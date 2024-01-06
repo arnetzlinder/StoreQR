@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Startsida";
+}
+
+
+@if (User?.Identity?.IsAuthenticated == true)
+{
+
+    <span class="m-5">Välkommen, @User.Identity.Name!</span>
+
+    <div class="text-center">
+        <h1 class="display-4">Välkommen till StoreQR</h1>
+        <p>Hjälp för dig att hålla koll på din förvaring</p>
+
+
+    </div>
+
+}
+else
+{
+
+    <span>Välkommen! Logga in för att få tillgång till StoreQR</span>
+}
+
+
+

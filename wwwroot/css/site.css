@@ -1,0 +1,105 @@
+* {
+    --FirstColor: #DFD6D1;
+    --SecondColor: #A7A098;
+    --TextColor: #524D45;
+    --AccentColor: #CF9291;
+    --AccentInputColor: #FDF1F1;
+    --SecondAccentColor: #933D3B;
+}
+
+body {
+    background-color: var(--FirstColor);
+    color: var(--TextColor);
+    font-family: 'Inknut Antiqua', serif;
+}
+
+.header .navbar {
+    background-color: var(--AccentColor) !important;
+    color: white !important;
+    height: 150px;
+}
+
+#headerlink {
+    color: white !important;
+}
+
+.StoreQRLogo {
+    max-height: 130px;
+}
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/*Kläderstyles*/
+
+.addClothesButton {
+    background-color: var(--AccentColor);
+    color: var(--TextColor);
+    border-radius: 5px;
+    width: 150px;
+}
+
+.ClothingCard {
+    max-width: 450px;
+    border-radius: 5px;
+    background-color: var(--SecondColor);
+    color: var(--TextColor);
+    font-size: 1rem;
+}
+
+    .ClothingCard h4 {
+        background-color: var(--AccentInputColor);
+        border-radius: 5px;
+        text-transform: uppercase;
+    }
+
+    .ClothingCard p {
+        background-color: var(--AccentInputColor);
+        border-radius: 5px;
+    }
+
+    .ClothingCard a {
+        background-color: var(--AccentColor);
+        color: var(--TextColor);
+        border-radius: 5px;
+        border: transparent;
+    }
+    .ClothingCard a:hover {
+        background-color: var(--TextColor);
+        color: white;
+        border: transparent;
+    }
+        .ClothingCard a:active {
+            background-color: var(--SecondColor);
+            color: white;
+            border: transparent;
+        }
+    .ClothingCard img {
+        max-height: 300px;
+    }
+
+    .ClothingCardBody {
+        display: flex;
+        flex-direction: row;
+    }
+
+ 
