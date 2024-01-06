@@ -4,10 +4,11 @@ namespace StoreQR.Models
 {
     public class ClothingItem
     {
-        public int Id { get; set; }
-
+        public int ClothingId { get; set; }
+        public int UserId { get; set; }
         
-        public string Name { get; set; } = string.Empty;
+        public byte[] ClothingImage { get; set; }
+        public string ClothingName { get; set; } = string.Empty;
 
         
         public string ClothingUser { get; set; } = string.Empty;
@@ -16,24 +17,23 @@ namespace StoreQR.Models
         //public string QRCode { get; set; } = string.Empty;
 
         
-        public string Brand { get; set; } = string.Empty;
+        public string ClothingBrand { get; set; } = string.Empty;
 
       
-        public string Size { get; set; } = string.Empty;
+        public string ClothingSize { get; set; } = string.Empty;
 
       
-        public string Color { get; set; } = string.Empty;
+        public string ClothingColor { get; set; } = string.Empty;
 
      
         public string Season { get; set; } = string.Empty;
 
     
-        public string Material { get; set; } = string.Empty;
+        public string ClothingMaterial { get; set; } = string.Empty;
 
         
         public string TypeOfClothing { get; set; } = string.Empty;
 
         //public int StorageId { get; set; }
-       // public string Image {  get; set; } = string.Empty;
     }
 }

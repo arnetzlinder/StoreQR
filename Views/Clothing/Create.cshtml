@@ -1,0 +1,78 @@
+﻿@model YourNamespace.Models.ClothingItem
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="ClothingName"></label>
+        <input asp-for="ClothingName" class="form-control" />
+        <span asp-validation-for="ClothingName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ClothingUser"></label>
+        <input asp-for="ClothingUser" class="form-control" />
+        <span asp-validation-for="ClothingUser" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ClothingBrand"></label>
+        <input asp-for="ClothingBrand" class="form-control" />
+        <span asp-validation-for="ClothingBrand" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ClothingSize"></label>
+        <input asp-for="ClothingSize" class="form-control" />
+        <span asp-validation-for="ClothingSize" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ClothingColor"></label>
+        <input asp-for="ClothingColor" class="form-control" />
+        <span asp-validation-for="ClothingColor" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Season"></label>
+        <input asp-for="Season" class="form-control" />
+        <span asp-validation-for="Season" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ClothingMaterial"></label>
+        <input asp-for="ClothingMaterial" class="form-control" />
+        <span asp-validation-for="ClothingMaterial" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="TypeOfClothing"></label>
+        <input asp-for="TypeOfClothing" class="form-control" />
+        <span asp-validation-for="TypeOfClothing" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ClothingImage"></label>
+        <input asp-for="ClothingImage" type="file" class="form-control-file" />
+        <span asp-validation-for="ClothingImage" class="text-danger"></span>
+    </div>
+    <div id="reader" style="width: 300px; height: 300px;"></div>
+    <button type="button" class="btn btn-primary" id="scanButton">Skanna QR-kod</button>
+    <input type="hidden" id="qrCodeResult" name="ClothingQRCode" />
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script>
+    document.getElementById('scanButton').addEventListener('click', function () {
+        // Initialize the QR code scanner
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+            'reader', // Element ID for the QR code scanner container
+            { fps: 10, qrbox: 250 } // Configuration options (e.g., frames per second, QR box size)
+        );
+
+        // Start scanning
+        html5QrcodeScanner.render(result => {
+            // Handle the scanned QR code result
+            console.log('Scanned result:', result);
+            // Set the scanned result to a hidden input field in the form
+            document.getElementById('qrCodeResult').value = result;
+
+            // You can perform other actions with the scanned result here
+            // For example, update other fields in the form
+        }).catch(err => {
+            // Handle any errors that occur during scanning
+            console.error(err);
+        });
+    });
+</script>

@@ -52,7 +52,7 @@
         </div>
     </footer>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <script>
+@*     <script>
         function onScanSuccess(decodedText, decodedResult) {
             // handle the scanned code as you like, for example:
             console.log(`Code matched = ${decodedText}`, decodedResult);
@@ -70,6 +70,26 @@
             { fps: 10, qrbox: { width: 250, height: 250 } },
                   /* verbose= */ false);
         html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    </script> *@
+    <script>
+        // Get reference to the reader container
+        let resultContainer = document.getElementById('reader');
+
+        // Initialize the QR code scanner
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+            'reader', // Element ID for the QR code scanner container
+            { fps: 10, qrbox: 250 } // Configuration options (e.g., frames per second, QR box size)
+        );
+
+        // Start scanning
+        html5QrcodeScanner.render(result => {
+            // Handle the scanned QR code result
+            console.log('Scanned result:', result);
+            // You can perform actions with the scanned result here, such as updating a field in your form
+        }).catch(err => {
+            // Handle any errors that occur during initialization
+            console.error(err);
+        });
     </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

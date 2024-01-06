@@ -10,7 +10,7 @@
     <div class="d-flex flex-column align-items-center justify-content-center">
         <h2>Mina kläder</h2>
         <div class="row">
-            <div class="col-sm-12">
+            <div class="container">
                 <div class="form-check-inline pull-right">
                     <label>Filtrera</label>
                     <p>Någon form av filtrering, input?</p>
@@ -25,11 +25,12 @@
                 <div class="card ClothingCard m-1 p-0">
                     <img class="m-3" src="./lib/example-pic.jpg" alt="Example picture" />
                     <div class="card-body d-flex flex-column mx-3 p-3 ClothingCardBody">
-                            <h4 class="card-title text-center mx-3 p-3">@item.Name</h4>
+                            <h4 class="card-title text-center mx-3 p-3">@item.ClothingName</h4>
                         <p class="card-text mx-3 p-3 text-center">Användare: @item.ClothingUser</p>
-                        <p class="card-text mx-3 p-3 text-center">Märke: @item.Brand</p>
-                        <p class="card-text mx-3 p-3 text-center">Storlek: @item.Size</p>
-                        <p class="card-text mx-3 p-3 text-center">Färg: @item.Color</p>
+                        <p class="card-text mx-3 p-3 text-center">Märke: @item.ClothingBrand</p>
+                        <p class="card-text mx-3 p-3 text-center">Storlek: @item.ClothingSize</p>
+                        <p class="card-text mx-3 p-3 text-center">Färg: @item.ClothingColor</p>
+                        <p class="card-text mx-3 p-3 text-center">Material: @item.ClothingMaterial</p>
                         <p class="card-text mx-3 p-3 text-center">Säsong: @item.Season</p>
                         <p class="card-text mx-3 p-3 text-center">Typ av plagg: @item.TypeOfClothing</p>
                         <p class="card-text mx-1 p-1 text-center">Förvaras i: Sussies garderob</p>
