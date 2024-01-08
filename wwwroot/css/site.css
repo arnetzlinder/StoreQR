@@ -89,6 +89,10 @@ body {
     border-color: transparent;
 }
 
+.InputLogin {
+    background-color: var(--AccentInputColor);
+}
+
 .col-md-6 section {
     display: none;
 }

@@ -21,10 +21,10 @@ namespace StoreQR.Controllers
             //_userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
-        [Authorize]
+        //[Authorize]
         public IActionResult Index()
         {
-            var clothes = _context.ClothingItems.ToList();
+            var clothes = _context.ClothingItem.ToList();
             return View(clothes);
         }
 
@@ -52,15 +52,15 @@ namespace StoreQR.Controllers
                 //    model.UserId = int.Parse(user.Id);
                 { 
 
-                    if (image != null && image.Length > 0)
-                    {
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            await image.CopyToAsync(memoryStream);
-                            model.ClothingImage = memoryStream.ToArray();
-                        }
-                    }
-                    _context.ClothingItems.Add(model);
+                    //if (image != null && image.Length > 0)
+                    //{
+                    //    using (var memoryStream = new MemoryStream())
+                    //    {
+                    //        await image.CopyToAsync(memoryStream);
+                    //        model.ClothingImage = memoryStream.ToArray();
+                    //    }
+                    //}
+                    _context.ClothingItem.Add(model);
                     await _context.SaveChangesAsync();
 
                     return RedirectToAction("Index");
