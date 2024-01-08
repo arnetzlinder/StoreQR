@@ -27,8 +27,34 @@ body {
     max-height: 130px;
 }
 html {
-    font-size: 14px;
+    font-size: 1rem;
 }
+
+.btn-primary {
+    color: var(--TextColor);
+    background-color: var(--AccentColor);
+    border-color: transparent;
+    border-radius: 5px;
+}
+.btn-primary:hover {
+    color: white;
+    background-color: var(--TextColor);
+    border-color: transparent;
+    border-radius: 5px;
+}
+.btn-primary:active {
+    color: white;
+    background-color: var(--SecondColor);
+    border-color: transparent;
+    border-radius: 5px;
+}
+    .btn-primary:focus {
+        color: white;
+        background-color: var(--SecondColor);
+        border-color: transparent;
+        border-radius: 5px;
+        box-shadow: transparent;
+    }
 
 @media (min-width: 768px) {
   html {
@@ -49,8 +75,24 @@ body {
   margin-bottom: 60px;
 }
 
-/*Kläderstyles*/
+/*Login*/
 
+#account a {
+    color: var(--TextColor);
+}
+#account a:hover {
+    color: black;
+}
+
+#Input_RememberMe {
+    background-color: var(--TextColor);
+    border-color: transparent;
+}
+
+.col-md-6 section {
+    display: none;
+}
+/*Kläderstyles*/
 .addClothesButton {
     background-color: var(--AccentColor);
     color: var(--TextColor);
@@ -102,4 +144,11 @@ body {
         flex-direction: row;
     }
 
- 
+/* Footer*/
+.StoreQRFooter {
+    color: var(--TextColor);
+}
+
+.StoreQRFooter a {
+    color: var(--TextColor);
+}
