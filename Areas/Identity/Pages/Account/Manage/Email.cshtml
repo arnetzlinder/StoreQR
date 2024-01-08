@@ -18,20 +18,20 @@
                         <div class="input-group-append">
                             <span class="h-100 input-group-text text-success font-weight-bold">✓</span>
                         </div>
-                    <label asp-for="Email" class="form-label"></label>
+                    <label asp-for="Email" class="form-label">E-post</label>
                 </div>
             }
             else
             {
                 <div class="form-floating mb-3">
                     <input asp-for="Email" class="form-control" placeholder="Skriv in din e-post" disabled />
-                    <label asp-for="Email" class="form-label"></label>
+                    <label asp-for="Email" class="form-label">E-post</label>
                     <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Skicka ett verifikations-mejl</button>
                 </div>
             }
             <div class="form-floating mb-3">
                 <input asp-for="Input.NewEmail" class="form-control" autocomplete="e-post" aria-required="true" placeholder="Skriv in din nya e-post" />
-                <label asp-for="Input.NewEmail" class="form-label"></label>
+                <label asp-for="Input.NewEmail" class="form-label">Ny e-post</label>
                 <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
             </div>
             <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="w-100 btn btn-lg btn-primary">Byt e-postadress</button>
