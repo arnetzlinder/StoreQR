@@ -1,6 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity;
-@inject SignInManager<IdentityUser> SignInManager
-
+﻿
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -31,16 +29,16 @@
                 <div id="addShow"class="navbar-collapse collapse justify-content-between p-3">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a id="headerlink1" class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Hem</a>
+                            <a id="headerlink1" class="nav-link mt-3" asp-area="" asp-controller="Home" asp-action="Index">Hem</a>
                         </li>
                         <li class="nav-item">
-                            <a id="headerlink2" class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Mina familjemedlemmar</a>
+                            <a id="headerlink2" class="nav-link mt-3" asp-area="" asp-controller="Home" asp-action="Privacy">Mina familjemedlemmar</a>
                         </li>
                         <li>
-                            <a id="headerlink3" class="nav-link" asp-area="" asp-controller="Clothing" asp-action="Index">Kläder</a>
+                            <a id="headerlink3" class="nav-link mt-3" asp-area="" asp-controller="Clothing" asp-action="Index">Kläder</a>
                         </li>
                         <li>
-                            <a id="headerlink4" class="nav-link" asp-area="" asp-controller="Storing" asp-action="Index">Förvaringsutrymmen</a>
+                            <a id="headerlink4" class="nav-link mt-3" asp-area="" asp-controller="Storing" asp-action="Index">Förvaringsutrymmen</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

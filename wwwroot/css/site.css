@@ -108,6 +108,14 @@ body {
     border-radius: 5px;
 
 }
+
+#addShow {
+    position: absolute;
+    right: 10px;
+    top: 148px;
+    width: 20rem;
+    text-align: end;
+}
 /*Login*/
 #account a {
     color: var(--TextColor);
@@ -239,4 +247,13 @@ body {
 
 .StoreQRFooter a {
     color: var(--TextColor);
+}
+
+.LogoutBtn {
+    background-color: var(--AccentColor);
+    color: var(--TextColor) !important;
+}
+.LogoutBtn:hover {
+    background-color: var(--SecondColor);
+    color: white !important;
 }
