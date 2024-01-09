@@ -84,12 +84,13 @@
 
         .navbar-collapse {
             transition: height 0.3s ease, opacity 0.2s ease-in-out;
-            opacity: 0;
+            visibility: hidden;
         }
 
             .navbar-collapse.show {
                 transition: height 0.3s ease, opacity 0.5s ease-in-out;
                 opacity: 1;
+                visibility: visible;
             }
 
         .collapse:not(.show) {
