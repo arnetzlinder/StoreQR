@@ -17,7 +17,7 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light box-shadow mb-3">
             <div class="container-fluid">
                 <a id="headerlink" class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img class="StoreQRLogo" src="./lib/StoreQRLogo.png" alt="Logo" />
+                    <img class="StoreQRLogo" src="/lib/StoreQRLogo.png" alt="Logo" />
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -33,6 +33,9 @@
                         </li>
                         <li>
                             <a id="headerlink" class="nav-link" asp-area="" asp-controller="Clothing" asp-action="Index">Kläder</a>
+                        </li>
+                        <li>
+                            <a id="headerlink" class="nav-link" asp-area="" asp-controller="Storing" asp-action="Index">Förvaringsutrymmen</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

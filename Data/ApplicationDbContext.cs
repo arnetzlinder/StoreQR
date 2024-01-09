@@ -9,6 +9,16 @@ namespace StoreQR.Data
         public DbSet<ClothingItem> ClothingItem { get; set; }
         public DbSet<StoringUnit> StoringUnit { get; set; }
 
+        //Ser till så att det returneras en tom lista om det inte finns några familjemedlemmar tillagda.
+
+        private ICollection<FamilyMember>? _familyMembers;
+
+        public ICollection<FamilyMember>? FamilyMembers
+        {
+            get => _familyMembers ??= new List<FamilyMember>();
+            set => _familyMembers = value;
+        }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace StoreQR.Models
 {
-    public class ClothingItem
+    public class ClothingViewModel
     {
-        [Key]
         public int ClothingId { get; set; }
         //public int UserId { get; set; }
         //[DisplayName("Bild")]
@@ -36,7 +34,10 @@ namespace StoreQR.Models
 
         [DisplayName("Typ av plagg:")]
         public string TypeOfClothing { get; set; } = string.Empty;
+        [DisplayName("Tillhör:")]
+        public string FamilyMemberName {  get; set; } = string.Empty;
 
-        //public int StorageId { get; set; }
+        //[DisplayName("Förvaras i: ")]
+        //public string StorageName { get; set; }
     }
 }

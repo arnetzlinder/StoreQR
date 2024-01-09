@@ -90,6 +90,14 @@ body {
 .nav-link.active {
     background-color: var(--AccentColor) !important;
 }
+
+/*.navbar-collapse {
+    background-color: var(--TextColor);
+    z-index: 10;
+    width: 100%;
+    border-radius: 5px;
+
+}*/
 /*Login*/
 #account a {
     color: var(--TextColor);
@@ -148,12 +156,71 @@ body {
         }
     .ClothingCard img {
         max-height: 300px;
+        border-radius: 5px;
+        filter: drop-shadow(5px 5px 5px #CF9291);
     }
 
     .ClothingCardBody {
         display: flex;
         flex-direction: row;
     }
+
+/*Förvaringstyles*/
+.addClothesButton {
+    background-color: var(--AccentColor);
+    color: var(--TextColor);
+    border-radius: 5px;
+    width: 150px;
+}
+
+.StorageCard {
+    max-width: 450px;
+    border-radius: 5px;
+    background-color: var(--SecondColor);
+    color: var(--TextColor);
+    font-size: 1rem;
+}
+
+    .StorageCard h4 {
+        background-color: var(--AccentInputColor);
+        border-radius: 5px;
+        text-transform: uppercase;
+    }
+
+    .StorageCard p {
+        background-color: var(--AccentInputColor);
+        border-radius: 5px;
+    }
+
+    .StorageCard a {
+        background-color: var(--AccentColor);
+        color: var(--TextColor);
+        border-radius: 5px;
+        border: transparent;
+    }
+
+        .StorageCard a:hover {
+            background-color: var(--TextColor);
+            color: white;
+            border: transparent;
+        }
+
+        .StorageCard a:active {
+            background-color: var(--SecondColor);
+            color: white;
+            border: transparent;
+        }
+
+    .StorageCard img {
+        max-height: 300px;
+        border-radius: 5px;
+        filter: drop-shadow(5px 5px  5px #CF9291);
+    }
+
+.StorageCardBody {
+    display: flex;
+    flex-direction: row;
+}
 
 /* Footer*/
 .StoreQRFooter {
