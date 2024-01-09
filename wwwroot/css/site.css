@@ -30,6 +30,10 @@ html {
     font-size: 1rem;
 }
 
+.WelcomeText {
+    margin-top: 8rem;
+}
+
 .btn-primary {
     color: var(--TextColor);
     background-color: var(--AccentColor);
