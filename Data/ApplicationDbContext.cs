@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using StoreQR.Models;
+using System.Data;
 
 namespace StoreQR.Data
 {
@@ -10,18 +11,58 @@ namespace StoreQR.Data
         public DbSet<StoringUnit> StoringUnit { get; set; }
 
         public DbSet<FamilyMember> FamilyMember { get; set; }
+        public List<ClothingViewModel> GetFamilyMembersForDropdown()
+        {
+            var familyMembers = new List<ClothingViewModel>();
 
-        //Ser till så att det returneras en tom lista om det inte finns några familjemedlemmar tillagda.
+            using (var command = Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "GetFamilyMembersForDropdown";
+                command.CommandType = CommandType.StoredProcedure;
 
-        //private ICollection<FamilyMember>? _familyMembers;
+                Database.OpenConnection();
 
-        //public ICollection<FamilyMember>? FamilyMembers
-        //{
-        //    get => _familyMembers ??= new List<FamilyMember>();
-        //    set => _familyMembers = value;
-        //}
+                using (var result = command.ExecuteReader())
+                {
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            var familyMember = new ClothingViewModel
+                            {
+                                ClothingId = result.GetInt32(0),    
+                                FamilyMemberName = result.GetString(2),
+                                ClothingName = result.GetString(7),
+                                //QRCode = result.GetString(5),
+                                ClothingBrand = result.GetString(3),
+                                ClothingSize = result.GetString(8),
+                                ClothingColor = result.GetString(4),
+                                Season = result.GetString(9),
+                                ClothingMaterial = result.GetString(6),
+                                TypeOfClothing = result.GetString(10)
+                            };
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+                            familyMembers.Add(familyMember);
+                        }
+                    }
+                }
+            }
+
+            return familyMembers;
+        }
+    
+
+    //Ser till så att det returneras en tom lista om det inte finns några familjemedlemmar tillagda.
+
+    //private ICollection<FamilyMember>? _familyMembers;
+
+    //public ICollection<FamilyMember>? FamilyMembers
+    //{
+    //    get => _familyMembers ??= new List<FamilyMember>();
+    //    set => _familyMembers = value;
+    //}
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }

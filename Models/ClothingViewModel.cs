@@ -11,10 +11,6 @@ namespace StoreQR.Models
         [DisplayName("Beskrivning:")]
         public string ClothingName { get; set; } = string.Empty;
 
-        //[DisplayName("Tillhör:")]
-        //public string ClothingUser { get; set; } = string.Empty;
-
-
         //public string QRCode { get; set; } = string.Empty;
 
         [DisplayName("Märke:")]
@@ -35,6 +31,7 @@ namespace StoreQR.Models
         [DisplayName("Typ av plagg:")]
         public string TypeOfClothing { get; set; } = string.Empty;
         [DisplayName("Tillhör:")]
+        public int ClothingUserId { get; set; }
         public string FamilyMemberName {  get; set; } = string.Empty;
 
         //[DisplayName("Förvaras i: ")]

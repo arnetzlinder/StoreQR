@@ -8,15 +8,16 @@
     <h1 class="mx-3 mb-3">@ViewData["Title"]</h1>
 
     
-    <div class="d-flex flex-row mb-5 p-3">
+    <div class="d-flex flex-row mb-5 p-3 flex-wrap">
 
     @foreach (var item in Model)
     {
         
         <div class="card FamilyMemberCard m-1 p-3 ">
-            <div class="">
+            <div class="d-flex flex-column">
                 <h4>@item.Name</h4>
-                <a class="btn btn-primary m-3 justify-content-end " asp-area="" asp-controller="FamilyMember" asp-action="Edit">Redigera</a>
+                <a class="btn btn-primary m-1 justify-content-end " asp-area="" asp-controller="FamilyMember" asp-action="Edit">Redigera</a>
+                <a class="btn btn-warning m-1 justify-content-end " asp-area="" asp-controller="FamilyMember" asp-action="Delete">Radera</a>
             </div>
 
         </div>

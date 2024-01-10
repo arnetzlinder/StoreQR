@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace StoreQR.Controllers
 {
@@ -24,8 +25,8 @@ namespace StoreQR.Controllers
         //[Authorize]
         public IActionResult Index()
         {
-            var clothes = _context.ClothingItem.ToList();
-            return View(clothes);
+            var combinedData = _context.GetFamilyMembersForDropdown();
+            return View(combinedData);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

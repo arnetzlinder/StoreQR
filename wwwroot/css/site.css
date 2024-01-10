@@ -33,6 +33,7 @@ html {
 .WelcomeText {
     margin-top: 8rem;
 }
+/*Knappar*/
 
 .btn-primary {
     color: var(--TextColor);
@@ -59,6 +60,18 @@ html {
         border-radius: 5px;
         box-shadow: transparent;
     }
+
+.btn-warning {
+    background-color: var(--SecondAccentColor);
+    color: white;
+    border: transparent;
+}
+
+    .btn-warning:hover {
+        background-color: var(--SecondAccentColor);
+        opacity: 0.7;
+    }
+/*Default styling bootstrap*/
 
 @media (min-width: 768px) {
   html {
@@ -136,6 +149,7 @@ body {
     color: var(--TextColor);
     font-size: 1rem;
     border: 2px solid var(--TextColor);
+    min-width: 10rem;
 }
 /*Kläderstyles*/
 .addClothesButton {
