@@ -1,4 +1,5 @@
-﻿@{
+﻿@model StoreQR.Models.FamilyMember
+@{
     ViewData["Title"] = "Familjemedlemmar";
 }
 
@@ -9,7 +10,14 @@
 
 <p class="mx-3">När du lagt till familjemedlemmar kan du tilldela dessa kläder direkt när du lägger till kläder</p>
 
-
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Spara</button>
+</form>
 
 <div id="reader" width="600px"></div>
 </div>

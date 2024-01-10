@@ -1,0 +1,40 @@
+﻿@model List<StoreQR.Models.FamilyMember>
+
+@{
+    ViewData["Title"] = "Familjemedlemmar";
+}
+
+<div class="container mt-3">
+    <h1 class="mx-3 mb-3">@ViewData["Title"]</h1>
+
+    
+    <div class="d-flex flex-row mb-5 p-3">
+
+    @foreach (var item in Model)
+    {
+        
+        <div class="card FamilyMemberCard m-1 p-3 ">
+            <div class="">
+                <h4>@item.Name</h4>
+                <a class="btn btn-primary m-3 justify-content-end " asp-area="" asp-controller="FamilyMember" asp-action="Edit">Redigera</a>
+            </div>
+
+        </div>
+    }
+    </div>
+
+    <h4 class="mx-3 mb-3"> Här kan du lägga till familjemedlemmar</h4>
+    <a class="btn btn-primary m-3 justify-content-end " asp-area="" asp-controller="FamilyMember" asp-action="Create">Lägg till familjemedlem</a>
+
+    <p class="mx-3 mt-3">När du lagt till familjemedlemmar kan du tilldela dessa kläder direkt när du lägger till kläder</p>
+@* 
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Spara</button>
+    </form> *@
+
+</div>

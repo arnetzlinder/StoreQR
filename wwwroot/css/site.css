@@ -129,6 +129,14 @@ body {
     border-color: transparent;
 }
 
+/*FamiljemedlemmarStyles*/
+.FamilyMemberCard {
+    border-radius: 5px;
+    background-color: var(--FirstColor);
+    color: var(--TextColor);
+    font-size: 1rem;
+    border: 2px solid var(--TextColor);
+}
 /*Kläderstyles*/
 .addClothesButton {
     background-color: var(--AccentColor);
