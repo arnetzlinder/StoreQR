@@ -39,7 +39,8 @@ namespace StoreQR.Data
                                 ClothingColor = result.GetString(4),
                                 Season = result.GetString(9),
                                 ClothingMaterial = result.GetString(6),
-                                TypeOfClothing = result.GetString(10)
+                                TypeOfClothing = result.GetString(10),
+                                FamilyUserId = result.GetString(1)
                             };
 
                             familyMembers.Add(familyMember);

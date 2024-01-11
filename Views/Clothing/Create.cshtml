@@ -4,18 +4,24 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="container">
+    <h1 class="mx-3 mb-3">@ViewData["Title"]</h1>
+    <p> Lägg till uppgifter om ditt klädesplagg. Du behöver inte fylla i alla egenskaper, beskrivning är det enda som måste finnas med.</p>
+
 <form asp-action="Create" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label asp-for="ClothingName"></label>
         <input asp-for="ClothingName" class="form-control" />
         <span asp-validation-for="ClothingName" class="text-danger"></span>
     </div>
-   @*  <div class="form-group">
-        <label asp-for="ClothingUserId" class="control-label">Välj vem plagget tillhör</label>
-        <select asp-for="ClothingUserId" class="form-control" asp-items="@(new SelectList(Model, nameof(StoreQR.Models.ClothingViewModel.ClothingUserId), nameof(StoreQR.Models.ClothingViewModel.FamilyMemberName)))">
-            <option value="">Select a Clothing User</option>
+    <div class="form-group ClothingUser">
+        <label asp-for="FamilyUserId" class="control-label">Välj vem plagget tillhör</label>
+        <select asp-for="FamilyUserId" class="form-control" asp-items="@ViewBag.FamilyMemberNames">
+            <option value="">Välj</option>
         </select>
-        </div> *@
+    </div>
+
+
   @*   <div class="form-group">
         <label asp-for="ClothingUser"></label>
         <input asp-for="ClothingUser" class="form-control" />
@@ -63,6 +69,7 @@
 
     <button type="submit" class="btn btn-primary">Spara</button>
 </form>
+</div>
 
 <script>
     document.getElementById('scanButton').addEventListener('click', function () {

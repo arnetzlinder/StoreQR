@@ -34,6 +34,8 @@ namespace StoreQR.Models
         public int ClothingUserId { get; set; }
         public string FamilyMemberName {  get; set; } = string.Empty;
 
+        public string FamilyUserId { get; set; } = string.Empty;
+
         //[DisplayName("Förvaras i: ")]
         //public string StorageName { get; set; }
     }

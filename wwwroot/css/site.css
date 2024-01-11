@@ -205,6 +205,11 @@ body {
         flex-direction: row;
     }
 
+.NameOption {
+    font-size: 1rem;
+    font-family: 'Inknut Antiqua', serif;
+}
+
 /*Förvaringstyles*/
 .addClothesButton {
     background-color: var(--AccentColor);

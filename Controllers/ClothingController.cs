@@ -6,6 +6,8 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace StoreQR.Controllers
 {
@@ -38,8 +40,35 @@ namespace StoreQR.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var familyMemberNames = _context.FamilyMember
+                    .Where(fm => fm.UserId == userId)
+                    .Select(fm => new SelectListItem
+                    {
+                        Value = fm.Id.ToString(),
+                        Text = fm.Name
+                    })
+                    .Distinct()
+                    .ToList();
+
+                if (familyMemberNames.Any())
+                {
+                    ViewBag.FamilyMemberNames = new SelectList(familyMemberNames, "Value", "Text");
+                }
+                else
+                {
+                    ViewBag.FamilyMemberNames = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "Inga medlemmar i hushållet tillagda" }
+            };
+                }
+            }
             return View();
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
