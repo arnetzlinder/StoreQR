@@ -1,4 +1,4 @@
-﻿@model List<StoreQR.Models.ClothingViewModel>
+﻿@model IEnumerable<StoreQR.Models.ClothingViewModel>
 @{
     ViewData["Title"] = "Kläder";
 }
@@ -7,15 +7,87 @@
 @if (User?.Identity?.IsAuthenticated == true)
 {
 
-    <div class="d-flex flex-column align-items-center justify-content-center">
+    <div class="container d-flex flex-column align-items-center justify-content-center">
         <h2>Mina kläder</h2>
-        <div class="row">
-            <div class="container">
-                <div class="form-check-inline pull-right">
-                    <label>Filtrera</label>
-                    <p>Någon form av filtrering, input?</p>
+        <div class="">
+            <form id="filterForm" method="get" action="@Url.Action("Index", "Clothing")">
+                <fieldset>
+                    <div class="form-group">
+                        <label class="control-label">Välj märke</label>
+                        <select name="ClothingBrand" class="form-control filter-dropdown">
+                            <option value="">Alla märken</option>
+                            @foreach (var distinctBrand in ViewBag.DistinctBrands)
+                            {
+                                <option value="@distinctBrand">@distinctBrand</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Välj storlek</label>
+                        <select name="ClothingSize" class="form-control filter-dropdown">
+                            <option value="">Alla storlekar</option>
+                            @foreach (var distinctSize in ViewBag.DistinctSizes)
+                            {
+                                <option value="@distinctSize">@distinctSize</option>
+                            }
+                        </select>
+                    </div>
+
+
+               @*          <div class="form-group">
+                            @if (clothingItem.ClothingSize != null && clothingItem.ClothingSize.Any())
+                            {
+                                <label class="control-label">Välj storlek</label>
+                                <select name="SelectedSize" class="form-control filter-dropdown" id="SelectedSize_@clothingItem.ClothingId">
+                                    <option value="" >Välj storlek</option>
+                                    @foreach (var size in clothingItem.ClothingSize)
+                                    {
+                                        <option value="@size">@size</option>
+                                    }
+                                </select>
+                            }
+                        </div> *@
+                @* <div class="form-group">
+                    @if (clothingItem.Colors != null && clothingItem.Colors.Any())
+                {
+                    
+                        @Html.LabelFor(model => clothingItem.SelectedColor, "Välj färg", new { @class = "control-label" })
+                            @Html.DropDownListFor(model => clothingItem.SelectedColor, clothingItem.Colors, "Välj färg", new { @class = "form-control filter-dropdown", id = $"SelectedColor_{clothingItem.ClothingId}" })
+                    
+                }
                 </div>
-            </div>
+                <div class="form-group">
+                    @if (clothingItem.Seasons != null && clothingItem.Seasons.Any())
+                {
+                    
+                        @Html.LabelFor(model => clothingItem.SelectedSeason, "Välj säsong", new { @class = "control-label" })
+                            @Html.DropDownListFor(model => clothingItem.SelectedSeason, clothingItem.Seasons, "Välj säsong", new { @class = "form-control filter-dropdown", id = $"SelectedSeason_{clothingItem.ClothingId}" })
+                    
+                }
+                </div>
+                <div class="form-group">
+                    @if (clothingItem.Materials != null && clothingItem.Materials.Any())
+                {
+                    
+                        @Html.LabelFor(model => clothingItem.SelectedMaterial, "Välj material", new { @class = "control-label" })
+                            @Html.DropDownListFor(model => clothingItem.SelectedMaterial, clothingItem.Materials, "Välj material", new { @class = "form-control filter-dropdown", id = $"SelectedMaterial_{clothingItem.ClothingId}" })
+                    
+                }
+                </div>
+                <div class="form-group">
+                    @if (clothingItem.TypeOfClothings != null && clothingItem.TypeOfClothings.Any())
+                {
+                    
+                        @Html.LabelFor(model => clothingItem.SelectedTypeOfClothing, "Välj typ av plagg", new { @class = "control-label" })
+                            @Html.DropDownListFor(model => clothingItem.SelectedTypeOfClothing, clothingItem.TypeOfClothings, "Välj typ av plagg", new { @class = "form-control filter-dropdown", id = $"SelectedTypeOfClothing_{clothingItem.ClothingId}" })
+                    
+                } 
+                </div> *@
+            
+                <input type="submit" class="btn-primary" value="Applicera filter">
+                </fieldset>
+            </form>
+
             <div class="d-flex align-items-center justify-content-center">
                 <a class="btn btn-primary addClothesButton px-3" asp-area="" asp-controller="Clothing" asp-action="Create">Lägg till nytt</a>
             </div>
@@ -55,4 +127,35 @@ else
     <span>Välkommen! Logga in för att få tillgång till StoreQR</span>
 }
 
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Hämta alla filterelement
+        var filterDropdowns = document.querySelectorAll(".filter-dropdown");
+
+        // Lägg på ett change-event på varje dropdown
+        filterDropdowns.forEach(function (dropdown) {
+            dropdown.addEventListener("change", function () {
+                // Spara det värdet på kolumn i localStorage
+                localStorage.setItem('selectedBrand', this.value);
+                localStorage.setItem('selectedSize', this.value);
+
+                // Skicka formuläret om innehållet i dropdownen ändras
+                document.getElementById("filterForm").submit();
+            });
+            console.log("MOAHAHAAHHAHAHA!!")
+
+            // Återställ det senast valda märket
+            var storedBrand = localStorage.getItem('selectedBrand');
+            if (storedBrand) {
+                dropdown.value = storedBrand;
+            }
+            var storedSize = localStorage.getItem('selectedSize');
+            if (storedSize) {
+                dropdown.value = storedSize;
+            }
+        });
+    });
+
+</script>
 

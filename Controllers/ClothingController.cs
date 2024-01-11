@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using StoreQR.Interface;
 
 namespace StoreQR.Controllers
 {
@@ -15,21 +16,65 @@ namespace StoreQR.Controllers
     {
         private readonly ILogger<ClothingController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly IClothingFilterService _filterService;
         //private readonly UserManager<ApplicationUser> _userManager;
 
-        public ClothingController(ILogger<ClothingController> logger, ApplicationDbContext context)
+        public ClothingController(ILogger<ClothingController> logger, ApplicationDbContext context, IClothingFilterService filterService)
         {
             _logger = logger;
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _filterService = filterService ?? throw new ArgumentNullException(nameof(filterService));
             //_userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         //[Authorize]
-        public IActionResult Index()
+        public IActionResult Index(ClothingViewModel viewModel)
         {
-            var combinedData = _context.GetFamilyMembersForDropdown();
-            return View(combinedData);
+            //Hämtar alla värden först
+            var distinctValues = _context.ClothingItem
+                .Select(c => new
+                {
+                    ClothingBrand = c.ClothingBrand,
+                    ClothingSize = c.ClothingSize,
+                    ClothingColor = c.ClothingColor,
+                    Season = c.Season,
+                    ClothingMaterial = c.ClothingMaterial,
+                    TypeOfClothing = c.TypeOfClothing
+                })
+                .Distinct()
+                .ToList();
+
+            ViewBag.DistinctBrands = _context.ClothingItem.Select(c => c.ClothingBrand).Distinct().ToList();
+            ViewBag.DistinctSizes = _context.ClothingItem.Select(c => c.ClothingSize).Distinct().ToList();
+            ViewBag.DistinctColors = _context.ClothingItem.Select(c => c.ClothingColor).Distinct().ToList();
+            ViewBag.DistinctSeasons = _context.ClothingItem.Select(c => c.Season).Distinct().ToList();
+            ViewBag.DistinctMaterials = _context.ClothingItem.Select(c => c.ClothingMaterial).Distinct().ToList();
+            ViewBag.DistinctTypesOfClothing = _context.ClothingItem.Select(c => c.TypeOfClothing).Distinct().ToList();
+
+            if (string.IsNullOrEmpty(viewModel.ClothingBrand))
+            {
+                //Hämtar alla träffar om inget val gjorts eller om användaren väljer alla märken
+                var allClothingItems = _filterService.GetAllClothingItems();
+                return View(allClothingItems);
+            }
+            else
+            {
+                var filteredClothingItems = _filterService.GetFilteredClothingItems(
+                              viewModel.ClothingBrand,
+                              viewModel.ClothingSize,
+                              viewModel.ClothingColor,
+                              viewModel.Season,
+                              viewModel.ClothingMaterial,
+                              viewModel.TypeOfClothing
+                          );
+
+              
+
+                return View(filteredClothingItems);
+            }
+          
         }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

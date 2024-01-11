@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using StoreQR.Interface;
 using StoreQR.Models;
 using System.Data;
 
@@ -11,6 +12,15 @@ namespace StoreQR.Data
         public DbSet<StoringUnit> StoringUnit { get; set; }
 
         public DbSet<FamilyMember> FamilyMember { get; set; }
+        
+        //public IClothingFilterService ClothingFilterService { get; }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options 
+            //IClothingFilterService clothingFilterService
+            )
+            : base(options)
+        {
+            //ClothingFilterService = ClothingFilterService ?? throw new ArgumentNullException(nameof(clothingFilterService));
+        }
         public List<ClothingViewModel> GetFamilyMembersForDropdown()
         {
             var familyMembers = new List<ClothingViewModel>();
@@ -63,10 +73,7 @@ namespace StoreQR.Data
     //    set => _familyMembers = value;
     //}
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
+    
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
