@@ -121,22 +121,30 @@ namespace StoreQR.Interface
 
 
             // Genomför förfrågan och returnera resultaten
-            var filteredClothingViewModels = query
-               .Select(c => new ClothingViewModel
-               {
-                  //Eftersom vi har en join så mappar vi ClothingItem mot ClothingViewModel
-                   ClothingId = c.ClothingId,
-                   ClothingName = c.ClothingName,
-                   ClothingBrand = c.ClothingBrand,
-                   ClothingSize = c.ClothingSize,
-                   ClothingColor = c.ClothingColor,
-                   Season = c.Season,
-                   ClothingMaterial = c.ClothingMaterial,
-                   TypeOfClothing = c.TypeOfClothing,
-                   FamilyMemberName = c.FamilyMemberName
-               })
-               .ToList();
-
+            var filteredClothingViewModels = _context.GetFamilyMembersForDropdown()
+            .Where(c =>
+           (string.IsNullOrEmpty(ClothingBrand) || c.ClothingBrand == ClothingBrand) &&
+           (string.IsNullOrEmpty(ClothingSize) || c.ClothingSize == ClothingSize) &&
+           (string.IsNullOrEmpty(ClothingColor) || c.ClothingColor == ClothingColor) &&
+           (string.IsNullOrEmpty(Season) || c.Season == Season) &&
+           (string.IsNullOrEmpty(ClothingMaterial) || c.ClothingMaterial == ClothingMaterial) &&
+           (string.IsNullOrEmpty(TypeOfClothing) || c.TypeOfClothing == TypeOfClothing) &&
+           (string.IsNullOrEmpty(FamilyMemberName) || c.FamilyMemberName == FamilyMemberName)
+            )
+            .Select(c => new ClothingViewModel
+            {
+           //Eftersom vi har en join så mappar vi ClothingItem mot ClothingViewModel
+           ClothingId = c.ClothingId,
+           ClothingName = c.ClothingName,
+           ClothingBrand = c.ClothingBrand,
+           ClothingSize = c.ClothingSize,
+           ClothingColor = c.ClothingColor,
+           Season = c.Season,
+           ClothingMaterial = c.ClothingMaterial,
+           TypeOfClothing = c.TypeOfClothing,
+           FamilyMemberName = c.FamilyMemberName
+            })
+            .ToList();
             return filteredClothingViewModels;
         }
     }
