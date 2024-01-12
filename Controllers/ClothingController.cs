@@ -31,7 +31,7 @@ namespace StoreQR.Controllers
         public IActionResult Index(ClothingViewModel viewModel)
         {
             //Hämtar alla värden först
-            var distinctValues = _context.ClothingItem
+            var distinctValues = _context.GetFamilyMembersForDropdown()
                 .Select(c => new
                 {
                     ClothingBrand = c.ClothingBrand,
@@ -39,19 +39,28 @@ namespace StoreQR.Controllers
                     ClothingColor = c.ClothingColor,
                     Season = c.Season,
                     ClothingMaterial = c.ClothingMaterial,
-                    TypeOfClothing = c.TypeOfClothing
+                    TypeOfClothing = c.TypeOfClothing,
+                    FamilyMemberName = c.FamilyMemberName
                 })
                 .Distinct()
                 .ToList();
 
-            ViewBag.DistinctBrands = _context.ClothingItem.Select(c => c.ClothingBrand).Distinct().ToList();
-            ViewBag.DistinctSizes = _context.ClothingItem.Select(c => c.ClothingSize).Distinct().ToList();
-            ViewBag.DistinctColors = _context.ClothingItem.Select(c => c.ClothingColor).Distinct().ToList();
-            ViewBag.DistinctSeasons = _context.ClothingItem.Select(c => c.Season).Distinct().ToList();
-            ViewBag.DistinctMaterials = _context.ClothingItem.Select(c => c.ClothingMaterial).Distinct().ToList();
-            ViewBag.DistinctTypesOfClothing = _context.ClothingItem.Select(c => c.TypeOfClothing).Distinct().ToList();
+            ViewBag.DistinctBrands = _context.GetFamilyMembersForDropdown().Select(c => c.ClothingBrand).Distinct().ToList();
+            ViewBag.DistinctSizes = _context.GetFamilyMembersForDropdown().Select(c => c.ClothingSize).Distinct().ToList();
+            ViewBag.DistinctColors = _context.GetFamilyMembersForDropdown().Select(c => c.ClothingColor).Distinct().ToList();
+            ViewBag.DistinctSeasons = _context.GetFamilyMembersForDropdown()    .Select(c => c.Season).Distinct().ToList();
+            ViewBag.DistinctMaterials = _context.GetFamilyMembersForDropdown().Select(c => c.ClothingMaterial).Distinct().ToList();
+            ViewBag.DistinctTypesOfClothing = _context.GetFamilyMembersForDropdown().Select(c => c.TypeOfClothing).Distinct().ToList();
+            ViewBag.DistinctFamilyMemberName = _context.GetFamilyMembersForDropdown().Select(c => c.FamilyMemberName).Distinct().ToList();
 
-            if (string.IsNullOrEmpty(viewModel.ClothingBrand))
+            //Om alla fält är tomma eller alla är vald
+            if (viewModel.ClothingBrand == "" &&
+                viewModel.ClothingSize == "" && 
+                viewModel.ClothingColor == "" && 
+                viewModel.Season == "" && 
+                viewModel.ClothingMaterial == "" &&
+                viewModel.TypeOfClothing == "" &&
+                viewModel.FamilyMemberName == "")
             {
                 //Hämtar alla träffar om inget val gjorts eller om användaren väljer alla märken
                 var allClothingItems = _filterService.GetAllClothingItems();
@@ -65,7 +74,8 @@ namespace StoreQR.Controllers
                               viewModel.ClothingColor,
                               viewModel.Season,
                               viewModel.ClothingMaterial,
-                              viewModel.TypeOfClothing
+                              viewModel.TypeOfClothing,
+                              viewModel.FamilyMemberName
                           );
 
               

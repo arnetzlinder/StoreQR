@@ -8,13 +8,26 @@
 {
 
     <div class="container d-flex flex-column align-items-center justify-content-center">
-        <h2>Mina kläder</h2>
-        <div class="">
-            <form id="filterForm" method="get" action="@Url.Action("Index", "Clothing")">
+        <h2 class="mb-3 mt-3">Mina kläder</h2>
+        <div class="d-flex align-items-center justify-content-center">
+            <a class="btn btn-primary addClothesButton px-3" asp-area="" asp-controller="Clothing" asp-action="Create">Lägg till nytt</a>
+        </div>
+        <div class="d-flex flex-row  flex-sm-wrap flex-md-nowrap">
+            <form class="mx-3" id="filterForm" method="get" action="@Url.Action("Index", "Clothing")">
                 <fieldset>
                     <div class="form-group">
+                        <label class="control-label">Välj användare</label>
+                        <select name="FamilyMemberName" class="form-control filter-dropdown family-dropdown">
+                            <option value="">Alla användare</option>
+                            @foreach (var distinctFamilyMemberName in ViewBag.DistinctFamilyMemberName)
+                            {
+                                <option value="@distinctFamilyMemberName">@distinctFamilyMemberName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label">Välj märke</label>
-                        <select name="ClothingBrand" class="form-control filter-dropdown">
+                        <select name="ClothingBrand" class="form-control filter-dropdown size-dropdown">
                             <option value="">Alla märken</option>
                             @foreach (var distinctBrand in ViewBag.DistinctBrands)
                             {
@@ -24,7 +37,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">Välj storlek</label>
-                        <select name="ClothingSize" class="form-control filter-dropdown">
+                        <select name="ClothingSize" class="form-control filter-dropdown size-dropdown">
                             <option value="">Alla storlekar</option>
                             @foreach (var distinctSize in ViewBag.DistinctSizes)
                             {
@@ -32,81 +45,68 @@
                             }
                         </select>
                     </div>
-
-
-               @*          <div class="form-group">
-                            @if (clothingItem.ClothingSize != null && clothingItem.ClothingSize.Any())
+                    <div class="form-group">
+                        <label class="control-label">Välj färg</label>
+                        <select name="ClothingColor" class="form-control filter-dropdown size-dropdown">
+                            <option value="">Alla färger</option>
+                            @foreach (var distinctColor in ViewBag.DistinctColors)
                             {
-                                <label class="control-label">Välj storlek</label>
-                                <select name="SelectedSize" class="form-control filter-dropdown" id="SelectedSize_@clothingItem.ClothingId">
-                                    <option value="" >Välj storlek</option>
-                                    @foreach (var size in clothingItem.ClothingSize)
-                                    {
-                                        <option value="@size">@size</option>
-                                    }
-                                </select>
+                                <option value="@distinctColor">@distinctColor</option>
                             }
-                        </div> *@
-                @* <div class="form-group">
-                    @if (clothingItem.Colors != null && clothingItem.Colors.Any())
-                {
-                    
-                        @Html.LabelFor(model => clothingItem.SelectedColor, "Välj färg", new { @class = "control-label" })
-                            @Html.DropDownListFor(model => clothingItem.SelectedColor, clothingItem.Colors, "Välj färg", new { @class = "form-control filter-dropdown", id = $"SelectedColor_{clothingItem.ClothingId}" })
-                    
-                }
-                </div>
-                <div class="form-group">
-                    @if (clothingItem.Seasons != null && clothingItem.Seasons.Any())
-                {
-                    
-                        @Html.LabelFor(model => clothingItem.SelectedSeason, "Välj säsong", new { @class = "control-label" })
-                            @Html.DropDownListFor(model => clothingItem.SelectedSeason, clothingItem.Seasons, "Välj säsong", new { @class = "form-control filter-dropdown", id = $"SelectedSeason_{clothingItem.ClothingId}" })
-                    
-                }
-                </div>
-                <div class="form-group">
-                    @if (clothingItem.Materials != null && clothingItem.Materials.Any())
-                {
-                    
-                        @Html.LabelFor(model => clothingItem.SelectedMaterial, "Välj material", new { @class = "control-label" })
-                            @Html.DropDownListFor(model => clothingItem.SelectedMaterial, clothingItem.Materials, "Välj material", new { @class = "form-control filter-dropdown", id = $"SelectedMaterial_{clothingItem.ClothingId}" })
-                    
-                }
-                </div>
-                <div class="form-group">
-                    @if (clothingItem.TypeOfClothings != null && clothingItem.TypeOfClothings.Any())
-                {
-                    
-                        @Html.LabelFor(model => clothingItem.SelectedTypeOfClothing, "Välj typ av plagg", new { @class = "control-label" })
-                            @Html.DropDownListFor(model => clothingItem.SelectedTypeOfClothing, clothingItem.TypeOfClothings, "Välj typ av plagg", new { @class = "form-control filter-dropdown", id = $"SelectedTypeOfClothing_{clothingItem.ClothingId}" })
-                    
-                } 
-                </div> *@
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Välj säsong</label>
+                        <select name="Season" class="form-control filter-dropdown size-dropdown">
+                            <option value="">Alla säsonger</option>
+                            @foreach (var distinctSeason in ViewBag.DistinctSeasons)
+                            {
+                                <option value="@distinctSeason">@distinctSeason</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Välj material</label>
+                        <select name="ClothingMaterial" class="form-control filter-dropdown size-dropdown">
+                            <option value="">Alla material</option>
+                            @foreach (var distinctMaterial in ViewBag.DistinctMaterials)
+                            {
+                                <option value="@distinctMaterial">@distinctMaterial</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Välj typ av plagg</label>
+                        <select name="TypeOfClothing" class="form-control filter-dropdown size-dropdown">
+                            <option value="">Alla typer av plagg</option>
+                            @foreach (var distinctTypeOfClothing in ViewBag.DistinctTypesOfClothing)
+                            {
+                                <option value="@distinctTypeOfClothing">@distinctTypeOfClothing</option>
+                            }
+                        </select>
+                    </div>
+
             
-                <input type="submit" class="btn-primary" value="Applicera filter">
+                <input type="submit" class="mt-3 btn-primary" value="Applicera filter">
                 </fieldset>
             </form>
 
-            <div class="d-flex align-items-center justify-content-center">
-                <a class="btn btn-primary addClothesButton px-3" asp-area="" asp-controller="Clothing" asp-action="Create">Lägg till nytt</a>
-            </div>
-            <div class="d-flex flex-column align-items-center justify-content-center">
+            <div class="d-flex flex-row align-items-center justify-content-center flex-wrap">
             @foreach (var item in Model)
             {
-                <div class="card ClothingCard m-1 p-0">
+                <div class="card ClothingCard m-1 p-0 flex-column d-flex">
                     <div class="d-flex justify-content-center align-items-center">
                     <img class="m-3" src="./lib/example-pic.jpg" alt="Example picture" />
                     </div>
                     <div class="card-body d-flex flex-column mx-3 p-3 ClothingCardBody">
                             <h4 class="card-title text-center mx-3 p-3">@item.ClothingName</h4>
                             <p class="card-text mx-3 p-3 text-center">Användare: @item.FamilyMemberName</p>
-                            <p class="card-text mx-3 p-3 text-center">Märke: @item.ClothingBrand</p>
+@*                             <p class="card-text mx-3 p-3 text-center">Märke: @item.ClothingBrand</p>
                             <p class="card-text mx-3 p-3 text-center">Storlek: @item.ClothingSize</p>
                             <p class="card-text mx-3 p-3 text-center">Färg: @item.ClothingColor</p>
                             <p class="card-text mx-3 p-3 text-center">Material: @item.ClothingMaterial</p>
-                        <p class="card-text mx-3 p-3 text-center">Säsong: @item.Season</p>
-                        <p class="card-text mx-3 p-3 text-center">Typ av plagg: @item.TypeOfClothing</p>
+                        <p class="card-text mx-3 p-3 text-center">Säsong: @item.Season</p> *@
+                       @*  <p class="card-text mx-3 p-3 text-center">Typ av plagg: @item.TypeOfClothing</p> *@
                         <p class="card-text mx-1 p-1 text-center">Förvaras i: Sussies garderob</p>
                         <a class="btn btn-primary m-3 justify-content-end " asp-area="" asp-controller="Clothing" asp-action="Edit">Redigera</a>
                     </div>
@@ -137,8 +137,11 @@ else
         filterDropdowns.forEach(function (dropdown) {
             dropdown.addEventListener("change", function () {
                 // Spara det värdet på kolumn i localStorage
-                localStorage.setItem('selectedBrand', this.value);
-                localStorage.setItem('selectedSize', this.value);
+                if (dropdown.classList.contains("family-dropdown")) {
+                    localStorage.setItem('selectedName', this.value);
+                } else if (dropdown.classList.contains("size-dropdown")) {
+                    localStorage.setItem('selectedSize', this.value);
+                }
 
                 // Skicka formuläret om innehållet i dropdownen ändras
                 document.getElementById("filterForm").submit();
@@ -146,12 +149,14 @@ else
             console.log("MOAHAHAAHHAHAHA!!")
 
             // Återställ det senast valda märket
-            var storedBrand = localStorage.getItem('selectedBrand');
-            if (storedBrand) {
+            var storedBrand = localStorage.getItem('selectedName');
+            if (storedBrand && dropdown.classList.contains("family-dropdown")) {
                 dropdown.value = storedBrand;
             }
+
+            // Återställ det senast valda storleken
             var storedSize = localStorage.getItem('selectedSize');
-            if (storedSize) {
+            if (storedSize && dropdown.classList.contains("size-dropdown")) {
                 dropdown.value = storedSize;
             }
         });

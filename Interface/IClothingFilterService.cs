@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 using StoreQR.Data;
 using StoreQR.Models;
@@ -14,11 +15,13 @@ namespace StoreQR.Interface
             string ClothingColor,
             string Season,
             string ClothingMaterial,
-            string TypeOfClothing
+            string TypeOfClothing,
+            string FamilyMemberName
             );
 
         List<ClothingViewModel> GetAllClothingItems();
-      
+        List<ClothingViewModel> GetFamilyMembersForDropdown();
+
     }
 
     public class ClothingFilterService : IClothingFilterService
@@ -29,10 +32,16 @@ namespace StoreQR.Interface
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
+        public List<ClothingViewModel> GetFamilyMembersForDropdown()
+        {
+            var familyMembers = _context.GetFamilyMembersForDropdown();
+
+            return familyMembers;
+        }
 
         public List<ClothingViewModel> GetAllClothingItems()
         {
-            var allClothingViewModels = _context.ClothingItem
+            var allClothingViewModels = _context.GetFamilyMembersForDropdown()
                 .Select(c => new ClothingViewModel
                 {
                     ClothingId = c.ClothingId,
@@ -43,6 +52,7 @@ namespace StoreQR.Interface
                     Season = c.Season,
                     ClothingMaterial = c.ClothingMaterial,
                     TypeOfClothing = c.TypeOfClothing,
+                    FamilyMemberName = c.FamilyMemberName,
                 })
                 .ToList();
 
@@ -54,23 +64,26 @@ namespace StoreQR.Interface
             string ClothingColor,
             string Season,
             string ClothingMaterial,
-            string TypeOfClothing
+            string TypeOfClothing,
+            string FamilyMemberName
         )
         {
-            var distinctBrands = _context.ClothingItem.Select(c => c.ClothingBrand).Distinct().ToList();
-            var distinctSizes = _context.ClothingItem.Select(c => c.ClothingSize).Distinct().ToList();
-            var distinctColors = _context.ClothingItem.Select(c => c.ClothingColor).Distinct().ToList();
-            var distinctSeasons = _context.ClothingItem.Select(c => c.Season).Distinct().ToList();
-            var distinctMaterials = _context.ClothingItem.Select(c => c.ClothingMaterial).Distinct().ToList();
-            var distinctTypeOfClothing = _context.ClothingItem.Select(c => c.TypeOfClothing).Distinct().ToList();
+            var distinctBrands = _context.GetFamilyMembersForDropdown().Select(c => c.ClothingBrand).Distinct().ToList();
+            var distinctSizes = _context.GetFamilyMembersForDropdown().Select(c => c.ClothingSize).Distinct().ToList();
+            var distinctColors = _context.GetFamilyMembersForDropdown().Select(c => c.ClothingColor).Distinct().ToList();
+            var distinctSeasons = _context.GetFamilyMembersForDropdown().Select(c => c.Season).Distinct().ToList();
+            var distinctMaterials = _context.GetFamilyMembersForDropdown().Select(c => c.ClothingMaterial).Distinct().ToList();
+            var distinctTypeOfClothing = _context.GetFamilyMembersForDropdown().Select(c => c.TypeOfClothing).Distinct().ToList();
+            var distinctFamilyMemberName = _context.GetFamilyMembersForDropdown().Select(c => c.FamilyMemberName).Distinct().ToList();
             var brandItems = distinctBrands.Select(brand => new SelectListItem { Text = brand, Value = brand }).ToList();
             var sizeItems = distinctSizes.Select(size => new SelectListItem { Text = size, Value = size }).ToList();
             var colorItems = distinctColors.Select(color => new SelectListItem { Text = color, Value = color }).ToList();
             var seasonItems = distinctSeasons.Select(season => new SelectListItem { Text = season, Value = season }).ToList();
             var materialItems = distinctMaterials.Select(material => new SelectListItem { Text = material, Value = material }).ToList();
             var typeItems = distinctTypeOfClothing.Select(type => new SelectListItem { Text = type, Value = type }).ToList();
+            var nameItems = distinctFamilyMemberName.Select(name => new SelectListItem { Text = name, Value = name }).ToList();
             // Kollar om det finns något innehåll och isf filtrerar på vald egenskap
-            var query = _context.ClothingItem.AsQueryable();
+            var query = _context.GetFamilyMembersForDropdown().AsQueryable();
 
             if (!string.IsNullOrEmpty(ClothingBrand))
             {
@@ -84,7 +97,7 @@ namespace StoreQR.Interface
 
             if (!string.IsNullOrEmpty(ClothingColor))
             {
-                query = query.Where(c => string.Equals(c.ClothingColor, ClothingColor, StringComparison.OrdinalIgnoreCase));
+                query = query.Where(c => c.ClothingColor == ClothingColor);
             }
 
             if (!string.IsNullOrEmpty(Season))
@@ -101,6 +114,10 @@ namespace StoreQR.Interface
             {
                 query = query.Where(c => string.Equals(c.TypeOfClothing, TypeOfClothing, StringComparison.OrdinalIgnoreCase));
             }
+            if (!string.IsNullOrEmpty(FamilyMemberName))
+            {
+                query = query.Where(c => string.Equals(c.FamilyMemberName, FamilyMemberName, StringComparison.OrdinalIgnoreCase));
+            }
 
 
             // Genomför förfrågan och returnera resultaten
@@ -116,6 +133,7 @@ namespace StoreQR.Interface
                    Season = c.Season,
                    ClothingMaterial = c.ClothingMaterial,
                    TypeOfClothing = c.TypeOfClothing,
+                   FamilyMemberName = c.FamilyMemberName
                })
                .ToList();
 
