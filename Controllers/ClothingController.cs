@@ -28,7 +28,7 @@ namespace StoreQR.Controllers
         }
 
         //[Authorize]
-        public IActionResult Index(ClothingViewModel viewModel)
+        public IActionResult Index(ClothingViewModel viewModel, bool? ResetFilters)
         {
             //Hämtar alla värden först
             var distinctValues = _context.GetFamilyMembersForDropdown()
@@ -52,6 +52,19 @@ namespace StoreQR.Controllers
             ViewBag.DistinctMaterials = _context.GetFamilyMembersForDropdown().Select(c => c.ClothingMaterial).Distinct().ToList();
             ViewBag.DistinctTypesOfClothing = _context.GetFamilyMembersForDropdown().Select(c => c.TypeOfClothing).Distinct().ToList();
             ViewBag.DistinctFamilyMemberName = _context.GetFamilyMembersForDropdown().Select(c => c.FamilyMemberName).Distinct().ToList();
+
+            if (ResetFilters.HasValue && ResetFilters.Value)
+            {
+                // Återställ filter om knappen återställ klickats på
+                viewModel.FamilyMemberName = "";
+                viewModel.ClothingBrand = "";
+                viewModel.ClothingSize = "";
+                viewModel.ClothingColor = "";
+                viewModel.Season = "";
+                viewModel.ClothingMaterial = "";
+                viewModel.TypeOfClothing = "";
+            }
+
 
             //Om alla fält är tomma eller alla är vald
             if (viewModel.ClothingBrand == "" &&

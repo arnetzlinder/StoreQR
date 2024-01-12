@@ -14,7 +14,7 @@
         </div>
         <div class="d-flex flex-row  flex-sm-wrap flex-md-nowrap">
             <form class="mx-3" id="filterForm" method="get" action="@Url.Action("Index", "Clothing")">
-                <fieldset>
+                <fieldset class="d-flex flex-column justify-content-center align-items-center">
                     <div class="form-group">
                         <label class="control-label">Välj användare</label>
                         <select name="FamilyMemberName" class="form-control filter-dropdown family-dropdown">
@@ -88,6 +88,7 @@
 
             
                 <input type="submit" class="mt-3 btn-primary" value="Applicera filter">
+                    <a href="@Url.Action("Index", "Clothing", new { ResetFilters = true })" class="mt-3 btn btn-warning">Återställ filter</a>
                 </fieldset>
             </form>
 
@@ -131,34 +132,12 @@ else
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Hämta alla filterelement
-        var filterDropdowns = document.querySelectorAll(".filter-dropdown");
+        var filterForm = document.getElementById("filterForm");
 
         // Lägg på ett change-event på varje dropdown
-        filterDropdowns.forEach(function (dropdown) {
-            dropdown.addEventListener("change", function () {
-                // Spara det värdet på kolumn i localStorage
-                if (dropdown.classList.contains("family-dropdown")) {
-                    localStorage.setItem('selectedName', this.value);
-                } else if (dropdown.classList.contains("size-dropdown")) {
-                    localStorage.setItem('selectedSize', this.value);
-                }
-
-                // Skicka formuläret om innehållet i dropdownen ändras
-                document.getElementById("filterForm").submit();
-            });
-            console.log("MOAHAHAAHHAHAHA!!")
-
-            // Återställ det senast valda märket
-            var storedBrand = localStorage.getItem('selectedName');
-            if (storedBrand && dropdown.classList.contains("family-dropdown")) {
-                dropdown.value = storedBrand;
-            }
-
-            // Återställ det senast valda storleken
-            var storedSize = localStorage.getItem('selectedSize');
-            if (storedSize && dropdown.classList.contains("size-dropdown")) {
-                dropdown.value = storedSize;
-            }
+        filterForm.addEventListener("change", function () {
+            // Skicka formuläret om innehållet i dropdownen ändras
+            filterForm.submit();
         });
     });
 
