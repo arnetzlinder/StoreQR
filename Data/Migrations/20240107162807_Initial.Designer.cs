@@ -276,7 +276,7 @@ namespace StoreQR.Data.Migrations
 
                     b.HasKey("ClothingId");
 
-                    b.ToTable("ClothingItems");
+                    b.ToTable("ClothingItem");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

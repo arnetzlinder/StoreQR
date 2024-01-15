@@ -12,89 +12,104 @@ using StoreQR.Interface;
 
 namespace StoreQR.Controllers
 {
+    [Authorize]
     public class ClothingController : Controller
     {
         private readonly ILogger<ClothingController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IClothingFilterService _filterService;
-        //private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ClothingController(ILogger<ClothingController> logger, ApplicationDbContext context, IClothingFilterService filterService)
+
+        public ClothingController(ILogger<ClothingController> logger, 
+            ApplicationDbContext context, 
+            IClothingFilterService filterService,
+            UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _filterService = filterService ?? throw new ArgumentNullException(nameof(filterService));
-            //_userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-        }
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+    }
 
         //[Authorize]
         public IActionResult Index(ClothingViewModel viewModel, bool? ResetFilters)
         {
-            //Hämtar alla värden först
-            var distinctValues = _context.GetFamilyMembersForDropdown()
-                .Select(c => new
+            //Hämta användarens id med hjälp av user manager
+            string? currentUserId = _userManager.GetUserId(HttpContext.User);
+            if (currentUserId != null)
+            {
+                //Hämtar alla värden först
+                var distinctValues = _context.GetFamilyMembersForDropdown(currentUserId)
+                    .Select(c => new
+                    {
+                        ClothingBrand = c.ClothingBrand,
+                        ClothingSize = c.ClothingSize,
+                        ClothingColor = c.ClothingColor,
+                        Season = c.Season,
+                        ClothingMaterial = c.ClothingMaterial,
+                        TypeOfClothing = c.TypeOfClothing,
+                        FamilyMemberName = c.FamilyMemberName
+                    })
+                    .Distinct()
+                    .ToList();
+
+                ViewBag.DistinctBrands = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.ClothingBrand).Distinct().ToList();
+                ViewBag.DistinctSizes = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.ClothingSize).Distinct().ToList();
+                ViewBag.DistinctColors = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.ClothingColor).Distinct().ToList();
+                ViewBag.DistinctSeasons = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.Season).Distinct().ToList();
+                ViewBag.DistinctMaterials = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.ClothingMaterial).Distinct().ToList();
+                ViewBag.DistinctTypesOfClothing = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.TypeOfClothing).Distinct().ToList();
+                ViewBag.DistinctFamilyMemberName = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.FamilyMemberName).Distinct().ToList();
+
+                if (ResetFilters.HasValue && ResetFilters.Value)
                 {
-                    ClothingBrand = c.ClothingBrand,
-                    ClothingSize = c.ClothingSize,
-                    ClothingColor = c.ClothingColor,
-                    Season = c.Season,
-                    ClothingMaterial = c.ClothingMaterial,
-                    TypeOfClothing = c.TypeOfClothing,
-                    FamilyMemberName = c.FamilyMemberName
-                })
-                .Distinct()
-                .ToList();
+                    // Återställ filter om knappen återställ klickats på
+                    viewModel.FamilyMemberName = "";
+                    viewModel.ClothingBrand = "";
+                    viewModel.ClothingSize = "";
+                    viewModel.ClothingColor = "";
+                    viewModel.Season = "";
+                    viewModel.ClothingMaterial = "";
+                    viewModel.TypeOfClothing = "";
+                }
 
-            ViewBag.DistinctBrands = _context.GetFamilyMembersForDropdown().Select(c => c.ClothingBrand).Distinct().ToList();
-            ViewBag.DistinctSizes = _context.GetFamilyMembersForDropdown().Select(c => c.ClothingSize).Distinct().ToList();
-            ViewBag.DistinctColors = _context.GetFamilyMembersForDropdown().Select(c => c.ClothingColor).Distinct().ToList();
-            ViewBag.DistinctSeasons = _context.GetFamilyMembersForDropdown()    .Select(c => c.Season).Distinct().ToList();
-            ViewBag.DistinctMaterials = _context.GetFamilyMembersForDropdown().Select(c => c.ClothingMaterial).Distinct().ToList();
-            ViewBag.DistinctTypesOfClothing = _context.GetFamilyMembersForDropdown().Select(c => c.TypeOfClothing).Distinct().ToList();
-            ViewBag.DistinctFamilyMemberName = _context.GetFamilyMembersForDropdown().Select(c => c.FamilyMemberName).Distinct().ToList();
 
-            if (ResetFilters.HasValue && ResetFilters.Value)
+                //Om alla fält är tomma eller alla är vald
+                if (viewModel.ClothingBrand == "" &&
+                    viewModel.ClothingSize == "" &&
+                    viewModel.ClothingColor == "" &&
+                    viewModel.Season == "" &&
+                    viewModel.ClothingMaterial == "" &&
+                    viewModel.TypeOfClothing == "" &&
+                    viewModel.FamilyMemberName == "")
+                {
+                    //Hämtar alla träffar om inget val gjorts eller om användaren väljer alla märken
+                    var allClothingItems = _filterService.GetAllClothingItems();
+                    return View(allClothingItems);
+                }
+                else
+                {
+                    var filteredClothingItems = _filterService.GetFilteredClothingItems(
+                                  viewModel.ClothingBrand,
+                                  viewModel.ClothingSize,
+                                  viewModel.ClothingColor,
+                                  viewModel.Season,
+                                  viewModel.ClothingMaterial,
+                                  viewModel.TypeOfClothing,
+                                  viewModel.FamilyMemberName
+                              );
+
+
+
+                    return View(filteredClothingItems);
+                }
+            } else
             {
-                // Återställ filter om knappen återställ klickats på
-                viewModel.FamilyMemberName = "";
-                viewModel.ClothingBrand = "";
-                viewModel.ClothingSize = "";
-                viewModel.ClothingColor = "";
-                viewModel.Season = "";
-                viewModel.ClothingMaterial = "";
-                viewModel.TypeOfClothing = "";
+                Console.WriteLine("Something went wrong");
+                throw new Exception("Something went wrong");
             }
-
-
-            //Om alla fält är tomma eller alla är vald
-            if (viewModel.ClothingBrand == "" &&
-                viewModel.ClothingSize == "" && 
-                viewModel.ClothingColor == "" && 
-                viewModel.Season == "" && 
-                viewModel.ClothingMaterial == "" &&
-                viewModel.TypeOfClothing == "" &&
-                viewModel.FamilyMemberName == "")
-            {
-                //Hämtar alla träffar om inget val gjorts eller om användaren väljer alla märken
-                var allClothingItems = _filterService.GetAllClothingItems();
-                return View(allClothingItems);
-            }
-            else
-            {
-                var filteredClothingItems = _filterService.GetFilteredClothingItems(
-                              viewModel.ClothingBrand,
-                              viewModel.ClothingSize,
-                              viewModel.ClothingColor,
-                              viewModel.Season,
-                              viewModel.ClothingMaterial,
-                              viewModel.TypeOfClothing,
-                              viewModel.FamilyMemberName
-                          );
-
-              
-
-                return View(filteredClothingItems);
-            }
+           
           
         }
 

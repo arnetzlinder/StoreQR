@@ -11,7 +11,7 @@ namespace StoreQR.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ClothingItems",
+                name: "ClothingItem",
                 columns: table => new
                 {
                     ClothingId = table.Column<int>(type: "int", nullable: false)
@@ -29,7 +29,7 @@ namespace StoreQR.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClothingItems", x => x.ClothingId);
+                    table.PrimaryKey("PK_ClothingItem", x => x.ClothingId);
                 });
         }
 
@@ -37,7 +37,7 @@ namespace StoreQR.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ClothingItems");
+                name: "ClothingItem");
         }
     }
 }
