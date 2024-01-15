@@ -35,10 +35,10 @@ namespace StoreQR.Interface
     public class ClothingFilterService : IClothingFilterService
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ClothingFilterService(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor)
+        public ClothingFilterService(ApplicationDbContext context, UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Exchange.WebServices.Data;
@@ -8,15 +9,15 @@ using System.Data;
 
 namespace StoreQR.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         public DbSet<ClothingItem> ClothingItem { get; set; }
         public DbSet<StoringUnit> StoringUnit { get; set; }
 
         public DbSet<FamilyMember> FamilyMember { get; set; }
-        //public DbSet<ApplicationUser> ApplicationUser { get; set; }
-        
+        //public DbSet<IdentityUser> IdentityUser { get; set; }
+
         //public IClothingFilterService ClothingFilterService { get; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor
             //IClothingFilterService clothingFilterService

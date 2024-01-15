@@ -18,13 +18,13 @@ namespace StoreQR.Controllers
         private readonly ILogger<ClothingController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IClothingFilterService _filterService;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
 
         public ClothingController(ILogger<ClothingController> logger, 
             ApplicationDbContext context, 
             IClothingFilterService filterService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -54,13 +54,14 @@ namespace StoreQR.Controllers
                     .Distinct()
                     .ToList();
 
-                ViewBag.DistinctBrands = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.ClothingBrand).Distinct().ToList();
-                ViewBag.DistinctSizes = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.ClothingSize).Distinct().ToList();
-                ViewBag.DistinctColors = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.ClothingColor).Distinct().ToList();
-                ViewBag.DistinctSeasons = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.Season).Distinct().ToList();
-                ViewBag.DistinctMaterials = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.ClothingMaterial).Distinct().ToList();
-                ViewBag.DistinctTypesOfClothing = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.TypeOfClothing).Distinct().ToList();
-                ViewBag.DistinctFamilyMemberName = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.FamilyMemberName).Distinct().ToList();
+                var clothingInfo = _context.GetFamilyMembersForDropdown(currentUserId).ToList();
+                ViewBag.DistinctBrands = clothingInfo.Select(c => c.ClothingBrand).Distinct().ToList();
+                ViewBag.DistinctSizes = clothingInfo.Select(c => c.ClothingSize).Distinct().ToList();
+                ViewBag.DistinctColors = clothingInfo.Select(c => c.ClothingColor).Distinct().ToList();
+                ViewBag.DistinctSeasons = clothingInfo.Select(c => c.Season).Distinct().ToList();
+                ViewBag.DistinctMaterials = clothingInfo.Select(c => c.ClothingMaterial).Distinct().ToList();
+                ViewBag.DistinctTypesOfClothing = clothingInfo.Select(c => c.TypeOfClothing).Distinct().ToList();
+                ViewBag.DistinctFamilyMemberName = clothingInfo.Select(c => c.FamilyMemberName).Distinct().ToList();
 
                 if (ResetFilters.HasValue && ResetFilters.Value)
                 {
@@ -112,7 +113,18 @@ namespace StoreQR.Controllers
            
           
         }
-
+        static List<string> ConvertToPascalCase(List<string> inputList) 
+        { 
+            List<string> pascalCaseList = new List<string>(); 
+            foreach (string input in inputList) 
+            { 
+                string[] words = input.Split(' '); for (int i = 0; i < words.Length; i++) 
+                {
+                    pascalCaseList.Add(char.ToUpper(words[i][0]) + words[i].Substring(1).ToLower()); 
+                } 
+            } 
+            return pascalCaseList; 
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

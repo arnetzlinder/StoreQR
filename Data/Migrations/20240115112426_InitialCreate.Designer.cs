@@ -12,8 +12,8 @@ using StoreQR.Data;
 namespace StoreQR.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240107162807_Initial")]
-    partial class Initial
+    [Migration("20240115112426_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -243,10 +243,6 @@ namespace StoreQR.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("ClothingImage")
-                        .IsRequired()
-                        .HasColumnType("varbinary(MAX)");
-
                     b.Property<string>("ClothingMaterial")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -259,10 +255,6 @@ namespace StoreQR.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClothingUser")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Season")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -271,12 +263,51 @@ namespace StoreQR.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("ClothingId");
 
                     b.ToTable("ClothingItem");
+                });
+
+            modelBuilder.Entity("StoreQR.Models.FamilyMember", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FamilyMember");
+                });
+
+            modelBuilder.Entity("StoreQR.Models.StoringUnit", b =>
+                {
+                    b.Property<int>("StorageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StorageId"));
+
+                    b.Property<string>("StorageDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StorageName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("StorageId");
+
+                    b.ToTable("StoringUnit");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
