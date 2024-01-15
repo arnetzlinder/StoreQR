@@ -35,13 +35,13 @@ namespace StoreQR.Data
             builder.Entity<ClothingItem>()
                 .HasKey(c => c.ClothingId);
         }
-        public List<ClothingViewModel> GetFamilyMembersForDropdown(string userId)
+        public List<ClothingViewModel> GetFamilyMembersByUserId(string userId)
         {
             var familyMembers = new List<ClothingViewModel>();
 
             using (var command = Database.GetDbConnection().CreateCommand())
             {
-                command.CommandText = "GetFamilyMembersForDropdown";
+                command.CommandText = "GetFamilyMembersByUserId";
                 command.CommandType = CommandType.StoredProcedure;
 
                 //Lägg till parametrar för userid

@@ -40,7 +40,7 @@ namespace StoreQR.Controllers
             if (currentUserId != null)
             {
                 //Hämtar alla värden först
-                var distinctValues = _context.GetFamilyMembersForDropdown(currentUserId)
+                var distinctValues = _context.GetFamilyMembersByUserId(currentUserId)
                     .Select(c => new
                     {
                         ClothingBrand = c.ClothingBrand,
@@ -54,7 +54,7 @@ namespace StoreQR.Controllers
                     .Distinct()
                     .ToList();
 
-                var clothingInfo = _context.GetFamilyMembersForDropdown(currentUserId).ToList();
+                var clothingInfo = _context.GetFamilyMembersByUserId(currentUserId).ToList();
                 ViewBag.DistinctBrands = clothingInfo.Select(c => c.ClothingBrand).Distinct().ToList();
                 ViewBag.DistinctSizes = clothingInfo.Select(c => c.ClothingSize).Distinct().ToList();
                 ViewBag.DistinctColors = clothingInfo.Select(c => c.ClothingColor).Distinct().ToList();

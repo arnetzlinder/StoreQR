@@ -28,7 +28,7 @@ namespace StoreQR.Interface
             );
 
         List<ClothingViewModel> GetAllClothingItems();
-        List<ClothingViewModel> GetFamilyMembersForDropdown(string userId);
+        List<ClothingViewModel> GetFamilyMembersByUserId(string userId);
 
     }
 
@@ -44,9 +44,9 @@ namespace StoreQR.Interface
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
-        public List<ClothingViewModel> GetFamilyMembersForDropdown(string userId)
+        public List<ClothingViewModel> GetFamilyMembersByUserId(string userId)
         {
-            var familyMembers = _context.GetFamilyMembersForDropdown(userId);
+            var familyMembers = _context.GetFamilyMembersByUserId(userId);
 
             return familyMembers;
         }
@@ -56,7 +56,7 @@ namespace StoreQR.Interface
             var currentUserId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (currentUserId != null)
             {
-                var allClothingViewModels = _context.GetFamilyMembersForDropdown(currentUserId)
+                var allClothingViewModels = _context.GetFamilyMembersByUserId(currentUserId)
                                .Select(c => new ClothingViewModel
                                {
                                    ClothingId = c.ClothingId,
@@ -92,13 +92,14 @@ namespace StoreQR.Interface
             var currentUserId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (currentUserId != null )
             {
-                var distinctBrands = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.ClothingBrand).Distinct().ToList();
-                var distinctSizes = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.ClothingSize).Distinct().ToList();
-                var distinctColors = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.ClothingColor).Distinct().ToList();
-                var distinctSeasons = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.Season).Distinct().ToList();
-                var distinctMaterials = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.ClothingMaterial).Distinct().ToList();
-                var distinctTypeOfClothing = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.TypeOfClothing).Distinct().ToList();
-                var distinctFamilyMemberName = _context.GetFamilyMembersForDropdown(currentUserId).Select(c => c.FamilyMemberName).Distinct().ToList();
+                var clothingInfo = _context.GetFamilyMembersByUserId(currentUserId).ToList();
+                var distinctBrands = clothingInfo.Select(c => c.ClothingBrand).Distinct().ToList();
+                var distinctSizes = clothingInfo.Select(c => c.ClothingSize).Distinct().ToList();
+                var distinctColors = clothingInfo.Select(c => c.ClothingColor).Distinct().ToList();
+                var distinctSeasons = clothingInfo.Select(c => c.Season).Distinct().ToList();
+                var distinctMaterials = clothingInfo.Select(c => c.ClothingMaterial).Distinct().ToList();
+                var distinctTypeOfClothing = clothingInfo.Select(c => c.TypeOfClothing).Distinct().ToList();
+                var distinctFamilyMemberName = clothingInfo.Select(c => c.FamilyMemberName).Distinct().ToList();
                 var brandItems = distinctBrands.Select(brand => new SelectListItem { Text = brand, Value = brand }).ToList();
                 var sizeItems = distinctSizes.Select(size => new SelectListItem { Text = size, Value = size }).ToList();
                 var colorItems = distinctColors.Select(color => new SelectListItem { Text = color, Value = color }).ToList();
@@ -107,7 +108,7 @@ namespace StoreQR.Interface
                 var typeItems = distinctTypeOfClothing.Select(type => new SelectListItem { Text = type, Value = type }).ToList();
                 var nameItems = distinctFamilyMemberName.Select(name => new SelectListItem { Text = name, Value = name }).ToList();
                 // Kollar om det finns något innehåll och isf filtrerar på vald egenskap
-                var query = _context.GetFamilyMembersForDropdown(currentUserId).AsQueryable();
+                var query = _context.GetFamilyMembersByUserId(currentUserId).AsQueryable();
 
                 if (!string.IsNullOrEmpty(ClothingBrand))
                 {
@@ -145,7 +146,7 @@ namespace StoreQR.Interface
 
 
                 // Genomför förfrågan och returnera resultaten
-                var filteredClothingViewModels = _context.GetFamilyMembersForDropdown(currentUserId)
+                var filteredClothingViewModels = _context.GetFamilyMembersByUserId(currentUserId)
                 .Where(c =>
                (string.IsNullOrEmpty(ClothingBrand) || c.ClothingBrand == ClothingBrand) &&
                (string.IsNullOrEmpty(ClothingSize) || c.ClothingSize == ClothingSize) &&
