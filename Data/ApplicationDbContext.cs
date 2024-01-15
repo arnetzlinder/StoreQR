@@ -40,17 +40,19 @@ namespace StoreQR.Data
                         {
                             var familyMember = new ClothingViewModel
                             {
-                                ClothingId = result.GetInt32(0),    
+                                ClothingId = result.GetInt32(0),
+                                FamilyUserId = result.GetString(1),
                                 FamilyMemberName = result.GetString(2),
-                                ClothingName = result.GetString(7),
-                                //QRCode = result.GetString(5),
-                                ClothingBrand = result.GetString(3),
-                                ClothingSize = result.GetString(8),
-                                ClothingColor = result.GetString(4),
-                                Season = result.GetString(9),
-                                ClothingMaterial = result.GetString(6),
-                                TypeOfClothing = result.GetString(10),
-                                FamilyUserId = result.GetString(1)
+                                UserId = result.GetString(3),
+                                ClothingBrand = result.GetString(4),
+                                ClothingColor = result.GetString(5),
+                                //ClothingImage = result.GetString(6),
+                                ClothingMaterial = result.GetString(7),
+                                ClothingName = result.GetString(8),
+                                ClothingSize = result.GetString(9),
+                                Season = result.GetString(10),
+                                TypeOfClothing = result.GetString(11),
+                                //QRCode = result.GetString(12)
                             };
 
                             familyMembers.Add(familyMember);

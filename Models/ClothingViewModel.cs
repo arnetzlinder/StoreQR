@@ -6,7 +6,7 @@ namespace StoreQR.Models
     public class ClothingViewModel
     {
         public int ClothingId { get; set; }
-        //public int UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
         //[DisplayName("Bild")]
         //public byte[] Image { get; set; }
         [DisplayName("Beskrivning:")]
