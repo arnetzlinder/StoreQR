@@ -153,7 +153,7 @@ body {
 }
 /*Kläderstyles*/
 .filter-dropdown {
-    width: 12rem;
+    width: 15.5rem;
 }
 .addClothesButton {
     background-color: var(--AccentColor);
@@ -232,18 +232,28 @@ body {
     width: 150px;
 }
 
+.StorageBody {
+    width: 100%;
+}
 .StorageCard {
-    max-width: 450px;
+    max-width: 350px;
+    max-height: 700px;
+    width: 100%;
     border-radius: 5px;
+    border: 1px solid var(--TextColor);
     background-color: var(--SecondColor);
     color: var(--TextColor);
     font-size: 1rem;
+    margin: 0.75rem;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
     .StorageCard h4 {
         background-color: var(--AccentInputColor);
+        font-size: 1.2rem;
         border-radius: 5px;
         text-transform: uppercase;
+        word-wrap:normal;
     }
 
     .StorageCard p {

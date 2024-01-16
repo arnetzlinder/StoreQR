@@ -16,7 +16,7 @@
             <form class="mx-3" id="filterForm" method="get" action="@Url.Action("Index", "Clothing")">
                 <fieldset class="d-flex flex-column justify-content-center align-items-center">
                     <div class="form-group">
-                        <label class="control-label">Välj användare</label>
+                        <label class="control-label">Användare</label>
                         <select name="FamilyMemberName" class="form-control filter-dropdown family-dropdown">
                             <option value="">Alla användare</option>
                             @foreach (var distinctFamilyMemberName in ViewBag.DistinctFamilyMemberName)
@@ -26,7 +26,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Välj märke</label>
+                        <label class="control-label mt-3">Märke</label>
                         <select name="ClothingBrand" class="form-control filter-dropdown size-dropdown">
                             <option value="">Alla märken</option>
                             @foreach (var distinctBrand in ViewBag.DistinctBrands)
@@ -36,7 +36,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Välj storlek</label>
+                        <label class="control-label mt-3">Storlek</label>
                         <select name="ClothingSize" class="form-control filter-dropdown size-dropdown">
                             <option value="">Alla storlekar</option>
                             @foreach (var distinctSize in ViewBag.DistinctSizes)
@@ -46,7 +46,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Välj färg</label>
+                        <label class="control-label mt-3">Färg</label>
                         <select name="ClothingColor" class="form-control filter-dropdown size-dropdown">
                             <option value="">Alla färger</option>
                             @foreach (var distinctColor in ViewBag.DistinctColors)
@@ -56,7 +56,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Välj säsong</label>
+                        <label class="control-label mt-3">Säsong</label>
                         <select name="Season" class="form-control filter-dropdown size-dropdown">
                             <option value="">Alla säsonger</option>
                             @foreach (var distinctSeason in ViewBag.DistinctSeasons)
@@ -66,7 +66,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Välj material</label>
+                        <label class="control-label mt-3">Material</label>
                         <select name="ClothingMaterial" class="form-control filter-dropdown size-dropdown">
                             <option value="">Alla material</option>
                             @foreach (var distinctMaterial in ViewBag.DistinctMaterials)
@@ -76,7 +76,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Välj typ av plagg</label>
+                        <label class="control-label mt-3">Typ av plagg</label>
                         <select name="TypeOfClothing" class="form-control filter-dropdown size-dropdown">
                             <option value="">Alla typer av plagg</option>
                             @foreach (var distinctTypeOfClothing in ViewBag.DistinctTypesOfClothing)
@@ -86,7 +86,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Välj typ av plagg</label>
+                        <label class="control-label mt-3">Förvaringsutrymme</label>
                         <select name="StorageName" class="form-control filter-dropdown size-dropdown">
                             <option value="">Alla förvaringsutrymmen</option>
                             @foreach (var StorageUnitName in ViewBag.StorageUnitName)

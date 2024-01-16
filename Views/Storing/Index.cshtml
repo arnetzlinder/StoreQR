@@ -5,13 +5,13 @@
 
 @if (User?.Identity?.IsAuthenticated == true)
 {
-    <div class="d-flex flex-column align-items-center justify-content-center">
-        <h2 class="m-3">Mina förvaringsutrymmen</h2>
-        <div class="row">
+    <div class="d-flex flex-column align-items-center justify-content-center container">
+        <h2 class="mb-3 mt-3">Mina förvaringsutrymmen</h2>
+        <div class="d-flex flex-row  flex-xs-wrap flex-md-nowrap">
             <div class="d-flex align-items-center justify-content-center">
-                <a class="btn btn-primary px-3 m-3" asp-area="" asp-controller="Clothing" asp-action="Create">Lägg till förvaringsutrymme</a>
+                <a class="btn btn-primary px-3 m-3" asp-area="" asp-controller="Storage" asp-action="Create">Lägg till förvaringsutrymme</a>
             </div>
-            <div class="d-flex flex-column align-items-center justify-content-center">
+            <div class="d-flex flex-column align-items-center justify-content-center flex-wrap StorageBody">
                 @foreach (var item in Model)
                 {
                     <div class="card StorageCard m-1 p-0">
