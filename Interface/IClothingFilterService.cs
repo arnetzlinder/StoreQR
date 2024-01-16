@@ -28,7 +28,7 @@ namespace StoreQR.Interface
             );
 
         List<ClothingViewModel> GetAllClothingItems();
-        List<ClothingViewModel> GetFamilyMembersByUserId(string userId);
+        List<ClothingViewModel> CombineFamilyNameAndStorageNameByUserId(string userId);
 
     }
 
@@ -44,9 +44,9 @@ namespace StoreQR.Interface
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
-        public List<ClothingViewModel> GetFamilyMembersByUserId(string userId)
+        public List<ClothingViewModel> CombineFamilyNameAndStorageNameByUserId(string userId)
         {
-            var familyMembers = _context.GetFamilyMembersByUserId(userId);
+            var familyMembers = _context.CombineFamilyNameAndStorageNameByUserId(userId);
 
             return familyMembers;
         }
@@ -56,7 +56,7 @@ namespace StoreQR.Interface
             var currentUserId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (currentUserId != null)
             {
-                var allClothingViewModels = _context.GetFamilyMembersByUserId(currentUserId)
+                var allClothingViewModels = _context.CombineFamilyNameAndStorageNameByUserId(currentUserId)
                                .Select(c => new ClothingViewModel
                                {
                                    ClothingId = c.ClothingId,
@@ -68,6 +68,8 @@ namespace StoreQR.Interface
                                    ClothingMaterial = c.ClothingMaterial,
                                    TypeOfClothing = c.TypeOfClothing,
                                    FamilyMemberName = c.FamilyMemberName,
+                                   StorageId = c.StorageId,
+                                   StorageName = c.StorageName,
                                })
                                .ToList();
 

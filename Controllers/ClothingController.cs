@@ -57,7 +57,7 @@ namespace StoreQR.Controllers
                     .Distinct()
                     .ToList();
                 //Plockar ut distinkta värden för förvaringsutrymmen
-                var distinctStorageUnits = familyMembersAndStorage.Select(c => new
+                var storageUnits = familyMembersAndStorage.Select(c => new
                 {
                     StorageId = c.StorageId,
                     StorageName = c.StorageName,
@@ -75,7 +75,7 @@ namespace StoreQR.Controllers
                 ViewBag.DistinctMaterials = distinctFamilyMembers.Select(c => c.ClothingMaterial).Distinct().ToList();
                 ViewBag.DistinctTypesOfClothing = distinctFamilyMembers.Select(c => c.TypeOfClothing).Distinct().ToList();
                 ViewBag.DistinctFamilyMemberName = distinctFamilyMembers.Select(c => c.FamilyMemberName).Distinct().ToList();
-                ViewBag.StorageUnitNames = distinctStorageUnits.Select(c => c.StorageName).Distinct().ToList();
+                ViewBag.StorageUnitNames = storageUnits.ToList();
 
                 if (ResetFilters.HasValue && ResetFilters.Value)
                 {

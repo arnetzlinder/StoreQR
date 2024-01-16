@@ -73,7 +73,8 @@ namespace StoreQR.Data
                                 ClothingSize = result.GetString(9),
                                 Season = result.GetString(10),
                                 TypeOfClothing = result.GetString(11),
-                                //QRCode = result.GetString(12)
+                                //QRCode = result.GetString(12),
+                                StorageId = result.GetInt32(13)
                             };
 
                             familyMembers.Add(familyMember);
@@ -125,22 +126,50 @@ namespace StoreQR.Data
             return storageUnitNames;
         }
 
-        public List<ClothingViewModel> CombineFamilyNameAndStorageNameByUserId (string userId)
+        public List<ClothingViewModel> CombineFamilyNameAndStorageNameByUserId(string userId)
         {
-            var combinedList = new List<ClothingViewModel>();
+            
 
             //Hämta familjemedlemmars namn och övrig info i clothingitem-tabellen
             var familyMembers = GetFamilyMembersByUserId(userId);
             //Hämta info om förvaringsutrymmen
             var storageUnits = GetStorageNameByUserId(userId);
 
-            //Kombinera till en modell
-            combinedList.AddRange(familyMembers);
-            combinedList.AddRange(storageUnits);
+            var familyMembersAndStorage = familyMembers.Select(fm => new ClothingViewModel
+            {
+                ClothingId = fm.ClothingId,
+                UserId = fm.UserId,
+                ClothingName = fm.ClothingName,
+                ClothingBrand = fm.ClothingBrand,
+                ClothingSize = fm.ClothingSize,
+                ClothingColor = fm.ClothingColor,
+                Season = fm.Season,
+                ClothingMaterial = fm.ClothingMaterial,
+                TypeOfClothing = fm.TypeOfClothing,
+                FamilyMemberName = fm.FamilyMemberName,
+                FamilyUserId = fm.FamilyUserId,
+                StorageId = fm.StorageId, 
+                StorageName = string.Empty
+            }).ToList();
 
-            return combinedList;
 
+            //  Lägg på förvaringsinfo på den kläder som har det.
+            foreach (var storageUnit in storageUnits)
+            {
+                var matchingItem = familyMembersAndStorage.FirstOrDefault(c => c.StorageId == storageUnit.StorageId);
 
+                if (matchingItem != null)
+                {
+                    matchingItem.StorageName = storageUnit.StorageName;
+                } else
+                {
+                    storageUnit.StorageName = "Ej angett";
+                }
+
+                
+
+            }
+            return familyMembersAndStorage;
         }
 
 
