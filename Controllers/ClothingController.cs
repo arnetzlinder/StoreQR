@@ -75,7 +75,7 @@ namespace StoreQR.Controllers
                 ViewBag.DistinctMaterials = distinctFamilyMembers.Select(c => c.ClothingMaterial).Distinct().ToList();
                 ViewBag.DistinctTypesOfClothing = distinctFamilyMembers.Select(c => c.TypeOfClothing).Distinct().ToList();
                 ViewBag.DistinctFamilyMemberName = distinctFamilyMembers.Select(c => c.FamilyMemberName).Distinct().ToList();
-                ViewBag.StorageUnitNames = storageUnits.ToList();
+                ViewBag.StorageUnitName = storageUnits.Select(c => c.StorageName).Distinct().ToList();
 
                 if (ResetFilters.HasValue && ResetFilters.Value)
                 {
@@ -87,6 +87,7 @@ namespace StoreQR.Controllers
                     viewModel.Season = "";
                     viewModel.ClothingMaterial = "";
                     viewModel.TypeOfClothing = "";
+                    viewModel.StorageName = "";
                 }
 
 
@@ -97,7 +98,8 @@ namespace StoreQR.Controllers
                     viewModel.Season == "" &&
                     viewModel.ClothingMaterial == "" &&
                     viewModel.TypeOfClothing == "" &&
-                    viewModel.FamilyMemberName == "")
+                    viewModel.FamilyMemberName == "" &&
+                    viewModel.StorageName == "")
                 {
                     //Hämtar alla träffar om inget val gjorts eller om användaren väljer alla märken
                     var allClothingItems = _filterService.GetAllClothingItems();
@@ -112,7 +114,8 @@ namespace StoreQR.Controllers
                                   viewModel.Season,
                                   viewModel.ClothingMaterial,
                                   viewModel.TypeOfClothing,
-                                  viewModel.FamilyMemberName
+                                  viewModel.FamilyMemberName,
+                                  viewModel.StorageName
                               );
 
 

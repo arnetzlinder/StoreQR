@@ -24,7 +24,8 @@ namespace StoreQR.Interface
             string Season,
             string ClothingMaterial,
             string TypeOfClothing,
-            string FamilyMemberName
+            string FamilyMemberName,
+            string StorageName
             );
 
         List<ClothingViewModel> GetAllClothingItems();
@@ -88,13 +89,15 @@ namespace StoreQR.Interface
             string Season,
             string ClothingMaterial,
             string TypeOfClothing,
-            string FamilyMemberName
+            string FamilyMemberName,
+            string StorageName
         )
         {
+            //Hämtar och filtrerar ut olika egenskaper utifrån vad användaren har lagt till i databasen
             var currentUserId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (currentUserId != null )
             {
-                var clothingInfo = _context.GetFamilyMembersByUserId(currentUserId).ToList();
+                var clothingInfo = _context.CombineFamilyNameAndStorageNameByUserId(currentUserId).ToList();
                 var distinctBrands = clothingInfo.Select(c => c.ClothingBrand).Distinct().ToList();
                 var distinctSizes = clothingInfo.Select(c => c.ClothingSize).Distinct().ToList();
                 var distinctColors = clothingInfo.Select(c => c.ClothingColor).Distinct().ToList();
@@ -102,6 +105,7 @@ namespace StoreQR.Interface
                 var distinctMaterials = clothingInfo.Select(c => c.ClothingMaterial).Distinct().ToList();
                 var distinctTypeOfClothing = clothingInfo.Select(c => c.TypeOfClothing).Distinct().ToList();
                 var distinctFamilyMemberName = clothingInfo.Select(c => c.FamilyMemberName).Distinct().ToList();
+                var distinctStorageNames = clothingInfo.Select(c => c.StorageName).Distinct().ToList();
                 var brandItems = distinctBrands.Select(brand => new SelectListItem { Text = brand, Value = brand }).ToList();
                 var sizeItems = distinctSizes.Select(size => new SelectListItem { Text = size, Value = size }).ToList();
                 var colorItems = distinctColors.Select(color => new SelectListItem { Text = color, Value = color }).ToList();
@@ -109,8 +113,9 @@ namespace StoreQR.Interface
                 var materialItems = distinctMaterials.Select(material => new SelectListItem { Text = material, Value = material }).ToList();
                 var typeItems = distinctTypeOfClothing.Select(type => new SelectListItem { Text = type, Value = type }).ToList();
                 var nameItems = distinctFamilyMemberName.Select(name => new SelectListItem { Text = name, Value = name }).ToList();
+                var storingItems = distinctStorageNames.Select(storage => new SelectListItem { Text = storage, Value = storage }).ToList();
                 // Kollar om det finns något innehåll och isf filtrerar på vald egenskap
-                var query = _context.GetFamilyMembersByUserId(currentUserId).AsQueryable();
+                var query = _context.CombineFamilyNameAndStorageNameByUserId(currentUserId).AsQueryable();
 
                 if (!string.IsNullOrEmpty(ClothingBrand))
                 {
@@ -145,10 +150,14 @@ namespace StoreQR.Interface
                 {
                     query = query.Where(c => string.Equals(c.FamilyMemberName, FamilyMemberName, StringComparison.OrdinalIgnoreCase));
                 }
+                if (!string.IsNullOrEmpty(StorageName))
+                {
+                    query = query.Where(c => string.Equals(c.StorageName, StorageName, StringComparison.OrdinalIgnoreCase));
+                }
 
 
                 // Genomför förfrågan och returnera resultaten
-                var filteredClothingViewModels = _context.GetFamilyMembersByUserId(currentUserId)
+                var filteredClothingViewModels = _context.CombineFamilyNameAndStorageNameByUserId(currentUserId)
                 .Where(c =>
                (string.IsNullOrEmpty(ClothingBrand) || c.ClothingBrand == ClothingBrand) &&
                (string.IsNullOrEmpty(ClothingSize) || c.ClothingSize == ClothingSize) &&
@@ -156,7 +165,8 @@ namespace StoreQR.Interface
                (string.IsNullOrEmpty(Season) || c.Season == Season) &&
                (string.IsNullOrEmpty(ClothingMaterial) || c.ClothingMaterial == ClothingMaterial) &&
                (string.IsNullOrEmpty(TypeOfClothing) || c.TypeOfClothing == TypeOfClothing) &&
-               (string.IsNullOrEmpty(FamilyMemberName) || c.FamilyMemberName == FamilyMemberName)
+               (string.IsNullOrEmpty(FamilyMemberName) || c.FamilyMemberName == FamilyMemberName) &&
+               (string.IsNullOrEmpty(StorageName) || c.StorageName == StorageName)
                 )
                 .Select(c => new ClothingViewModel
                 {
@@ -169,7 +179,8 @@ namespace StoreQR.Interface
                     Season = c.Season,
                     ClothingMaterial = c.ClothingMaterial,
                     TypeOfClothing = c.TypeOfClothing,
-                    FamilyMemberName = c.FamilyMemberName
+                    FamilyMemberName = c.FamilyMemberName,
+                    StorageName = c.StorageName
                 })
                 .ToList();
                 return filteredClothingViewModels;

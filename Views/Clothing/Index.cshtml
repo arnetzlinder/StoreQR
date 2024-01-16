@@ -12,7 +12,7 @@
         <div class="d-flex align-items-center justify-content-center">
             <a class="btn btn-primary addClothesButton px-3" asp-area="" asp-controller="Clothing" asp-action="Create">Lägg till nytt</a>
         </div>
-        <div class="d-flex flex-row  flex-sm-wrap flex-md-nowrap">
+        <div class="d-flex flex-row  flex-xs-wrap flex-md-nowrap">
             <form class="mx-3" id="filterForm" method="get" action="@Url.Action("Index", "Clothing")">
                 <fieldset class="d-flex flex-column justify-content-center align-items-center">
                     <div class="form-group">
@@ -82,6 +82,16 @@
                             @foreach (var distinctTypeOfClothing in ViewBag.DistinctTypesOfClothing)
                             {
                                 <option value="@distinctTypeOfClothing">@distinctTypeOfClothing</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Välj typ av plagg</label>
+                        <select name="StorageName" class="form-control filter-dropdown size-dropdown">
+                            <option value="">Alla förvaringsutrymmen</option>
+                            @foreach (var StorageUnitName in ViewBag.StorageUnitName)
+                            {
+                                <option value="@StorageUnitName">@StorageUnitName</option>
                             }
                         </select>
                     </div>
