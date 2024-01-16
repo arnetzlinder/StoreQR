@@ -74,7 +74,7 @@ namespace StoreQR.Data
                                 Season = result.GetString(10),
                                 TypeOfClothing = result.GetString(11),
                                 //QRCode = result.GetString(12),
-                                StorageId = result.GetInt32(13)
+                                StorageId = result.IsDBNull(13) ? (int?)null : result.GetInt32(13)
                             };
 
                             familyMembers.Add(familyMember);
@@ -149,11 +149,11 @@ namespace StoreQR.Data
                 FamilyMemberName = fm.FamilyMemberName,
                 FamilyUserId = fm.FamilyUserId,
                 StorageId = fm.StorageId, 
-                StorageName = string.Empty
+                StorageName = "Ej angett"
             }).ToList();
 
 
-            //  Lägg på förvaringsinfo på den kläder som har det.
+            //  Lägg på förvaringsinfo på de kläder som har det inlagt.
             foreach (var storageUnit in storageUnits)
             {
                 var matchingItem = familyMembersAndStorage.FirstOrDefault(c => c.StorageId == storageUnit.StorageId);
@@ -163,7 +163,8 @@ namespace StoreQR.Data
                     matchingItem.StorageName = storageUnit.StorageName;
                 } else
                 {
-                    storageUnit.StorageName = "Ej angett";
+                        // Sätt StorageName till "Ej angett" 
+                        storageUnit.StorageName = "Ej angett";
                 }
 
                 
