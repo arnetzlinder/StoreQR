@@ -85,6 +85,64 @@ namespace StoreQR.Data
             return familyMembers;
         }
 
+        public List<ClothingViewModel> GetStorageNameByUserId(string userId)
+        {
+            var storageUnitNames = new List<ClothingViewModel>();
+
+            using (var command = Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "GetStorageNameByUserId";
+                command.CommandType = CommandType.StoredProcedure;
+
+                //Lägg till parametrar för userid
+                var userIdParameter = command.CreateParameter();
+                userIdParameter.ParameterName = "@UserId";
+                userIdParameter.DbType = DbType.String;
+                userIdParameter.Value = userId;
+                command.Parameters.Add(userIdParameter);
+
+                Database.OpenConnection();
+
+                using (var result = command.ExecuteReader())
+                {
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            var storageUnitName = new ClothingViewModel
+                            {
+                                StorageId = result.GetInt32(0),
+                                StorageName = result.GetString(1),
+                                UserId = result.GetString(2),
+                            };
+
+                            storageUnitNames.Add(storageUnitName);
+                        }
+                    }
+                }
+            }
+
+            return storageUnitNames;
+        }
+
+        public List<ClothingViewModel> CombineFamilyNameAndStorageNameByUserId (string userId)
+        {
+            var combinedList = new List<ClothingViewModel>();
+
+            //Hämta familjemedlemmars namn och övrig info i clothingitem-tabellen
+            var familyMembers = GetFamilyMembersByUserId(userId);
+            //Hämta info om förvaringsutrymmen
+            var storageUnits = GetStorageNameByUserId(userId);
+
+            //Kombinera till en modell
+            combinedList.AddRange(familyMembers);
+            combinedList.AddRange(storageUnits);
+
+            return combinedList;
+
+
+        }
+
 
         //Ser till så att det returneras en tom lista om det inte finns några familjemedlemmar tillagda.
 
@@ -97,7 +155,7 @@ namespace StoreQR.Data
         //}
 
 
-        
+
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
         //    base.OnModelCreating(modelBuilder);

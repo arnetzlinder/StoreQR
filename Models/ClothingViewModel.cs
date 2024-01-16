@@ -38,5 +38,8 @@ namespace StoreQR.Models
 
         public string FamilyUserId { get; set; } = string.Empty;
 
+        public int StorageId { get; set; }
+        public string StorageName { get; set; } = string.Empty;
+
     }
 }

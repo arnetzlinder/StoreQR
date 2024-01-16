@@ -40,7 +40,10 @@ namespace StoreQR.Controllers
             if (currentUserId != null)
             {
                 //Hämtar alla värden först
-                var distinctValues = _context.GetFamilyMembersByUserId(currentUserId)
+                var familyMembersAndStorage = _context.CombineFamilyNameAndStorageNameByUserId(currentUserId);
+
+                //Plockar ut distinkta värden för familjemedlemmar
+                var distinctFamilyMembers = familyMembersAndStorage
                     .Select(c => new
                     {
                         ClothingBrand = c.ClothingBrand,
@@ -53,15 +56,26 @@ namespace StoreQR.Controllers
                     })
                     .Distinct()
                     .ToList();
+                //Plockar ut distinkta värden för förvaringsutrymmen
+                var distinctStorageUnits = familyMembersAndStorage.Select(c => new
+                {
+                    StorageId = c.StorageId,
+                    StorageName = c.StorageName,
+                    
+                })
+                    .Distinct()
+                    .ToList();
 
-                var clothingInfo = _context.GetFamilyMembersByUserId(currentUserId).ToList();
-                ViewBag.DistinctBrands = clothingInfo.Select(c => c.ClothingBrand).Distinct().ToList();
-                ViewBag.DistinctSizes = clothingInfo.Select(c => c.ClothingSize).Distinct().ToList();
-                ViewBag.DistinctColors = clothingInfo.Select(c => c.ClothingColor).Distinct().ToList();
-                ViewBag.DistinctSeasons = clothingInfo.Select(c => c.Season).Distinct().ToList();
-                ViewBag.DistinctMaterials = clothingInfo.Select(c => c.ClothingMaterial).Distinct().ToList();
-                ViewBag.DistinctTypesOfClothing = clothingInfo.Select(c => c.TypeOfClothing).Distinct().ToList();
-                ViewBag.DistinctFamilyMemberName = clothingInfo.Select(c => c.FamilyMemberName).Distinct().ToList();
+                //var clothingInfo = _context.GetFamilyMembersByUserId(currentUserId).ToList();
+                //var storageUnitNames = _context.GetStorageNameByUserId(currentUserId).ToList();
+                ViewBag.DistinctBrands = distinctFamilyMembers.Select(c => c.ClothingBrand).Distinct().ToList();
+                ViewBag.DistinctSizes = distinctFamilyMembers.Select(c => c.ClothingSize).Distinct().ToList();
+                ViewBag.DistinctColors = distinctFamilyMembers.Select(c => c.ClothingColor).Distinct().ToList();
+                ViewBag.DistinctSeasons = distinctFamilyMembers.Select(c => c.Season).Distinct().ToList();
+                ViewBag.DistinctMaterials = distinctFamilyMembers.Select(c => c.ClothingMaterial).Distinct().ToList();
+                ViewBag.DistinctTypesOfClothing = distinctFamilyMembers.Select(c => c.TypeOfClothing).Distinct().ToList();
+                ViewBag.DistinctFamilyMemberName = distinctFamilyMembers.Select(c => c.FamilyMemberName).Distinct().ToList();
+                ViewBag.StorageUnitNames = distinctStorageUnits.Select(c => c.StorageName).Distinct().ToList();
 
                 if (ResetFilters.HasValue && ResetFilters.Value)
                 {
