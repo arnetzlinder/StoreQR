@@ -9,7 +9,7 @@ namespace StoreQR.Models
         public string UserId { get; set; } = string.Empty;
         [DisplayName("Bild")]
         public byte[]? ClothingImage { get; set; } 
-        [DisplayName("*Beskrivning:")]
+        [DisplayName("Beskrivning:")]
         public string ClothingName { get; set; } = string.Empty;
 
         //public string QRCode { get; set; } = string.Empty;

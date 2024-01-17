@@ -1,4 +1,4 @@
-﻿@model StoreQR.Models.ClothingViewModel
+﻿@model StoreQR.Models.ClothingItem
 @{
     ViewData["Title"] = "Lägg till klädesplagg";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -16,8 +16,8 @@
         <span asp-validation-for="ClothingName" class="text-danger"></span>
     </div>
     <div class="form-group ClothingUser">
-        <label asp-for="FamilyUserId" class="control-label mt-2">Välj vem plagget tillhör</label>
-        <select asp-for="FamilyUserId" class="form-control" asp-items="@ViewBag.FamilyMemberNames">
+        <label asp-for="ClothingUserId" class="control-label mt-2 mb-2">Välj vem plagget tillhör</label>
+            <select asp-for="ClothingUserId" class="form-control" asp-items="@ViewBag.FamilyMemberNames">
             <option value="">Ingen vald</option>
         </select>
     </div>
@@ -52,7 +52,7 @@
     @*     <div id="reader" style="width: 300px; height: 300px;"></div>
         <button type="button" class="btn btn-primary" id="scanButton">Skanna QR-kod</button>
         <input type="hidden" id="qrCodeResult" name="ClothingQRCode" /> *@
-    <button type="submit" class="btn btn-primary">Spara</button>
+    <button type="submit" class="btn btn-primary mt-3">Spara</button>
 </form>
 </div>
 

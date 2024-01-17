@@ -178,7 +178,9 @@ namespace StoreQR.Controllers
             };
                 }
             }
-            return View();
+
+            var clothingItem = new ClothingItem();
+            return View(clothingItem);
         }
 
 
