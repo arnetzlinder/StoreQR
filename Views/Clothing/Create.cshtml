@@ -12,7 +12,7 @@
     <form asp-action="Create" method="post" enctype="multipart/form-data" class="w-75">
     <div class="form-group">
         <label asp-for="ClothingName"></label>
-            <input asp-for="ClothingName" class="form-control mt-2" />
+            <input asp-for="ClothingName" class="form-control mt-2" id="ClothingName"/>
         <span asp-validation-for="ClothingName" class="text-danger"></span>
     </div>
     <div class="form-group ClothingUser">
@@ -23,27 +23,27 @@
     </div>
     <div class="form-group">
             <label asp-for="ClothingBrand" class="mt-2"></label>
-        <input asp-for="ClothingBrand" class="form-control" />
+        <input asp-for="ClothingBrand" class="form-control" id="ClothingBrand"/>
     </div>
     <div class="form-group">
             <label asp-for="ClothingSize" class="mt-2"></label>
-        <input asp-for="ClothingSize" class="form-control" />
+        <input asp-for="ClothingSize" class="form-control" itemid="ClothingSize"/>
     </div>
     <div class="form-group">
             <label asp-for="ClothingColor" class="mt-2"></label>
-        <input asp-for="ClothingColor" class="form-control" />
+        <input asp-for="ClothingColor" class="form-control" id="ClothingColor" />
     </div>
     <div class="form-group">
             <label asp-for="Season" class="mt-2"></label>
-        <input asp-for="Season" class="form-control" />
+        <input asp-for="Season" class="form-control" id="Season"/>
     </div>
     <div class="form-group">
             <label asp-for="ClothingMaterial" class="mt-2"></label>
-        <input asp-for="ClothingMaterial" class="form-control" />
+        <input asp-for="ClothingMaterial" class="form-control" id="ClothingMaterial"/>
     </div>
     <div class="form-group">
            <label asp-for="TypeOfClothing" class="mt-2"></label>
-        <input asp-for="TypeOfClothing" class="form-control" />
+        <input asp-for="TypeOfClothing" class="form-control" id="TypeOfClothing"/>
     </div>
     <div class="form-group d-flex flex-column">
             <label asp-for="ClothingImage" class="mt-2"></label>
@@ -57,25 +57,58 @@
 </div>
 
 <script>
-    document.getElementById('scanButton').addEventListener('click', function () {
-        // Initialize the QR code scanner
-        let html5QrcodeScanner = new Html5QrcodeScanner(
-            'reader', // Element ID for the QR code scanner container
-            { fps: 10, qrbox: 250 } // Configuration options (e.g., frames per second, QR box size)
-        );
+    document.addEventListener('DOMContentLoaded', function () {
+        function validateForm() {
+            // Ta bort mellanslag före och efter samt gör om alla strängar till pascal case
+            updateValue("ClothingName");
+            updateValue("ClothingBrand");
+            updateValue("ClothingSize");
+            updateValue("ClothingColor");
+            updateValue("Season");
+            updateValue("ClothingMaterial");
+            updateValue("TypeOfClothing");
 
-        // Start scanning
-        html5QrcodeScanner.render(result => {
-            // Handle the scanned QR code result
-            console.log('Scanned result:', result);
-            // Set the scanned result to a hidden input field in the form
-            document.getElementById('qrCodeResult').value = result;
+            return true; // Allow the form to be submitted
+        }
 
-            // You can perform other actions with the scanned result here
-            // For example, update other fields in the form
-        }).catch(err => {
-            // Handle any errors that occur during scanning
-            console.error(err);
-        });
+        // Function to update the value of an element identified by ID
+        function updateValue(elementId) {
+            var element = document.getElementById(elementId);
+
+            // Check if the element exists
+            if (element) {
+                // Update the value if the element exists
+                element.value = toPascalCase(element.value);
+            }
+        }
+
+        // Function to convert a string to Pascal case
+        function toPascalCase(str) {
+            return str.trim().replace(/\b\w/g, function (word) {
+                return word.toUpperCase();
+            });
+        }
     });
+
+    // document.getElementById('scanButton').addEventListener('click', function () {
+    //     // Initialize the QR code scanner
+    //     let html5QrcodeScanner = new Html5QrcodeScanner(
+    //         'reader', // Element ID for the QR code scanner container
+    //         { fps: 10, qrbox: 250 } // Configuration options (e.g., frames per second, QR box size)
+    //     );
+
+    //     // Start scanning
+    //     html5QrcodeScanner.render(result => {
+    //         // Handle the scanned QR code result
+    //         console.log('Scanned result:', result);
+    //         // Set the scanned result to a hidden input field in the form
+    //         document.getElementById('qrCodeResult').value = result;
+
+    //         // You can perform other actions with the scanned result here
+    //         // For example, update other fields in the form
+    //     }).catch(err => {
+    //         // Handle any errors that occur during scanning
+    //         console.error(err);
+    //     });
+    // });
 </script>
