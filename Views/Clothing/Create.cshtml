@@ -57,7 +57,6 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
         function validateForm() {
             // Ta bort mellanslag före och efter samt gör om alla strängar till pascal case
             updateValue("ClothingName");
@@ -87,8 +86,7 @@
             return str.trim().replace(/\b\w/g, function (word) {
                 return word.toUpperCase();
             });
-        }
-    });
+    };
 
     // document.getElementById('scanButton').addEventListener('click', function () {
     //     // Initialize the QR code scanner

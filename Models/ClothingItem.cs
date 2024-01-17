@@ -7,10 +7,12 @@ namespace StoreQR.Models
     {
         [Key]
         public int ClothingId { get; set; }
+        [Required]
         public string UserId { get; set; } = string.Empty;
         [DisplayName("Bild")]
         public byte[]? ClothingImage { get; set; }
         [DisplayName("*Beskrivning:")]
+        [Required(ErrorMessage ="Beskrivning är obligatoriskt")]
         public string ClothingName { get; set; } = string.Empty;
 
         [DisplayName("Tillhör:")]

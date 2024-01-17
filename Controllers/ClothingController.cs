@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using StoreQR.Interface;
+using Microsoft.CodeAnalysis.Elfie.Extensions;
 
 namespace StoreQR.Controllers
 {
@@ -188,29 +189,46 @@ namespace StoreQR.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ClothingItem model, IFormFile image)
         {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+
             if (ModelState.IsValid)
             {
-                //var user = await _userManager.GetUserAsync(User);
-                //if (user != null)
-                //{
-                //    model.UserId = int.Parse(user.Id);
-                { 
+                if (image != null && image.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await image.CopyToAsync(memoryStream);
+                        model.ClothingImage = memoryStream.ToArray();
+                    }
+                }
 
-                    //if (image != null && image.Length > 0)
-                    //{
-                    //    using (var memoryStream = new MemoryStream())
-                    //    {
-                    //        await image.CopyToAsync(memoryStream);
-                    //        model.ClothingImage = memoryStream.ToArray();
-                    //    }
-                    //}
-                    _context.ClothingItem.Add(model);
-                    await _context.SaveChangesAsync();
+                model.ClothingBrand = model.ClothingBrand.Trim();
+                model.ClothingName = model.ClothingName.Trim();
+                model.ClothingUserId = model.ClothingUserId;
+                model.ClothingSize = model.ClothingSize.Trim();
+                model.ClothingColor = model.ClothingColor.Trim();
+                model.ClothingMaterial = model.ClothingMaterial.Trim();
+                model.Season = model.Season.Trim();
+                model.TypeOfClothing = model.TypeOfClothing.Trim();
+                model.UserId = userId;
 
-                    return RedirectToAction("Index");
+                _context.ClothingItem.Add(model);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                foreach (var modelStateEntry in ModelState.Values)
+                {
+                    foreach (var error in modelStateEntry.Errors)
+                    {
+                        Console.WriteLine($"Error: {error.ErrorMessage}");
+                    }
                 }
             }
-            return View(model);
+            
+                return View(model);
         }
     }
 }
