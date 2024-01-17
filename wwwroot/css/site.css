@@ -16,15 +16,15 @@ body {
 .header .navbar {
     background-color: var(--AccentColor) !important;
     color: white !important;
-    height: 150px;
+    height: 200px;
 }
 
 #headerlink {
     color: white !important;
 }
-
+/*Lägg till mediaquerys för att göra logo och header större på större skärm*/
 .StoreQRLogo {
-    max-height: 130px;
+    max-height: 160px;
 }
 html {
     font-size: 1rem;

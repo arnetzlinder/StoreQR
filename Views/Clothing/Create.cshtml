@@ -5,64 +5,51 @@
 }
 
 <div class="container">
-    <h1 class="mx-3 mb-3">@ViewData["Title"]</h1>
-    <p> Lägg till uppgifter om ditt klädesplagg. Du behöver inte fylla i alla egenskaper, beskrivning är det enda som måste finnas med.</p>
+    <h1 class="mb-3">@ViewData["Title"]</h1>
+    <p> Lägg till uppgifter om ditt klädesplagg. Stjärnmarkerade fält är obligatoriska. </p>
+    <p>Du kan välja att lägga in förvaringsutrymme manuellt eller att skanna förvaringens qr-kod.</p>
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <form asp-action="Create" method="post" enctype="multipart/form-data" class="w-75">
     <div class="form-group">
         <label asp-for="ClothingName"></label>
-        <input asp-for="ClothingName" class="form-control" />
+            <input asp-for="ClothingName" class="form-control mt-2" />
         <span asp-validation-for="ClothingName" class="text-danger"></span>
     </div>
     <div class="form-group ClothingUser">
-        <label asp-for="FamilyUserId" class="control-label">Välj vem plagget tillhör</label>
+        <label asp-for="FamilyUserId" class="control-label mt-2">Välj vem plagget tillhör</label>
         <select asp-for="FamilyUserId" class="form-control" asp-items="@ViewBag.FamilyMemberNames">
-            <option value="">Välj</option>
+            <option value="">Ingen vald</option>
         </select>
     </div>
-
-
-  @*   <div class="form-group">
-        <label asp-for="ClothingUser"></label>
-        <input asp-for="ClothingUser" class="form-control" />
-        <span asp-validation-for="ClothingUser" class="text-danger"></span>
-    </div> 
-    Denna behöver ändras till en id för att passa ihop med familymember id.*@
-   @*  <div class="form-group">
-        <label asp-for="ClothingBrand"></label>
+    <div class="form-group">
+            <label asp-for="ClothingBrand" class="mt-2"></label>
         <input asp-for="ClothingBrand" class="form-control" />
-        <span asp-validation-for="ClothingBrand" class="text-danger"></span>
-    </div> *@
+    </div>
     <div class="form-group">
-        <label asp-for="ClothingSize"></label>
+            <label asp-for="ClothingSize" class="mt-2"></label>
         <input asp-for="ClothingSize" class="form-control" />
-        <span asp-validation-for="ClothingSize" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="ClothingColor"></label>
+            <label asp-for="ClothingColor" class="mt-2"></label>
         <input asp-for="ClothingColor" class="form-control" />
-        <span asp-validation-for="ClothingColor" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Season"></label>
+            <label asp-for="Season" class="mt-2"></label>
         <input asp-for="Season" class="form-control" />
-        <span asp-validation-for="Season" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="ClothingMaterial"></label>
+            <label asp-for="ClothingMaterial" class="mt-2"></label>
         <input asp-for="ClothingMaterial" class="form-control" />
-        <span asp-validation-for="ClothingMaterial" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="TypeOfClothing"></label>
+            <label asp-for="TypeOfClothing" class="mt-2"></label>
         <input asp-for="TypeOfClothing" class="form-control" />
-        <span asp-validation-for="TypeOfClothing" class="text-danger"></span>
     </div>
-   @*  <div class="form-group">
+    <div class="form-group">
         <label asp-for="ClothingImage"></label>
         <input asp-for="ClothingImage" type="file" class="form-control-file" />
         <span asp-validation-for="ClothingImage" class="text-danger"></span>
-    </div> *@
+    </div>
     <div id="reader" style="width: 300px; height: 300px;"></div>
     <button type="button" class="btn btn-primary" id="scanButton">Skanna QR-kod</button>
     <input type="hidden" id="qrCodeResult" name="ClothingQRCode" />
