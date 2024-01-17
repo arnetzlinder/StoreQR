@@ -8,8 +8,8 @@ namespace StoreQR.Models
         [Key]
         public int ClothingId { get; set; }
         //public int UserId { get; set; }
-        //[DisplayName("Bild")]
-        //public byte[] Image { get; set; }
+        [DisplayName("Bild")]
+        public byte?[] ClothingImage { get; set; }
         [DisplayName("Beskrivning:")]
         public string ClothingName { get; set; } = string.Empty;
 

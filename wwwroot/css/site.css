@@ -224,6 +224,9 @@ body {
     font-family: 'Inknut Antiqua', serif;
 }
 
+.QRReader {
+    visibility: hidden;
+}
 /*Förvaringstyles*/
 .addClothesButton {
     background-color: var(--AccentColor);
