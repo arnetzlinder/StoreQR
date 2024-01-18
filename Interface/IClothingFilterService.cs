@@ -134,25 +134,25 @@ namespace StoreQR.Interface
 
                 if (!string.IsNullOrEmpty(Season))
                 {
-                    query = query.Where(c => string.Equals(c.Season, Season, StringComparison.OrdinalIgnoreCase));
+                    query = query.Where(c => c.Season == Season);
                 }
 
                 if (!string.IsNullOrEmpty(ClothingMaterial))
                 {
-                    query = query.Where(c => string.Equals(c.ClothingMaterial, ClothingMaterial, StringComparison.OrdinalIgnoreCase));
+                    query = query.Where(c => c.ClothingMaterial == ClothingMaterial);
                 }
 
                 if (!string.IsNullOrEmpty(TypeOfClothing))
                 {
-                    query = query.Where(c => string.Equals(c.TypeOfClothing, TypeOfClothing, StringComparison.OrdinalIgnoreCase));
+                    query = query.Where(c => c.TypeOfClothing == TypeOfClothing);
                 }
                 if (!string.IsNullOrEmpty(FamilyMemberName))
                 {
-                    query = query.Where(c => string.Equals(c.FamilyMemberName, FamilyMemberName, StringComparison.OrdinalIgnoreCase));
+                    query = query.Where(c => c.FamilyMemberName == FamilyMemberName);
                 }
                 if (!string.IsNullOrEmpty(StorageName))
                 {
-                    query = query.Where(c => string.Equals(c.StorageName, StorageName, StringComparison.OrdinalIgnoreCase));
+                    query = query.Where(c => c.StorageName == StorageName);
                 }
 
 

@@ -213,7 +213,7 @@ namespace StoreQR.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ClothingItem model)
+        public async Task<IActionResult> Create(ClothingItem model, IFormFile clothingImageFile)
         {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             if (userId != null)
@@ -223,15 +223,14 @@ namespace StoreQR.Controllers
                 {
                     try
                     {
-
-                        //if (image != null && image.Length > 0)
-                        //{
-                        //    using (var memoryStream = new MemoryStream())
-                        //    {
-                        //        await image.CopyToAsync(memoryStream);
-                        //        model.ClothingImage = memoryStream.ToArray();
-                        //    }
-                        //}
+                        if (model.ClothingImageFile != null && model.ClothingImageFile.Length > 0)
+                        {
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                await model.ClothingImageFile.CopyToAsync(memoryStream);
+                                model.ClothingImage = memoryStream.ToArray();
+                            }
+                        }
 
                         model.ClothingBrand = model.ClothingBrand.Trim();
                         model.ClothingName = model.ClothingName.Trim();
@@ -275,5 +274,16 @@ namespace StoreQR.Controllers
             
                 return View(model);
         }
+        //private async Task UploadImage(ClothingItem model, IFormFile image)
+        //{
+        //    if (image != null && image.Length > 0)
+        //    {
+        //        using (var memoryStream = new MemoryStream())
+        //        {
+        //            await image.CopyToAsync(memoryStream);
+        //            model.ClothingImage = memoryStream.ToArray();
+        //        }
+        //    }
+        //}
     }
 }

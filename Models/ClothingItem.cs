@@ -10,8 +10,13 @@ namespace StoreQR.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ClothingId { get; set; }
         public string UserId { get; set; } = string.Empty;
-        //[DisplayName("Bild")]
-        //public byte[]? ClothingImage { get; set; }
+        [DisplayName("Bild")]
+        [DataType(DataType.Upload)]
+        [NotMapped] //Ta bort från mappningen i databasen, test för att få till uppladdning
+        public IFormFile? ClothingImageFile { get; set; }
+        [DisplayName("Bild")]
+        [NotMapped]
+        public byte[]? ClothingImage {  get; set; }
         [DisplayName("*Beskrivning:")]
         [Required(ErrorMessage ="Beskrivning är obligatoriskt")]
         public string ClothingName { get; set; } = string.Empty;
