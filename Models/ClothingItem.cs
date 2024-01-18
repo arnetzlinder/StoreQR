@@ -40,6 +40,7 @@ namespace StoreQR.Models
         [DisplayName("Typ av plagg:")]
         public string TypeOfClothing { get; set; } = string.Empty;
 
-        //public int StorageId { get; set; }
+        [DisplayName("Förvaringsutrymme:")]
+        public int StorageId { get; set; }
     }
 }

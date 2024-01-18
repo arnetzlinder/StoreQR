@@ -181,6 +181,31 @@ namespace StoreQR.Controllers
                 }
             }
 
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var storageNames = _context.GetStorageNameByUserId(userId)
+                    .Where(fm => fm.UserId == userId)
+                    .Select(fm => new SelectListItem
+                    {
+                        Value = fm.StorageId.ToString(),
+                        Text = fm.StorageName
+                    })
+                    .Distinct()
+                    .ToList();
+
+                if (storageNames.Any())
+                {
+                    ViewBag.storageNames = new SelectList(storageNames, "Value", "Text");
+                }
+                else
+                {
+                    ViewBag.storageNames = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "Inga förvaringsutrymmen tillagda" }
+            };
+                }
+            }
+
             var clothingItem = new ClothingItem();
             return View(clothingItem);
         }
@@ -216,6 +241,7 @@ namespace StoreQR.Controllers
                         model.ClothingMaterial = model.ClothingMaterial.Trim();
                         model.Season = model.Season.Trim();
                         model.TypeOfClothing = model.TypeOfClothing.Trim();
+                        model.StorageId = model.StorageId;
                         model.UserId = userId;
 
                         _context.ClothingItem.Add(model);

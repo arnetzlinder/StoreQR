@@ -135,6 +135,21 @@ namespace StoreQR.Data
             //Hämta info om förvaringsutrymmen
             var storageUnits = GetStorageNameByUserId(userId);
 
+            //Skapa en ordlista för att hålla koll på förvaringsutrymmens namn
+            var storageNamesById = new Dictionary<int, string>();
+
+            foreach (var storageUnit in storageUnits)
+            {
+                var storageId = storageUnit.StorageId.GetValueOrDefault();
+
+                //Kolla om nyckel redan finns i lista
+                if (!storageNamesById.ContainsKey(storageId))
+                {
+                    storageNamesById.Add(storageId, storageUnit.StorageName);
+                }
+            }
+
+
             var familyMembersAndStorage = familyMembers.Select(fm => new ClothingViewModel
             {
                 ClothingId = fm.ClothingId,
@@ -148,8 +163,11 @@ namespace StoreQR.Data
                 TypeOfClothing = fm.TypeOfClothing,
                 FamilyMemberName = fm.FamilyMemberName,
                 FamilyUserId = fm.FamilyUserId,
-                StorageId = fm.StorageId, 
-                StorageName = "Ej angett"
+                StorageId = fm.StorageId,
+                //Använd ordlistan för att populera förvaringsutrymmen med namn
+                StorageName = storageNamesById.TryGetValue(fm.StorageId.GetValueOrDefault(), out var storageName)
+                    ? storageName
+                    : "Ej angett"
             }).ToList();
 
 
@@ -173,29 +191,5 @@ namespace StoreQR.Data
             return familyMembersAndStorage;
         }
 
-
-        //Ser till så att det returneras en tom lista om det inte finns några familjemedlemmar tillagda.
-
-        //private ICollection<FamilyMember>? _familyMembers;
-
-        //public ICollection<FamilyMember>? FamilyMembers
-        //{
-        //    get => _familyMembers ??= new List<FamilyMember>();
-        //    set => _familyMembers = value;
-        //}
-
-
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    base.OnModelCreating(modelBuilder);
-
-        //    // Your configurations for ClothingItem entity
-        //    modelBuilder.Entity<ClothingItem>()
-        //        .Property(c => c.ClothingImage)
-        //        .HasColumnType("varbinary(MAX)");
-
-
-        //}
     }
 }
