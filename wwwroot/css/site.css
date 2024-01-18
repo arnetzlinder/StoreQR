@@ -26,6 +26,16 @@ body {
 .StoreQRLogo {
     max-height: 160px;
 }
+
+@media screen and (min-width: 720px) {
+    .StoreQRLogo {
+        max-height: 220px;
+    }
+    .header .navbar {
+        height: 250px;
+    }
+}
+/*Startsida*/
 html {
     font-size: 1rem;
 }
@@ -33,8 +43,11 @@ html {
 .WelcomeText {
     margin-top: 8rem;
 }
-/*Knappar*/
+.StoreLogo {
+    max-width: fit-content
+}
 
+/*Knappar*/
 .btn-primary {
     color: var(--TextColor);
     background-color: var(--AccentColor);
