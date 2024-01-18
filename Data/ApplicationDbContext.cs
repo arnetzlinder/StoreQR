@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Exchange.WebServices.Data;
 using StoreQR.Interface;
 using StoreQR.Models;
 using System.Data;
+using System.Data.Common;
 
 namespace StoreQR.Data
 {
@@ -70,7 +72,7 @@ namespace StoreQR.Data
                                 UserId = result.GetString(3),
                                 ClothingBrand = result.GetString(4),
                                 ClothingColor = result.GetString(5),
-                                //ClothingImage = result.GetString(6),
+                                ClothingImage = GetBytes(result, 6),
                                 ClothingMaterial = result.GetString(7),
                                 ClothingName = result.GetString(8),
                                 ClothingSize = result.GetString(9),
@@ -87,6 +89,31 @@ namespace StoreQR.Data
             }
 
             return familyMembers;
+        }
+
+        //För att få ut bildfil från byte []
+        private static byte[]? GetBytes(DbDataReader reader, int ordinal)
+        {
+            if (reader.IsDBNull(ordinal))
+            {
+                return null; // Returnera null om null i databas så att exempelbild istället visas i frontenden
+            }
+
+            const int bufferSize = 1024;
+            byte[] buffer = new byte[bufferSize];
+            long bytesRead;
+            long fieldOffset = 0;
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                while ((bytesRead = reader.GetBytes(ordinal, fieldOffset, buffer, 0, bufferSize)) > 0)
+                {
+                    stream.Write(buffer, 0, (int)bytesRead);
+                    fieldOffset += bufferSize;
+                }
+
+                return stream.ToArray();
+            }
         }
 
         public List<ClothingViewModel> GetStorageNameByUserId(string userId)
@@ -161,6 +188,7 @@ namespace StoreQR.Data
                 ClothingBrand = fm.ClothingBrand,
                 ClothingSize = fm.ClothingSize,
                 ClothingColor = fm.ClothingColor,
+                ClothingImage = fm.ClothingImage,
                 Season = fm.Season,
                 ClothingMaterial = fm.ClothingMaterial,
                 TypeOfClothing = fm.TypeOfClothing,

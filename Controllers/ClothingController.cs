@@ -54,7 +54,8 @@ namespace StoreQR.Controllers
                         Season = c.Season,
                         ClothingMaterial = c.ClothingMaterial,
                         TypeOfClothing = c.TypeOfClothing,
-                        FamilyMemberName = c.FamilyMemberName
+                        FamilyMemberName = c.FamilyMemberName,
+                        ClothingImage = c.ClothingImage,
                     })
                     .Distinct()
                     .ToList();

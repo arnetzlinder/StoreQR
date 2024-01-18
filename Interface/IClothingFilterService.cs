@@ -65,6 +65,7 @@ namespace StoreQR.Interface
                                    ClothingBrand = c.ClothingBrand,
                                    ClothingSize = c.ClothingSize,
                                    ClothingColor = c.ClothingColor,
+                                   ClothingImage = c.ClothingImage,
                                    Season = c.Season,
                                    ClothingMaterial = c.ClothingMaterial,
                                    TypeOfClothing = c.TypeOfClothing,
