@@ -1,16 +1,17 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StoreQR.Models
 {
     public class ClothingItem
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ClothingId { get; set; }
-        [Required]
         public string UserId { get; set; } = string.Empty;
-        [DisplayName("Bild")]
-        public byte[]? ClothingImage { get; set; }
+        //[DisplayName("Bild")]
+        //public byte[]? ClothingImage { get; set; }
         [DisplayName("*Beskrivning:")]
         [Required(ErrorMessage ="Beskrivning är obligatoriskt")]
         public string ClothingName { get; set; } = string.Empty;

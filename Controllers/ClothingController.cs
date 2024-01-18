@@ -10,6 +10,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using StoreQR.Interface;
 using Microsoft.CodeAnalysis.Elfie.Extensions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace StoreQR.Controllers
 {
@@ -187,46 +188,64 @@ namespace StoreQR.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ClothingItem model, IFormFile image)
+        public async Task<IActionResult> Create(ClothingItem model)
         {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-
-            if (ModelState.IsValid)
+            if (userId != null)
             {
-                if (image != null && image.Length > 0)
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await image.CopyToAsync(memoryStream);
-                        model.ClothingImage = memoryStream.ToArray();
-                    }
-                }
-
-                model.ClothingBrand = model.ClothingBrand.Trim();
-                model.ClothingName = model.ClothingName.Trim();
-                model.ClothingUserId = model.ClothingUserId;
-                model.ClothingSize = model.ClothingSize.Trim();
-                model.ClothingColor = model.ClothingColor.Trim();
-                model.ClothingMaterial = model.ClothingMaterial.Trim();
-                model.Season = model.Season.Trim();
-                model.TypeOfClothing = model.TypeOfClothing.Trim();
                 model.UserId = userId;
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
 
-                _context.ClothingItem.Add(model);
-                await _context.SaveChangesAsync();
+                        //if (image != null && image.Length > 0)
+                        //{
+                        //    using (var memoryStream = new MemoryStream())
+                        //    {
+                        //        await image.CopyToAsync(memoryStream);
+                        //        model.ClothingImage = memoryStream.ToArray();
+                        //    }
+                        //}
 
-                return RedirectToAction("Index");
-            }
+                        model.ClothingBrand = model.ClothingBrand.Trim();
+                        model.ClothingName = model.ClothingName.Trim();
+                        model.ClothingUserId = model.ClothingUserId;
+                        model.ClothingSize = model.ClothingSize.Trim();
+                        model.ClothingColor = model.ClothingColor.Trim();
+                        model.ClothingMaterial = model.ClothingMaterial.Trim();
+                        model.Season = model.Season.Trim();
+                        model.TypeOfClothing = model.TypeOfClothing.Trim();
+                        model.UserId = userId;
+
+                        _context.ClothingItem.Add(model);
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index");
+                    } catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error saving ClothingItem: {ex.Message}");
+                    }
+
+                }
+                else
+                {
+                    foreach (var modelStateEntry in ModelState.Values)
+                    {
+                        foreach (var error in modelStateEntry.Errors)
+                        {
+                            Console.WriteLine($"Error: {error.ErrorMessage}");
+                        }
+                    }
+                } 
+
+                }
             else
             {
-                foreach (var modelStateEntry in ModelState.Values)
-                {
-                    foreach (var error in modelStateEntry.Errors)
-                    {
-                        Console.WriteLine($"Error: {error.ErrorMessage}");
-                    }
-                }
+                return BadRequest("UserId saknas.");
             }
+
+   
             
                 return View(model);
         }
