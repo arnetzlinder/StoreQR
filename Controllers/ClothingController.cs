@@ -278,34 +278,28 @@ namespace StoreQR.Controllers
         }
 
         //Get ClothingItem Edit
-        //public async Task<IActionResult> Edit (int? ClothingId)
-        //{
-        //    if (ClothingId == null)
-        //    {
-        //        Console.WriteLine("Det finns inget plagg");
-        //    }
+        public async Task<IActionResult> Edit(int ClothingId)
+        {
 
-        //    string? currentUserId = _userManager.GetUserId(HttpContext.User);
+            string? currentUserId = _userManager.GetUserId(HttpContext.User);
 
-        //    if (currentUserId != null)
-        //    {
-        //        var clothingItems = await _context.GetClothingItemAsync;
+            if (currentUserId == null)
+            {
+                Console.WriteLine("Du är inte behörig");
+                return View(null);
+            }
 
-        //        var clothingItem = clothingItems.Find(c => c.ClothingId == ClothingId);
+            var clothingItems = await _context.GetClothingItemAsync(ClothingId);
 
-        //        if (clothingItem == null)
-        //        {
-        //            Console.WriteLine("Klädesplagg saknas"); 
-        //        }
+            var clothingItem = clothingItems.Find(c => c.ClothingId == ClothingId);
 
-        //        return View(clothingItem);
-        //    }
+            if (clothingItem == null)
+            {
+                Console.WriteLine("Klädesplagg saknas");
+            }
 
-        //    // User är null.
-        //    Console.WriteLine("Du är inte behörig");
-
-
-        //}
-    
+            return View(clothingItem);
+        }
+        
     }
 }

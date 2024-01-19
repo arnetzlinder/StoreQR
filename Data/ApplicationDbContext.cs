@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Exchange.WebServices.Data;
+//using Microsoft.Exchange.WebServices.Data;
 using Microsoft.Identity.Client.Extensions.Msal;
 using StoreQR.Interface;
 using StoreQR.Models;
@@ -85,6 +85,7 @@ namespace StoreQR.Data
                         }
                     }
                 }
+                Database.CloseConnection();
             }
 
             return familyMembers;
@@ -150,6 +151,7 @@ namespace StoreQR.Data
                         }
                     }
                 }
+                Database.CloseConnection();
             }
 
             return storageUnitNames;
@@ -220,134 +222,144 @@ namespace StoreQR.Data
             }
             return familyMembersAndStorage;
         }
-        //public async System.Threading.Tasks.Task<List<ClothingViewModel>> GetClothingItemAsync(int ClothingId)
-        //{
-        //    var familyMemberNameTask = GetClothingItemWithFamilyMemberName(ClothingId);
-        //    var storageNameTask = GetClothingItemWithStorageName(ClothingId);
+        public async Task<List<ClothingViewModel>> GetClothingItemAsync(int ClothingId)
+        {
+            var familyMemberNameTask = GetClothingItemWithFamilyMemberNameAsync(ClothingId);
+            var storageNameTask = GetClothingItemWithStorageNameAsync(ClothingId);
 
-        //    await System.Threading.Tasks.Task.WhenAll(familyMemberNameTask, storageNameTask);
+            var familyMemberName = (await GetClothingItemWithFamilyMemberNameAsync(ClothingId)).FirstOrDefault();
+            var storageName = (await GetClothingItemWithStorageNameAsync(ClothingId)).FirstOrDefault();
 
-        //    var familyMemberName = familyMemberNameTask.Result.FirstOrDefault();
-        //    var storageName = storageNameTask.Result.FirstOrDefault();
 
-        //    var clothingItem = new List<ClothingViewModel>();
+            var clothingItem = new List<ClothingViewModel>();
 
-        //    using (var command = Database.GetDbConnection().CreateCommand())
-        //    {
-        //        command.CommandText = "GetClothingItemById";
-        //        command.CommandType = CommandType.StoredProcedure;
+            using (var command = Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "GetClothingItemById";
+                command.CommandType = CommandType.StoredProcedure;
 
-        //        var clothingItemParameter = command.CreateParameter();
-        //        clothingItemParameter.ParameterName = "@ClothingId";
-        //        clothingItemParameter.DbType = DbType.Int32;
-        //        clothingItemParameter.Value = ClothingId;
-        //        command.Parameters.Add(clothingItemParameter);
+                var clothingItemParameter = command.CreateParameter();
+                clothingItemParameter.ParameterName = "@ClothingId";
+                clothingItemParameter.DbType = DbType.Int32;
+                clothingItemParameter.Value = ClothingId;
+                command.Parameters.Add(clothingItemParameter);
 
-        //        await Database.OpenConnectionAsync();
+                await Database.OpenConnectionAsync();
 
-        //        using (var result = await command.ExecuteReaderAsync())
-        //        {
-        //            if (result.HasRows)
-        //            {
-        //                while (await result.ReadAsync())
-        //                {
-        //                    var clothingItemValues = new ClothingViewModel();
-        //                    {
-        //                        ClothingId = result.GetInt32(0);
-        //                        ClothingName = result.GetString(2);
-        //                        ClothingUserId = result.GetInt32(3);
-        //                        //QRCode = result.GetString (4);
-        //                        ClothingBrand = result.GetString(5);
-        //                        ClothingSize = result.GetString(6);
-        //                        ClothingColor = result.GetString(7);
-        //                        Season = result.GetString(8);
-        //                        ClothingMaterial = result.GetString(9);
-        //                        TypeOfClothing = result.GetString(10);
-        //                        StorageId = result.GetInt32(11);
-        //                        FamilyMemberName = familyMemberName?.FamilyMemberName;
-        //                        StorageName = storageName?.StorageName;
-        //                    }
-        //                    clothingItem.Add(clothingItemValues);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return clothingItem;
-        //}
+                using (var result = await command.ExecuteReaderAsync())
+                {
+                    if (result.HasRows)
+                    {
+                        while (await result.ReadAsync())
+                        {
+                            var clothingItemValues = new ClothingViewModel()
+                            {
+                                ClothingId = result.GetInt32(0),
+                                ClothingName = result.GetString(2),
+                                ClothingUserId = result.GetInt32(3),
+                                //QRCode = result.GetString (4),
+                                ClothingBrand = result.GetString(5),
+                                ClothingSize = result.GetString(6),
+                                ClothingColor = result.GetString(7),
+                                Season = result.GetString(8),
+                                ClothingMaterial = result.GetString(9),
+                                TypeOfClothing = result.GetString(10),
+                                StorageId = result.GetInt32(11),
+                                FamilyMemberName = familyMemberName?.FamilyMemberName,
+                                StorageName = storageName?.StorageName
+                            };
+                            
 
-        //public async Task<List<ClothingViewModel>> GetClothingItemWithFamilyMemberName(int ClothingId)
-        //{
-        //    var clothingItemWithFamilyMemberName = new List<ClothingViewModel>();
+                            clothingItem.Add(clothingItemValues);
+                        }
+                    }
+                }
+                await Database.CloseConnectionAsync();
+            }
+           
 
-        //    using (var command = Database.GetDbConnection().CreateCommand())
-        //    {
-        //        command.CommandText = "GetClothingItemWithFamilyMemberName";
-        //        command.CommandType = CommandType.StoredProcedure;
+            return clothingItem;
+        }
 
-        //        var clothingItemParameter = command.CreateParameter();
-        //        clothingItemParameter.ParameterName = "@ClothingId";
-        //        clothingItemParameter.DbType = DbType.Int32;
-        //        clothingItemParameter.Value = ClothingId;
-        //        command.Parameters.Add(clothingItemParameter);
+        public async Task<List<ClothingViewModel>> GetClothingItemWithFamilyMemberNameAsync(int ClothingId)
+        {
+            var clothingItemWithFamilyMemberName = new List<ClothingViewModel>();
 
-        //        await Database.OpenConnectionAsync();
+            using (var command = Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "GetClothingItemWithFamilyMemberName";
+                command.CommandType = CommandType.StoredProcedure;
 
-        //        using (var result = await command.ExecuteReaderAsync())
-        //        {
-        //            if (result.HasRows)
-        //            {
-        //                while (await result.ReadAsync())
-        //                {
-        //                    var clothingFamilyName = new ClothingViewModel();
-        //                    {
-        //                        ClothingId = result.GetInt32(0);
-        //                        string FamilyMemberName = result.GetString(13);
-        //                    };
+                var clothingItemParameter = command.CreateParameter();
+                clothingItemParameter.ParameterName = "@ClothingId";
+                clothingItemParameter.DbType = DbType.Int32;
+                clothingItemParameter.Value = ClothingId;
+                command.Parameters.Add(clothingItemParameter);
 
-        //                    clothingItemWithFamilyMemberName.Add(clothingFamilyName);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return clothingItemWithFamilyMemberName;
-        //}
+                await Database.OpenConnectionAsync();
 
-        //public async Task<List<ClothingViewModel>> GetClothingItemWithStorageName(int ClothingId)
-        //{
-        //    var clothingItemWithStorageName = new List<ClothingViewModel>();
+                using (var result = await command.ExecuteReaderAsync())
+                {
+                    if (result.HasRows)
+                    {
+                        while (await result.ReadAsync())
+                        {
+                            var clothingFamilyName = new ClothingViewModel()
+                            {
+                                ClothingId = result.GetInt32(0),
+                                FamilyMemberName = result.GetString(13),
+                                FamilyMemberId = result.GetInt32(14)
+                            };
 
-        //    using (var command = Database.GetDbConnection().CreateCommand())
-        //    {
-        //        command.CommandText = "GetClothingItemWithStorageName";
-        //        command.CommandType = CommandType.StoredProcedure;
+                            clothingItemWithFamilyMemberName.Add(clothingFamilyName);
+                        }
+                    }
+                }
+                Database.CloseConnection();
+            }
+            
+            return clothingItemWithFamilyMemberName;
+        }
 
-        //        var clothingItemParameter = command.CreateParameter();
-        //        clothingItemParameter.ParameterName = "@ClothingId";
-        //        clothingItemParameter.DbType = DbType.Int32;
-        //        clothingItemParameter.Value = ClothingId;
-        //        command.Parameters.Add(clothingItemParameter);
+        public async Task<List<ClothingViewModel>> GetClothingItemWithStorageNameAsync(int ClothingId)
+        {
+            var clothingItemWithStorageName = new List<ClothingViewModel>();
 
-        //        await Database.OpenConnectionAsync();
+            using (var command = Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "GetClothingItemWithStorageName";
+                command.CommandType = CommandType.StoredProcedure;
 
-        //        using (var result = await command.ExecuteReaderAsync())
-        //        {
-        //            if (result.HasRows)
-        //            {
-        //                while (await result.ReadAsync())
-        //                {
-        //                    var clothingFamilyName = new ClothingViewModel();
-        //                    {
-        //                        ClothingId = result.GetInt32(0);
-        //                        string StorageName = result.GetString(13);
-        //                    };
+                var clothingItemParameter = command.CreateParameter();
+                clothingItemParameter.ParameterName = "@ClothingId";
+                clothingItemParameter.DbType = DbType.Int32;
+                clothingItemParameter.Value = ClothingId;
+                command.Parameters.Add(clothingItemParameter);
 
-        //                    clothingItemWithFamilyMemberName.Add(clothingFamilyName);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return clothingItemWithFamilyMemberName;
-        //}
+                await Database.OpenConnectionAsync();
+
+                using (var result = await command.ExecuteReaderAsync())
+                {
+                    if (result.HasRows)
+                    {
+                        while (await result.ReadAsync())
+                        {
+                            var clothingFamilyName = new ClothingViewModel()
+                            {
+                                ClothingId = result.GetInt32(0),
+                                StorageName = result.GetString(13),
+                                StorageId = result.GetInt32(14)
+                            };
+
+                            clothingItemWithStorageName.Add(clothingFamilyName);
+                        }
+                    }
+                }
+                Database.CloseConnection();
+            }
+            
+            return clothingItemWithStorageName;
+        }
 
     }
       
