@@ -25,9 +25,8 @@ namespace StoreQR.Controllers
             string? currentUserId = _userManager.GetUserId(HttpContext.User);
             if (currentUserId != null)
             {
-                var familyMembers = _context.FamilyMember
-            .Where(fm => fm.UserId == currentUserId)
-            .ToList();
+               //Hämtar alla användarens hushållsmedlemmar
+               var familyMembers = _context.GetFamilyMembersFilteredByUserId(currentUserId);
 
                 return View(familyMembers);
             }

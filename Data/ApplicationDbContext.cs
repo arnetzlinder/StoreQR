@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Exchange.WebServices.Data;
+
 //using Microsoft.Exchange.WebServices.Data;
 using Microsoft.Identity.Client.Extensions.Msal;
 using StoreQR.Interface;
@@ -45,7 +47,7 @@ namespace StoreQR.Data
 
             using (var command = Database.GetDbConnection().CreateCommand())
             {
-                command.CommandText = "GetFamilyMembersByUserId";
+                command.CommandText = "GetClothingItemWithFamilyMemberName";
                 command.CommandType = CommandType.StoredProcedure;
 
                 //Lägg till parametrar för userid
@@ -89,6 +91,85 @@ namespace StoreQR.Data
             }
 
             return familyMembers;
+        }
+
+        public List<FamilyMember> GetFamilyMembersFilteredByUserId (string userId)
+        {
+            var familyMembers = new List<FamilyMember>();
+
+            using (var command = Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "GetFamilyMembersFilteredByUserId";
+                command.CommandType = CommandType.StoredProcedure;
+
+                //Lägg till parametrar för userid
+                var userIdParameter = command.CreateParameter();
+                userIdParameter.ParameterName = "@UserId";
+                userIdParameter.DbType = DbType.String;
+                userIdParameter.Value = userId;
+                command.Parameters.Add(userIdParameter);
+
+                Database.OpenConnection();
+
+                using (var result = command.ExecuteReader())
+                {
+                    if(result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            var familyMember = new FamilyMember
+                            {
+                                Id = result.GetInt32(0),
+                                UserId = result.GetString(1),
+                                Name = result.GetString(2)
+                            };
+                            familyMembers.Add(familyMember);
+                        }
+                    }
+                }
+                Database.CloseConnection();
+            }
+            return familyMembers;
+        }
+
+        public List<StoringUnit> GetStorageUnitsFilteredByUserId(string userId)
+        {
+            var storingUnits = new List<StoringUnit>();
+
+            using (var command = Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "GetStorageUnitsFilteredByUserId";
+                command.CommandType = CommandType.StoredProcedure;
+
+                //Lägg till parametrar för userid
+                var userIdParameter = command.CreateParameter();
+                userIdParameter.ParameterName = "@UserId";
+                userIdParameter.DbType = DbType.String;
+                userIdParameter.Value = userId;
+                command.Parameters.Add(userIdParameter);
+
+                Database.OpenConnection();
+
+                using (var result = command.ExecuteReader())
+                {
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            var storingUnit = new StoringUnit
+                            {
+                                StorageId = result.GetInt32(0),
+                                StorageName = result.GetString(1),
+                                StorageDescription = result.GetString(2),
+                                UserId = result.GetString(3)
+                            };
+                            storingUnits.Add(storingUnit);
+                        }
+                    }
+                }
+                Database.CloseConnection();
+            }
+            return storingUnits;
         }
 
         //För att få ut bildfil från byte []
@@ -222,7 +303,7 @@ namespace StoreQR.Data
             }
             return familyMembersAndStorage;
         }
-        public async Task<List<ClothingViewModel>> GetClothingItemAsync(int ClothingId)
+        public async Task<List<ClothingViewModel>> GetClothingItemAsync(int ClothingId, string UserId)
         {
             var familyMemberNameTask = GetClothingItemWithFamilyMemberNameAsync(ClothingId);
             var storageNameTask = GetClothingItemWithStorageNameAsync(ClothingId);
@@ -244,6 +325,12 @@ namespace StoreQR.Data
                 clothingItemParameter.Value = ClothingId;
                 command.Parameters.Add(clothingItemParameter);
 
+                clothingItemParameter = command.CreateParameter();
+                clothingItemParameter.ParameterName = "@UserId";
+                clothingItemParameter.DbType = DbType.String;
+                clothingItemParameter.Value = UserId;
+                command.Parameters.Add(clothingItemParameter);
+
                 await Database.OpenConnectionAsync();
 
                 using (var result = await command.ExecuteReaderAsync())
@@ -255,16 +342,16 @@ namespace StoreQR.Data
                             var clothingItemValues = new ClothingViewModel()
                             {
                                 ClothingId = result.GetInt32(0),
-                                ClothingName = result.GetString(2),
-                                ClothingUserId = result.GetInt32(3),
-                                //QRCode = result.GetString (4),
-                                ClothingBrand = result.GetString(5),
-                                ClothingSize = result.GetString(6),
-                                ClothingColor = result.GetString(7),
-                                Season = result.GetString(8),
-                                ClothingMaterial = result.GetString(9),
-                                TypeOfClothing = result.GetString(10),
-                                StorageId = result.GetInt32(11),
+                                ClothingName = result.GetString(3),
+                                ClothingUserId = result.GetInt32(4),
+                                //QRCode = result.GetString (5),
+                                ClothingBrand = result.GetString(6),
+                                ClothingSize = result.GetString(7),
+                                ClothingColor = result.GetString(8),
+                                Season = result.GetString(9),
+                                ClothingMaterial = result.GetString(10),
+                                TypeOfClothing = result.GetString(11),
+                                StorageId = result.GetInt32(12),
                                 FamilyMemberName = familyMemberName?.FamilyMemberName,
                                 StorageName = storageName?.StorageName
                             };
