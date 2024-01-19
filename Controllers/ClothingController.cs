@@ -287,9 +287,9 @@ namespace StoreQR.Controllers
             {
                 Console.WriteLine("Du är inte behörig");
                 return View(null);
-            }
+            } 
 
-            var clothingItems = await _context.GetClothingItemAsync(ClothingId);
+            var clothingItems = await _context.GetClothingItemAsync(ClothingId, currentUserId);
 
       
 
