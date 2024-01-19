@@ -22,12 +22,11 @@ namespace StoreQR.Controllers
 
         public IActionResult Index(StoringUnit viewModel)
         {
+            //Hämta användarens id med hjälp av user manager
             string? currentUserId = _userManager.GetUserId(HttpContext.User);
             if (currentUserId != null)
             {
-                var storageUnits = _context.StoringUnit
-                    .Where(s => s.UserId == currentUserId)
-                    .ToList();
+                var storageUnits = _context.GetStorageUnitsFilteredByUserId(currentUserId);
 
                 return View(storageUnits);
             }
