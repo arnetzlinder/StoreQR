@@ -307,8 +307,8 @@ namespace StoreQR.Data
                             var clothingFamilyName = new ClothingViewModel()
                             {
                                 ClothingId = result.GetInt32(0),
-                                FamilyMemberName = result.GetString(13),
-                                FamilyMemberId = result.GetInt32(14)
+                                FamilyMemberName = result.GetString(1),
+                                FamilyMemberId = result.GetInt32(2)
                             };
 
                             clothingItemWithFamilyMemberName.Add(clothingFamilyName);
@@ -347,8 +347,8 @@ namespace StoreQR.Data
                             var clothingFamilyName = new ClothingViewModel()
                             {
                                 ClothingId = result.GetInt32(0),
-                                StorageName = result.GetString(13),
-                                StorageId = result.GetInt32(14)
+                                StorageName = result.GetString(1),
+                                StorageId = result.GetInt32(2)
                             };
 
                             clothingItemWithStorageName.Add(clothingFamilyName);

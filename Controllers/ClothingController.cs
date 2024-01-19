@@ -291,14 +291,14 @@ namespace StoreQR.Controllers
 
             var clothingItems = await _context.GetClothingItemAsync(ClothingId);
 
-            var clothingItem = clothingItems.Find(c => c.ClothingId == ClothingId);
+      
 
-            if (clothingItem == null)
+            if (clothingItems == null || !clothingItems.Any())
             {
                 Console.WriteLine("Klädesplagg saknas");
             }
 
-            return View(clothingItem);
+            return View(clothingItems);
         }
         
     }
