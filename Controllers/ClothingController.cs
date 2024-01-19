@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using StoreQR.Interface;
 using Microsoft.CodeAnalysis.Elfie.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Exchange.WebServices.Data;
 
 namespace StoreQR.Controllers
 {
@@ -275,16 +276,36 @@ namespace StoreQR.Controllers
             
                 return View(model);
         }
-        //private async Task UploadImage(ClothingItem model, IFormFile image)
-        //{
-        //    if (image != null && image.Length > 0)
-        //    {
-        //        using (var memoryStream = new MemoryStream())
-        //        {
-        //            await image.CopyToAsync(memoryStream);
-        //            model.ClothingImage = memoryStream.ToArray();
-        //        }
-        //    }
-        //}
+
+        //Get ClothingItem Edit
+        public async Task<IActionResult> Edit (int? ClothingId)
+        {
+            if (ClothingId == null)
+            {
+                Console.WriteLine("Det finns inget plagg");
+            }
+
+            string? currentUserId = _userManager.GetUserId(HttpContext.User);
+
+            if (currentUserId != null)
+            {
+                var clothingItems = await _context.;
+
+                var clothingItem = clothingItems.Find(c => c.ClothingId == ClothingId);
+
+                if (clothingItem == null)
+                {
+                    Console.WriteLine("Klädesplagg saknas"); 
+                }
+
+                return View(clothingItem);
+            }
+
+            // User är null.
+            Console.WriteLine("Du är inte behörig");
+
+
+        }
+    
     }
 }
