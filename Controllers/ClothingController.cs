@@ -217,7 +217,7 @@ namespace StoreQR.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ClothingItem model, IFormFile clothingImageFile)
         {
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             if (userId != null)
             {
                 model.UserId = userId;
