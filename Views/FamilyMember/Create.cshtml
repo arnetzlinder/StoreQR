@@ -1,0 +1,19 @@
+﻿@model StoreQR.Models.FamilyMember
+@{
+    ViewData["Title"] = "Lägg till familjemedlem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h1 class="mb-3">@ViewData["Title"]</h1>
+    <p> Lägg till person i ditt hushåll</p>
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data" class="w-75">
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control mt-2" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Lägg till</button>
+        </form>
+</div>
