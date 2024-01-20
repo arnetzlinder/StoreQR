@@ -37,6 +37,8 @@ namespace StoreQR.Data
 
             builder.Entity<ClothingItem>()
                 .HasKey(c => c.ClothingId);
+            builder.Entity<FamilyMember>()
+                .HasKey(fm => fm.Id);
             builder.Entity<ClothingItem>()
                 .Property(c => c.ClothingImage)
                 .HasColumnType("varbinary(MAX)");
@@ -47,7 +49,7 @@ namespace StoreQR.Data
 
             using (var command = Database.GetDbConnection().CreateCommand())
             {
-                command.CommandText = "GetClothingItemWithFamilyMemberName";
+                command.CommandText = "GetClothingItemWithFamilyMemberNameByUserId";
                 command.CommandType = CommandType.StoredProcedure;
 
                 //Lägg till parametrar för userid
