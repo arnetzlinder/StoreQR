@@ -33,7 +33,7 @@ namespace StoreQR.Controllers
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _filterService = filterService ?? throw new ArgumentNullException(nameof(filterService));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-    }
+        }
 
         //[Authorize]
         public IActionResult Index(ClothingViewModel viewModel, bool? ResetFilters)

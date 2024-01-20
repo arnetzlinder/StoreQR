@@ -21,11 +21,16 @@
 }
 else
 {
+    <div class="text-center d-flex align-items-center justify-content-center flex-column WelcomeText">
     <h1 class="text-center m-3">Välkommen!</h1>
-    <div class="m-1 text-center">
-    <a id="headerlink" class="btn btn-primary m-5 text-center" asp-area="Identity" asp-page="/Account/Login">Logga in</a>
+    <img class="rounded-circle m-3 w-75 StoreLogo" src="~/lib/StoreQRLogo.png" />
+    <p class="m-3 text-center">För att få tillgång till StoreQR behöver du registrera dig eller logga in</p>
+    <div class="m-1 text-center d-flex align-items-center justify-content-center">
+    <a id="headerlink" class="btn btn-primary m-3 text-center" asp-area="Identity" asp-page="/Account/Login">Logga in</a>
+    <a id="headerlink" class="btn btn-primary m-3 text-center" asp-area="Identity" asp-page="/Account/Register">Registrera</a>
     </div>
-    <p class="m-1 text-center">för att få tillgång till StoreQR</p>
+    </div>
+    
 }
 
 
