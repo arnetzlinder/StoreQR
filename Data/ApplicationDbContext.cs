@@ -42,8 +42,9 @@ namespace StoreQR.Data
             builder.Entity<ClothingItem>()
                 .Property(c => c.ClothingImage)
                 .HasColumnType("varbinary(MAX)");
-
-            //Lägg ev till samma för storingunit!
+            builder.Entity<StoringUnit>()
+                .Property(s => s.StorageImage)
+                .HasColumnType("varbinary(MAX)");
         }
         public List<ClothingViewModel> GetFamilyMembersByUserId(string userId)
         {
@@ -165,7 +166,8 @@ namespace StoreQR.Data
                                 StorageId = result.GetInt32(0),
                                 StorageName = result.GetString(1),
                                 StorageDescription = result.GetString(2),
-                                UserId = result.GetString(3)
+                                UserId = result.GetString(3),
+                                StorageImage = GetBytes(result, 4)
                             };
                             storingUnits.Add(storingUnit);
                         }

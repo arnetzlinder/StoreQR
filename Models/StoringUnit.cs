@@ -16,12 +16,12 @@ namespace StoreQR.Models
         public string StorageDescription { get; set; } = string.Empty;
         //public string QRCode { get; set; } = string.Empty;
         public string UserId { get; set; } = string.Empty;
-        //[DisplayName("Bild")]
-        //[DataType(DataType.Upload)]
-        //[NotMapped] //Ta bort från mappningen i databasen, test för att få till uppladdning
-        //public IFormFile? StorageImageFile { get; set; }
-        //[DisplayName("Bild")]
-        //[NotMapped]
-        //public byte[]? StorageImage { get; set; }
+        [DisplayName("Bild")]
+        [DataType(DataType.Upload)]
+        [NotMapped] //Ta bort från mappningen i databasen, test för att få till uppladdning
+        public IFormFile? StorageImageFile { get; set; }
+        [DisplayName("Bild")]
+        [NotMapped]
+        public byte[]? StorageImage { get; set; }
     }
 }

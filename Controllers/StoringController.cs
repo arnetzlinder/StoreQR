@@ -44,9 +44,7 @@ namespace StoreQR.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create (StoringUnit model 
-            //,IFormFile formFile
-            )
+        public async Task<IActionResult> Create (StoringUnit model, IFormFile storageImageFile)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             if(userId != null)
@@ -56,14 +54,14 @@ namespace StoreQR.Controllers
                 {
                     try
                     {
-                        //if(model.StorageImageFile != null && model.StorageImageFile.Length > 0)
-                        //{
-                        //    using (var memoryStream = new MemoryStream())
-                        //    {
-                        //        await model.StorageImageFile.CopyToAsync(memoryStream);
-                        //        model.StorageImage = memoryStream.ToArray();
-                        //    }
-                        //}
+                        if (storageImageFile != null && storageImageFile.Length > 0)
+                        {
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                await storageImageFile.CopyToAsync(memoryStream);
+                                model.StorageImage = memoryStream.ToArray();
+                            }
+                        }
 
                         model.StorageName = model.StorageName.Trim();
                         model.StorageDescription = model.StorageDescription.Trim();
