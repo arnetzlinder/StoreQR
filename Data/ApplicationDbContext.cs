@@ -42,6 +42,8 @@ namespace StoreQR.Data
             builder.Entity<ClothingItem>()
                 .Property(c => c.ClothingImage)
                 .HasColumnType("varbinary(MAX)");
+
+            //Lägg ev till samma för storingunit!
         }
         public List<ClothingViewModel> GetFamilyMembersByUserId(string userId)
         {
