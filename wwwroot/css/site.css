@@ -237,6 +237,11 @@ body {
     font-family: 'Inknut Antiqua', serif;
 }
 
+.editClothing {
+    background-color: var(--SecondColor);
+    border-radius: 5px;
+}
+
 
 /*Förvaringstyles*/
 .addClothesButton {
