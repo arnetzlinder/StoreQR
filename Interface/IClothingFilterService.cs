@@ -116,45 +116,45 @@ namespace StoreQR.Interface
                 var nameItems = distinctFamilyMemberName.Select(name => new SelectListItem { Text = name, Value = name }).ToList();
                 var storingItems = distinctStorageNames.Select(storage => new SelectListItem { Text = storage, Value = storage }).ToList();
                 // Kollar om det finns något innehåll och isf filtrerar på vald egenskap
-                var query = _context.CombineFamilyNameAndStorageNameByUserId(currentUserId).AsQueryable();
+                //var query = _context.CombineFamilyNameAndStorageNameByUserId(currentUserId).AsQueryable();
 
-                if (!string.IsNullOrEmpty(ClothingBrand))
-                {
-                    query = query.Where(c => c.ClothingBrand == ClothingBrand);
-                }
+                //if (!string.IsNullOrEmpty(ClothingBrand))
+                //{
+                //    query = query.Where(c => c.ClothingBrand == ClothingBrand);
+                //}
 
-                if (!string.IsNullOrEmpty(ClothingSize))
-                {
-                    query = query.Where(c => c.ClothingSize == ClothingSize);
-                }
+                //if (!string.IsNullOrEmpty(ClothingSize))
+                //{
+                //    query = query.Where(c => c.ClothingSize == ClothingSize);
+                //}
 
-                if (!string.IsNullOrEmpty(ClothingColor))
-                {
-                    query = query.Where(c => c.ClothingColor == ClothingColor);
-                }
+                //if (!string.IsNullOrEmpty(ClothingColor))
+                //{
+                //    query = query.Where(c => c.ClothingColor == ClothingColor);
+                //}
 
-                if (!string.IsNullOrEmpty(Season))
-                {
-                    query = query.Where(c => c.Season == Season);
-                }
+                //if (!string.IsNullOrEmpty(Season))
+                //{
+                //    query = query.Where(c => c.Season == Season);
+                //}
 
-                if (!string.IsNullOrEmpty(ClothingMaterial))
-                {
-                    query = query.Where(c => c.ClothingMaterial == ClothingMaterial);
-                }
+                //if (!string.IsNullOrEmpty(ClothingMaterial))
+                //{
+                //    query = query.Where(c => c.ClothingMaterial == ClothingMaterial);
+                //}
 
-                if (!string.IsNullOrEmpty(TypeOfClothing))
-                {
-                    query = query.Where(c => c.TypeOfClothing == TypeOfClothing);
-                }
-                if (!string.IsNullOrEmpty(FamilyMemberName))
-                {
-                    query = query.Where(c => c.FamilyMemberName == FamilyMemberName);
-                }
-                if (!string.IsNullOrEmpty(StorageName))
-                {
-                    query = query.Where(c => c.StorageName == StorageName);
-                }
+                //if (!string.IsNullOrEmpty(TypeOfClothing))
+                //{
+                //    query = query.Where(c => c.TypeOfClothing == TypeOfClothing);
+                //}
+                //if (!string.IsNullOrEmpty(FamilyMemberName))
+                //{
+                //    query = query.Where(c => c.FamilyMemberName == FamilyMemberName);
+                //}
+                //if (!string.IsNullOrEmpty(StorageName))
+                //{
+                //    query = query.Where(c => c.StorageName == StorageName);
+                //}
 
 
                 // Genomför förfrågan och returnera resultaten
