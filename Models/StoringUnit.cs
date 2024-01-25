@@ -22,6 +22,6 @@ namespace StoreQR.Models
         public IFormFile? StorageImageFile { get; set; }
         [DisplayName("Bild")]
         [NotMapped]
-        public byte[]? StorageImage { get; set; }
+        public string StorageImage { get; set; } = string.Empty;
     }
 }

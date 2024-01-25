@@ -20,7 +20,7 @@
                         <div class="d-flex justify-content-center align-items-center">
                             @if (item.StorageImage != null)
                             {
-                                <img class="m-3" src="data:image/png;base64,@Convert.ToBase64String(item.StorageImage)" alt="Bild av förvaringsurymme" />
+                                <img class="m-3" src="data:image/png;base64,@item.StorageImage" alt="Bild av förvaringsutrymme" />
                             }
                             else
                             {
