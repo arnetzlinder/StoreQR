@@ -107,9 +107,9 @@
             {
                 <div class="card ClothingCard m-1 p-0 flex-column d-flex">
                     <div class="d-flex justify-content-center align-items-center">
-                            @if(item.ClothingImage != null)
+                            @if (!string.IsNullOrEmpty(item.ClothingImage))
                             {
-                                <img class="m-3" src="data:image/png;base64,@Convert.ToBase64String(item.ClothingImage)" alt="Bild av plagg" />
+                                <img class="m-3" src="data:image/;base64,@item.ClothingImage" alt="Bild av plagg" />
                             }
                             else
                             {

@@ -11,6 +11,7 @@ using StoreQR.Interface;
 using StoreQR.Models;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace StoreQR.Data
@@ -76,14 +77,14 @@ namespace StoreQR.Data
                                 FamilyUserId = result.GetString(1),
                                 FamilyMemberName = result.GetString(2),
                                 UserId = result.GetString(3),
-                                ClothingBrand = result.GetString(4),
-                                ClothingColor = result.GetString(5),
-                                ClothingImage = GetBytes(result, 6),
-                                ClothingMaterial = result.GetString(7),
+                                ClothingBrand = result.IsDBNull(4) ? null! : result.GetString(4),
+                                ClothingColor = result.IsDBNull(5) ? null! : result.GetString(5),
+                                ClothingImage = result.IsDBNull(6) ? null! : result.GetString(6),
+                                ClothingMaterial = result.IsDBNull(7) ? null! : result.GetString(7),
                                 ClothingName = result.GetString(8),
-                                ClothingSize = result.GetString(9),
-                                Season = result.GetString(10),
-                                TypeOfClothing = result.GetString(11),
+                                ClothingSize = result.IsDBNull(9) ? null! : result.GetString(9),
+                                Season = result.IsDBNull(10) ? null! : result.GetString(10),
+                                TypeOfClothing = result.IsDBNull(11) ? null! : result.GetString(11),
                                 //QRCode = result.GetString(12),
                                 StorageId = result.IsDBNull(13) ? (int?)null : result.GetInt32(13)
                             };
@@ -167,7 +168,7 @@ namespace StoreQR.Data
                                 StorageName = result.GetString(1),
                                 StorageDescription = result.GetString(2),
                                 UserId = result.GetString(3),
-                                StorageImage = GetBytes(result, 4)
+                                StorageImage = result.IsDBNull(4) ? null! : result.GetString(4),
                             };
                             storingUnits.Add(storingUnit);
                         }
@@ -179,29 +180,29 @@ namespace StoreQR.Data
         }
 
         //För att få ut bildfil från byte []
-        private static byte[]? GetBytes(DbDataReader reader, int ordinal)
-        {
-            if (reader.IsDBNull(ordinal))
-            {
-                return null; // Returnera null om null i databas så att exempelbild istället visas i frontenden
-            }
+        //private static byte[]? GetBytes(DbDataReader reader, int ordinal)
+        //{
+        //    if (reader.IsDBNull(ordinal))
+        //    {
+        //        return null; // Returnera null om null i databas så att exempelbild istället visas i frontenden
+        //    }
 
-            const int bufferSize = 1024;
-            byte[] buffer = new byte[bufferSize];
-            long bytesRead;
-            long fieldOffset = 0;
+        //    const int bufferSize = 1024;
+        //    byte[] buffer = new byte[bufferSize];
+        //    long bytesRead;
+        //    long fieldOffset = 0;
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                while ((bytesRead = reader.GetBytes(ordinal, fieldOffset, buffer, 0, bufferSize)) > 0)
-                {
-                    stream.Write(buffer, 0, (int)bytesRead);
-                    fieldOffset += bufferSize;
-                }
+        //    using (MemoryStream stream = new MemoryStream())
+        //    {
+        //        while ((bytesRead = reader.GetBytes(ordinal, fieldOffset, buffer, 0, bufferSize)) > 0)
+        //        {
+        //            stream.Write(buffer, 0, (int)bytesRead);
+        //            fieldOffset += bufferSize;
+        //        }
 
-                return stream.ToArray();
-            }
-        }
+        //        return stream.ToArray();
+        //    }
+        //}
 
         public List<ClothingViewModel> GetStorageNameByUserId(string userId)
         {
@@ -246,10 +247,9 @@ namespace StoreQR.Data
 
         public List<ClothingViewModel> CombineFamilyNameAndStorageNameByUserId(string userId)
         {
-            
-
             //Hämta familjemedlemmars namn och övrig info i clothingitem-tabellen
             var familyMembers = GetFamilyMembersByUserId(userId);
+           
             //Hämta info om förvaringsutrymmen
             var storageUnits = GetStorageNameByUserId(userId);
 
@@ -263,7 +263,11 @@ namespace StoreQR.Data
                 //Kolla om nyckel redan finns i lista
                 if (!storageNamesById.ContainsKey(storageId))
                 {
-                    storageNamesById.Add(storageId, storageUnit.StorageName);
+                    //Om värdet redan finns i listan. lägg inte till igen (eftersom det kan ligga många saker i ett förvaringsutrymme)
+                    if(!storageNamesById.ContainsValue(storageUnit.StorageName))
+                    {
+                        storageNamesById.Add(storageId, storageUnit.StorageName);
+                    }
                 }
             }
 
@@ -358,8 +362,8 @@ namespace StoreQR.Data
                                 ClothingMaterial = result.GetString(10),
                                 TypeOfClothing = result.GetString(11),
                                 StorageId = result.GetInt32(12),
-                                FamilyMemberName = familyMemberName?.FamilyMemberName,
-                                StorageName = storageName?.StorageName
+                                FamilyMemberName = familyMemberName?.FamilyMemberName!,
+                                StorageName = storageName?.StorageName!
                             };
                             
 

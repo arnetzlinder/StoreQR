@@ -45,6 +45,7 @@
            <label asp-for="TypeOfClothing" class="mt-2"></label>
         <input asp-for="TypeOfClothing" class="form-control" id="TypeOfClothing"/>
     </div>
+    @* //Boxen kommer behöva laddas på något annat sätt *@
     <div class="form-group ClothingUser">
         <label asp-for="StorageId" class="control-label mt-2 mb-2">Välj var plagget förvaras</label>
         <select asp-for="StorageId" class="form-control" asp-items="@ViewBag.StorageNames">

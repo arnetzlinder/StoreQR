@@ -42,9 +42,13 @@ namespace StoreQR.Controllers
             string? currentUserId = _userManager.GetUserId(HttpContext.User);
             if (currentUserId != null)
             {
+                Stopwatch klocka = new Stopwatch();
+                klocka.Start();
                 //Hämtar alla värden först
                 var familyMembersAndStorage = _context.CombineFamilyNameAndStorageNameByUserId(currentUserId);
-
+                //Denna tar tio sekunder drygt.
+                var tid1 = klocka.Elapsed;
+                
                 //Plockar ut distinkta värden för familjemedlemmar
                 var distinctFamilyMembers = familyMembersAndStorage
                     .Select(c => new
@@ -60,6 +64,8 @@ namespace StoreQR.Controllers
                     })
                     .Distinct()
                     .ToList();
+                
+                TimeSpan tid = klocka.Elapsed;
                 //Plockar ut distinkta värden för förvaringsutrymmen
                 var storageUnits = familyMembersAndStorage.Select(c => new
                 {
@@ -69,7 +75,7 @@ namespace StoreQR.Controllers
                 })
                     .Distinct()
                     .ToList();
-
+                var tid3 = klocka.Elapsed;
                 //var clothingInfo = _context.GetFamilyMembersByUserId(currentUserId).ToList();
                 //var storageUnitNames = _context.GetStorageNameByUserId(currentUserId).ToList();
                 ViewBag.DistinctBrands = distinctFamilyMembers.Select(c => c.ClothingBrand).Distinct().ToList();
@@ -80,6 +86,8 @@ namespace StoreQR.Controllers
                 ViewBag.DistinctTypesOfClothing = distinctFamilyMembers.Select(c => c.TypeOfClothing).Distinct().ToList();
                 ViewBag.DistinctFamilyMemberName = distinctFamilyMembers.Select(c => c.FamilyMemberName).Distinct().ToList();
                 ViewBag.StorageUnitName = storageUnits.Select(c => c.StorageName).Distinct().ToList();
+
+                var tid2 = klocka.Elapsed;
 
                 if (ResetFilters.HasValue && ResetFilters.Value)
                 {
@@ -107,6 +115,7 @@ namespace StoreQR.Controllers
                 {
                     //Hämtar alla träffar om inget val gjorts eller om användaren väljer alla märken
                     var allClothingItems = _filterService.GetAllClothingItems();
+                    klocka.Stop();
                     return View(allClothingItems);
                 }
                 else
@@ -123,7 +132,7 @@ namespace StoreQR.Controllers
                               );
 
 
-
+                    
                     return View(filteredClothingItems);
                 }
             } else
@@ -187,12 +196,13 @@ namespace StoreQR.Controllers
             {
                 var storageNames = _context.GetStorageNameByUserId(userId)
                     .Where(fm => fm.UserId == userId)
+                    .GroupBy(fm => fm.StorageName)
+                    .Select(group => group.First())
                     .Select(fm => new SelectListItem
                     {
                         Value = fm.StorageId.ToString(),
                         Text = fm.StorageName
                     })
-                    .Distinct()
                     .ToList();
 
                 if (storageNames.Any())
@@ -215,7 +225,7 @@ namespace StoreQR.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ClothingItem model, IFormFile clothingImageFile)
+        public async Task<IActionResult> Create(ClothingItem model)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             if (userId != null)
@@ -230,18 +240,22 @@ namespace StoreQR.Controllers
                             using (var memoryStream = new MemoryStream())
                             {
                                 await model.ClothingImageFile.CopyToAsync(memoryStream);
-                                model.ClothingImage = memoryStream.ToArray();
+
+
+                                //Gör om bytearrayen till en base64sträng
+                                var base64String = Convert.ToBase64String(memoryStream.ToArray());
+
+                                model.ClothingImage = base64String;
                             }
                         }
-
-                        model.ClothingBrand = model.ClothingBrand.Trim();
+                        model.ClothingBrand = model.ClothingBrand;
                         model.ClothingName = model.ClothingName.Trim();
                         model.ClothingUserId = model.ClothingUserId;
-                        model.ClothingSize = model.ClothingSize.Trim();
-                        model.ClothingColor = model.ClothingColor.Trim();
-                        model.ClothingMaterial = model.ClothingMaterial.Trim();
-                        model.Season = model.Season.Trim();
-                        model.TypeOfClothing = model.TypeOfClothing.Trim();
+                        model.ClothingSize = model.ClothingSize;
+                        model.ClothingColor = model.ClothingColor;
+                        model.ClothingMaterial = model.ClothingMaterial;
+                        model.Season = model.Season;
+                        model.TypeOfClothing = model.TypeOfClothing;
                         model.StorageId = model.StorageId;
                         model.UserId = userId;
 
@@ -289,9 +303,59 @@ namespace StoreQR.Controllers
                 return View(null);
             } 
 
-            var clothingItems = await _context.GetClothingItemAsync(ClothingId, currentUserId);
+            
 
-      
+            if (!string.IsNullOrEmpty(currentUserId))
+            {
+                var familyMemberNames = _context.FamilyMember
+                    .Where(fm => fm.UserId == currentUserId)
+                    .Select(fm => new SelectListItem
+                    {
+                        Value = fm.Id.ToString(),
+                        Text = fm.Name
+                    })
+                    .Distinct()
+                    .ToList();
+
+                if (familyMemberNames.Any())
+                {
+                    ViewBag.FamilyMemberNames = new SelectList(familyMemberNames, "Value", "Text");
+                }
+                else
+                {
+                    ViewBag.FamilyMemberNames = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "Inga medlemmar i hushållet tillagda" }
+            };
+                }
+            }
+
+            if (!string.IsNullOrEmpty(currentUserId))
+            {
+                var storageNames = _context.GetStorageNameByUserId(currentUserId)
+                    .Where(fm => fm.UserId == currentUserId)
+                    .Select(fm => new SelectListItem
+                    {
+                        Value = fm.StorageId.ToString(),
+                        Text = fm.StorageName
+                    })
+                    .Distinct()
+                    .ToList();
+
+                if (storageNames.Any())
+                {
+                    ViewBag.storageNames = new SelectList(storageNames, "Value", "Text");
+                }
+                else
+                {
+                    ViewBag.storageNames = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "Inga förvaringsutrymmen tillagda" }
+            };
+                }
+            }
+
+            var clothingItems = await _context.GetClothingItemAsync(ClothingId, currentUserId);
 
             if (clothingItems == null || !clothingItems.Any())
             {
@@ -300,6 +364,15 @@ namespace StoreQR.Controllers
 
             return View(clothingItems);
         }
+
+        ////POST Clothing/Edit
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit (int ClothingId, string currentUserId)
+        //{
+
+        //}
+
         
     }
 }
