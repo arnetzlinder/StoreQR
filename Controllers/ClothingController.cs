@@ -334,6 +334,8 @@ namespace StoreQR.Controllers
             {
                 var storageNames = _context.GetStorageNameByUserId(currentUserId)
                     .Where(fm => fm.UserId == currentUserId)
+                    .GroupBy(fm => fm.StorageName)
+                    .Select(group => group.First())
                     .Select(fm => new SelectListItem
                     {
                         Value = fm.StorageId.ToString(),

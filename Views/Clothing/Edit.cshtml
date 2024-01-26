@@ -8,38 +8,53 @@
     <div class="d-flex flex-row align-items-center justify-content-center">
         @foreach (var item in Model)
         {
-            <div class="m-1 p-0 flex-column d-flex w-25 editClothing">
-                <div class="d-flex justify-content-center align-items-center">
+            <div class="m-1 p-0 flex-column d-flex w-50 editClothing">
+               @*  <div class="d-flex justify-content-center align-items-center">
                 @if (item.ClothingImage != null)
                 {
-                        <img class="m-3 w-25" src="data:image/png;base64,@Convert.ToBase64String(item.ClothingImage)" alt="Bild av plagg" />
+                        <img class="m-3 w-50" src="data:image/png;base64,@Convert.ToBase64String(item.ClothingImage)" alt="Bild av plagg" />
                 }
                 else
                 {
-                        <img class="m-3 w-25" src="~/lib/example-pic.jpg" alt="Exempelbild" />
+                        <img class="m-3 w-50" src="~/lib/example-pic.jpg" alt="Exempelbild" />
                 }
-            </div>
+            </div> *@
                 <div class=" d-flex flex-column mx-3 p-3">
                     <h5 class="text-center mx-3 p-3">@item.ClothingName</h5>
                     <form method="post" asp-area="" asp-controller="Clothing" asp-action="Edit">
-                    <div class="form-group">
-                        <label for="FamilyMemberName">Användare:</label>
-                        <input type="text" class="form-control" id="FamilyMemberName" name="FamilyMemberName" value="@item.FamilyMemberName">
-                    </div>
                         <div class="form-group">
+                            <label asp-for="@item.FamilyMemberId" class="control-label mt-2 mb-2">Plagget tillhör:</label>
+                            <select asp-for="@item.FamilyMemberId" class="form-control" asp-items="ViewBag.FamilyMemberNames">
+                                <option value="@item.FamilyMemberName">@item.FamilyMemberName</option>
+                            </select>
+                        </div>
+                        <div class="form-group mt-3">
                             <label for="ClothingBrand">Märke:</label>
                             <input type="text" class="form-control" id="ClothingBrand" name="ClothingBrand" value="@item.ClothingBrand">
                         </div>
-                    <p class="mx-3 p-3 text-center">Användare: @item.FamilyMemberName</p>
-                    <p class="mx-3 p-3 text-center">Märke: @item.ClothingBrand</p>
-                    <p class="mx-3 p-3 text-center">Storlek: @item.ClothingSize</p>
-                    <p class=" mx-3 p-3 text-center">Färg: @item.ClothingColor</p>
-                    <p class=" mx-3 p-3 text-center">Material: @item.ClothingMaterial</p>
-                    <p class=" mx-3 p-3 text-center">Säsong: @item.Season</p>
-                    <p class=" mx-3 p-3 text-center">Typ av plagg: @item.TypeOfClothing</p>
-                    <p class=" mx-1 p-1 text-center">@item.StorageName</p>
-                    @* <a class="btn btn-primary m-3 justify-content-end " asp-area="" asp-controller="Clothing" asp-action="Edit">Spara</a> *@
-                        <button type="submit" asp-area="" asp-controller="Clothing" asp-action="Edit" class="btn btn-primary m-3 justify-content-end">Spara</button>
+                        <div class="form-group mt-3">
+                            <label for="ClothingSize">Storlek:</label>
+                            <input type="text" class="form-control" id="ClothingSize" name="ClothingSize" value="@item.ClothingSize">
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="ClothingColor">Färg:</label>
+                            <input type="text" class="form-control" id="ClothingSize" name="ClothingColor" value="@item.ClothingColor">
+                        </div>
+                        <div class="form-group mt-3">
+                                <label for="Season">Säsong:</label>
+                            <input type="text" class="form-control" id="Season" name="ClothingSeason" value="@item.Season">
+                        </div>
+                        <div class="form-group mt-3">
+                                <label for="TypeOfClothing">Typ av plagg:</label>
+                            <input type="text" class="form-control" id="TypeOfClothing" name="TypeOfClothing" value="@item.TypeOfClothing">
+                        </div>
+                        <div class="form-group mt-3">
+                            <label asp-for="@item.StorageId" class="control-label mt-2 mb-2">Förvaras i:</label>
+                            <select asp-for="@item.StorageId" class="form-control" asp-items="ViewBag.StorageNames">
+                                <option value="@item.StorageName"></option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary m-3 justify-content-end">Spara</button>
                     </form>
                     @* Kolla upp asp-action för att spara *@
                 </div>
