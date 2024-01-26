@@ -367,14 +367,28 @@ namespace StoreQR.Controllers
             return View(clothingItems);
         }
 
-        ////POST Clothing/Edit
+        //POST Clothing/Edit
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit (int ClothingId, string currentUserId)
+        //public async Task<IActionResult> Edit(ClothingItem model)
         //{
+        //    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        //    if(userId == null)
+        //    {
+        //        return BadRequest("UserId saknas");
+        //    }
+
+        //    try
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+
+        //        }
+        //    }
 
         //}
 
-        
+
     }
 }
