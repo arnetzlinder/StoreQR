@@ -12,6 +12,7 @@ using StoreQR.Interface;
 using Microsoft.CodeAnalysis.Elfie.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Exchange.WebServices.Data;
+using X.PagedList;
 
 namespace StoreQR.Controllers
 {
@@ -36,7 +37,7 @@ namespace StoreQR.Controllers
         }
 
         //[Authorize]
-        public IActionResult Index(ClothingViewModel viewModel, bool? ResetFilters)
+        public IActionResult Index(ClothingViewModel viewModel, bool? ResetFilters, int? page)
         {
             //Hämta användarens id med hjälp av user manager
             string? currentUserId = _userManager.GetUserId(HttpContext.User);
@@ -48,7 +49,10 @@ namespace StoreQR.Controllers
                 var familyMembersAndStorage = _context.CombineFamilyNameAndStorageNameByUserId(currentUserId);
                 //Denna tar tio sekunder drygt.
                 var tid1 = klocka.Elapsed;
-                
+
+                //Sidor i pagineringen
+                int pageSize = 10;
+
                 //Plockar ut distinkta värden för familjemedlemmar
                 var distinctFamilyMembers = familyMembersAndStorage
                     .Select(c => new
@@ -115,8 +119,26 @@ namespace StoreQR.Controllers
                 {
                     //Hämtar alla träffar om inget val gjorts eller om användaren väljer alla märken
                     var allClothingItems = _filterService.GetAllClothingItems();
-                    klocka.Stop();
-                    return View(allClothingItems);
+                    var pagedClothingItems = allClothingItems.ToPagedList(page ?? 1, pageSize);
+
+                    var pagedClothingViewModels = new StaticPagedList<ClothingViewModel>(
+                        pagedClothingItems.Select(item => new ClothingViewModel 
+                        {
+                            ClothingId = item.ClothingId,
+                            ClothingName = item.ClothingName,
+                            ClothingImage = item.ClothingImage,
+                            ClothingBrand = item.ClothingBrand,
+                            ClothingSize = item.ClothingSize,
+                            ClothingColor = item.ClothingColor,
+                            Season = item.Season,
+                            ClothingMaterial = item.ClothingMaterial,
+                            TypeOfClothing = item.TypeOfClothing,
+                            FamilyMemberName = item.FamilyMemberName,
+                            StorageName = item.StorageName
+                        }),
+                        pagedClothingItems.GetMetaData()
+                    );
+                    return View(pagedClothingViewModels);
                 }
                 else
                 {
@@ -132,8 +154,27 @@ namespace StoreQR.Controllers
                               );
 
 
-                    
-                    return View(filteredClothingItems);
+
+                    var pagedFilteredClothingItems = filteredClothingItems.ToPagedList(page ?? 1, pageSize);
+
+                    var pagedFilteredClothingViewModels = new StaticPagedList<ClothingViewModel>(
+                        pagedFilteredClothingItems.Select(item => new ClothingViewModel { 
+                        ClothingId = item.ClothingId,
+                        ClothingName = item.ClothingName,
+                        ClothingImage = item.ClothingImage,
+                        ClothingBrand = item.ClothingBrand,
+                        ClothingSize = item.ClothingSize,
+                        ClothingColor = item.ClothingColor,
+                        Season = item.Season,
+                        ClothingMaterial = item.ClothingMaterial,
+                        TypeOfClothing = item.TypeOfClothing,
+                        FamilyMemberName = item.FamilyMemberName,
+                        StorageName = item.StorageName
+                        }),
+                        pagedFilteredClothingItems.GetMetaData()
+                    );
+
+                    return View(pagedFilteredClothingViewModels);
                 }
             } else
             {

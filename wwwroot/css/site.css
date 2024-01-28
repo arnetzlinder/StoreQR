@@ -155,6 +155,23 @@ body {
     border-color: transparent;
 }
 
+
+/*Paginering styling*/
+
+.page-item.active .page-link {
+    color: var(--TextColor);
+    background-color: var(--AccentInputColor);
+    border-color: var(--AccentColor);
+}
+
+.page-link {
+    color: var(--TextColor);
+}
+
+    .page-link:hover {
+        background-color: var(--SecondAccentColor);
+        color: white;
+    }
 /*FamiljemedlemmarStyles*/
 .FamilyMemberCard {
     border-radius: 5px;
