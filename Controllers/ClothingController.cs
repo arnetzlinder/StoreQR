@@ -299,8 +299,8 @@ namespace StoreQR.Controllers
 
             if (currentUserId == null)
             {
-                Console.WriteLine("Du är inte behörig");
-                return View(null);
+                _logger.LogWarning("User is not authorized.");
+            return Forbid(); // Return 403 Forbidden status if the user is not authorized.
             } 
 
             
@@ -368,27 +368,71 @@ namespace StoreQR.Controllers
         }
 
         //POST Clothing/Edit
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(ClothingItem model)
-        //{
-        //    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int ClothingId, 
+            //[Bind("ClothingName, ClothingId, ClothingUserId, ClothingBrand, ClothingSize, ClothingColor, Season, TypeOfClothing, StorageId")] 
+        ClothingItem model)
+        {
+            if (ClothingId != model.ClothingId)
+            {
+                return NotFound();
+            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        //    if(userId == null)
-        //    {
-        //        return BadRequest("UserId saknas");
-        //    }
+            if (userId == null)
+            {
+                return BadRequest("UserId saknas");
+            }
 
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        //Hämta nuvarande klädobjekt från databasen
 
-        //        }
-        //    }
+                        var existingClothingItem = await _context.ClothingItem.FindAsync(ClothingId);
 
-        //}
+                        if (existingClothingItem == null)
+                        {
+                            return NotFound();
+                        }
 
+
+
+                        //Uppdaterar det som användaren skrivit in
+                        existingClothingItem.ClothingName = model.ClothingName;
+                        existingClothingItem.ClothingUserId = model.ClothingUserId;
+                        existingClothingItem.ClothingBrand = model.ClothingBrand;
+                        existingClothingItem.ClothingColor = model.ClothingColor;
+                        existingClothingItem.ClothingSize = model.ClothingSize;
+                        existingClothingItem.Season = model.Season;
+                        existingClothingItem.TypeOfClothing = model.TypeOfClothing;
+                        existingClothingItem.StorageId = model.StorageId;
+
+                        //Spara ändringar till databas
+                        _context.ClothingItem.Update(existingClothingItem);
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index");
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        _logger.LogError(ex, $"Error updating ClothingItem with ID {ClothingId}. Database update error.");
+                        return View(model);
+                    }
+                }
+                return View(model);
+
+            }
+            catch 
+            {
+                return View(model);
+            }
+
+        }
 
     }
 }

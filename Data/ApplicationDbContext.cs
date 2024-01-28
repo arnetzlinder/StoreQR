@@ -42,10 +42,10 @@ namespace StoreQR.Data
                 .HasKey(fm => fm.Id);
             builder.Entity<ClothingItem>()
                 .Property(c => c.ClothingImage)
-                .HasColumnType("varbinary(MAX)");
+                .HasColumnType("varchar(MAX)");
             builder.Entity<StoringUnit>()
                 .Property(s => s.StorageImage)
-                .HasColumnType("varbinary(MAX)");
+                .HasColumnType("varchar(MAX)");
         }
         public List<ClothingViewModel> GetFamilyMembersByUserId(string userId)
         {
@@ -313,7 +313,7 @@ namespace StoreQR.Data
             }
             return familyMembersAndStorage;
         }
-        public async Task<List<ClothingViewModel>> GetClothingItemAsync(int ClothingId, string UserId)
+        public async Task<List<ClothingItem>> GetClothingItemAsync(int ClothingId, string UserId)
         {
             var familyMemberNameTask = GetClothingItemWithFamilyMemberNameAsync(ClothingId);
             var storageNameTask = GetClothingItemWithStorageNameAsync(ClothingId);
@@ -322,7 +322,7 @@ namespace StoreQR.Data
             var storageName = (await GetClothingItemWithStorageNameAsync(ClothingId)).FirstOrDefault();
 
 
-            var clothingItem = new List<ClothingViewModel>();
+            var clothingItem = new List<ClothingItem>();
 
             using (var command = Database.GetDbConnection().CreateCommand())
             {
@@ -349,9 +349,10 @@ namespace StoreQR.Data
                     {
                         while (await result.ReadAsync())
                         {
-                            var clothingItemValues = new ClothingViewModel()
+                            var clothingItemValues = new ClothingItem()
                             {
                                 ClothingId = result.GetInt32(0),
+                                ClothingImage = result.GetString(2),
                                 ClothingName = result.GetString(3),
                                 ClothingUserId = result.GetInt32(4),
                                 //QRCode = result.GetString (5),
@@ -361,9 +362,9 @@ namespace StoreQR.Data
                                 Season = result.GetString(9),
                                 ClothingMaterial = result.GetString(10),
                                 TypeOfClothing = result.GetString(11),
-                                StorageId = result.GetInt32(12),
-                                FamilyMemberName = familyMemberName?.FamilyMemberName!,
-                                StorageName = storageName?.StorageName!
+                                StorageId = result.GetInt32(12)
+                                //FamilyMemberName = familyMemberName?.FamilyMemberName!,
+                                //StorageName = storageName?.StorageName!
                             };
                             
 

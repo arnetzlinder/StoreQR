@@ -1,4 +1,4 @@
-﻿@model List<StoreQR.Models.ClothingViewModel>
+﻿@model List<StoreQR.Models.ClothingItem>
 @{
     ViewData["Title"] = "Redigera klädesplagg";
 }
@@ -22,10 +22,13 @@
                 <div class=" d-flex flex-column mx-3 p-3">
                     <h5 class="text-center mx-3 p-3">@item.ClothingName</h5>
                     <form method="post" asp-area="" asp-controller="Clothing" asp-action="Edit">
+                        <input type="hidden" asp-for="@item.ClothingId" name="ClothingId" />
+                        <input type="hidden" asp-for="@item.ClothingName" name="ClothingName" />
                         <div class="form-group">
-                            <label asp-for="@item.FamilyMemberId" class="control-label mt-2 mb-2">Plagget tillhör:</label>
-                            <select asp-for="@item.FamilyMemberId" class="form-control" asp-items="ViewBag.FamilyMemberNames">
-                                <option value="@item.FamilyMemberName">@item.FamilyMemberName</option>
+                            @* <input type="hidden" asp-for="@item.ClothingUserId" name="ClothingUserId"/> *@
+                            <label asp-for="@item.ClothingUserId" class="control-label mt-2 mb-2">Plagget tillhör:</label>
+                            <select asp-for="@item.ClothingUserId" class="form-control" asp-items="ViewBag.FamilyMemberNames" name="ClothingUserId">
+                                <option value="@item.ClothingUserId" selected="@item.ClothingUserId"></option>
                             </select>
                         </div>
                         <div class="form-group mt-3">
@@ -38,25 +41,25 @@
                         </div>
                         <div class="form-group mt-3">
                             <label for="ClothingColor">Färg:</label>
-                            <input type="text" class="form-control" id="ClothingSize" name="ClothingColor" value="@item.ClothingColor">
+                            <input type="text" class="form-control" id="ClothingColor" name="ClothingColor" value="@item.ClothingColor">
                         </div>
                         <div class="form-group mt-3">
                                 <label for="Season">Säsong:</label>
-                            <input type="text" class="form-control" id="Season" name="ClothingSeason" value="@item.Season">
+                            <input type="text" class="form-control" id="Season" name="Season" value="@item.Season">
                         </div>
                         <div class="form-group mt-3">
                                 <label for="TypeOfClothing">Typ av plagg:</label>
                             <input type="text" class="form-control" id="TypeOfClothing" name="TypeOfClothing" value="@item.TypeOfClothing">
                         </div>
                         <div class="form-group mt-3">
+                            @* <input type="hidden" asp-for="@item.StorageId"  /> *@
                             <label asp-for="@item.StorageId" class="control-label mt-2 mb-2">Förvaras i:</label>
-                            <select asp-for="@item.StorageId" class="form-control" asp-items="ViewBag.StorageNames">
-                                <option value="@item.StorageName"></option>
+                            <select asp-for="@item.StorageId" class="form-control" asp-items="ViewBag.StorageNames" name="StorageId">
+                                <option value="@item.StorageId" selected="@item.StorageId"></option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary m-3 justify-content-end">Spara</button>
                     </form>
-                    @* Kolla upp asp-action för att spara *@
                 </div>
 
             </div>
