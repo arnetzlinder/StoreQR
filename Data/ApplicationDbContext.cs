@@ -47,6 +47,8 @@ namespace StoreQR.Data
                 .Property(s => s.StorageImage)
                 .HasColumnType("varchar(MAX)");
         }
+
+        //Relaterat till Kläder
         public List<ClothingViewModel> GetFamilyMembersByUserId(string userId)
         {
             var familyMembers = new List<ClothingViewModel>();
@@ -99,111 +101,6 @@ namespace StoreQR.Data
             return familyMembers;
         }
 
-        public List<FamilyMember> GetFamilyMembersFilteredByUserId (string userId)
-        {
-            var familyMembers = new List<FamilyMember>();
-
-            using (var command = Database.GetDbConnection().CreateCommand())
-            {
-                command.CommandText = "GetFamilyMembersFilteredByUserId";
-                command.CommandType = CommandType.StoredProcedure;
-
-                //Lägg till parametrar för userid
-                var userIdParameter = command.CreateParameter();
-                userIdParameter.ParameterName = "@UserId";
-                userIdParameter.DbType = DbType.String;
-                userIdParameter.Value = userId;
-                command.Parameters.Add(userIdParameter);
-
-                Database.OpenConnection();
-
-                using (var result = command.ExecuteReader())
-                {
-                    if(result.HasRows)
-                    {
-                        while (result.Read())
-                        {
-                            var familyMember = new FamilyMember
-                            {
-                                Id = result.GetInt32(0),
-                                UserId = result.GetString(1),
-                                Name = result.GetString(2)
-                            };
-                            familyMembers.Add(familyMember);
-                        }
-                    }
-                }
-                Database.CloseConnection();
-            }
-            return familyMembers;
-        }
-
-        public List<StoringUnit> GetStorageUnitsFilteredByUserId(string userId)
-        {
-            var storingUnits = new List<StoringUnit>();
-
-            using (var command = Database.GetDbConnection().CreateCommand())
-            {
-                command.CommandText = "GetStorageUnitsFilteredByUserId";
-                command.CommandType = CommandType.StoredProcedure;
-
-                //Lägg till parametrar för userid
-                var userIdParameter = command.CreateParameter();
-                userIdParameter.ParameterName = "@UserId";
-                userIdParameter.DbType = DbType.String;
-                userIdParameter.Value = userId;
-                command.Parameters.Add(userIdParameter);
-
-                Database.OpenConnection();
-
-                using (var result = command.ExecuteReader())
-                {
-                    if (result.HasRows)
-                    {
-                        while (result.Read())
-                        {
-                            var storingUnit = new StoringUnit
-                            {
-                                StorageId = result.GetInt32(0),
-                                StorageName = result.GetString(1),
-                                StorageDescription = result.GetString(2),
-                                UserId = result.GetString(3),
-                                StorageImage = result.IsDBNull(4) ? null! : result.GetString(4),
-                            };
-                            storingUnits.Add(storingUnit);
-                        }
-                    }
-                }
-                Database.CloseConnection();
-            }
-            return storingUnits;
-        }
-
-        //För att få ut bildfil från byte []
-        //private static byte[]? GetBytes(DbDataReader reader, int ordinal)
-        //{
-        //    if (reader.IsDBNull(ordinal))
-        //    {
-        //        return null; // Returnera null om null i databas så att exempelbild istället visas i frontenden
-        //    }
-
-        //    const int bufferSize = 1024;
-        //    byte[] buffer = new byte[bufferSize];
-        //    long bytesRead;
-        //    long fieldOffset = 0;
-
-        //    using (MemoryStream stream = new MemoryStream())
-        //    {
-        //        while ((bytesRead = reader.GetBytes(ordinal, fieldOffset, buffer, 0, bufferSize)) > 0)
-        //        {
-        //            stream.Write(buffer, 0, (int)bytesRead);
-        //            fieldOffset += bufferSize;
-        //        }
-
-        //        return stream.ToArray();
-        //    }
-        //}
-
         public List<ClothingViewModel> GetStorageNameByUserId(string userId)
         {
             var storageUnitNames = new List<ClothingViewModel>();
@@ -249,7 +146,7 @@ namespace StoreQR.Data
         {
             //Hämta familjemedlemmars namn och övrig info i clothingitem-tabellen
             var familyMembers = GetFamilyMembersByUserId(userId);
-           
+
             //Hämta info om förvaringsutrymmen
             var storageUnits = GetStorageNameByUserId(userId);
 
@@ -264,7 +161,7 @@ namespace StoreQR.Data
                 if (!storageNamesById.ContainsKey(storageId))
                 {
                     //Om värdet redan finns i listan. lägg inte till igen (eftersom det kan ligga många saker i ett förvaringsutrymme)
-                    if(!storageNamesById.ContainsValue(storageUnit.StorageName))
+                    if (!storageNamesById.ContainsValue(storageUnit.StorageName))
                     {
                         storageNamesById.Add(storageId, storageUnit.StorageName);
                     }
@@ -302,13 +199,14 @@ namespace StoreQR.Data
                 if (matchingItem != null)
                 {
                     matchingItem.StorageName = storageUnit.StorageName;
-                } else
+                }
+                else
                 {
-                        // Sätt StorageName till "Ej angett" 
-                        storageUnit.StorageName = "Ej angett";
+                    // Sätt StorageName till "Ej angett" 
+                    storageUnit.StorageName = "Ej angett";
                 }
 
-                
+
 
             }
             return familyMembersAndStorage;
@@ -364,7 +262,7 @@ namespace StoreQR.Data
                                 TypeOfClothing = result.IsDBNull(11) ? null : result.GetString(11),
                                 StorageId = result.IsDBNull(12) ? (int?)null : result.GetInt32(12)
                             };
-                            
+
 
                             clothingItem.Add(clothingItemValues);
                         }
@@ -372,7 +270,7 @@ namespace StoreQR.Data
                 }
                 await Database.CloseConnectionAsync();
             }
-           
+
 
             return clothingItem;
         }
@@ -413,7 +311,7 @@ namespace StoreQR.Data
                 }
                 Database.CloseConnection();
             }
-            
+
             return clothingItemWithFamilyMemberName;
         }
 
@@ -453,59 +351,49 @@ namespace StoreQR.Data
                 }
                 Database.CloseConnection();
             }
-            
+
             return clothingItemWithStorageName;
         }
 
-        public async Task<List<StoringUnit>> GetStoringUnitAsync(int StorageId, string UserId)
-        {
 
-            var storingUnit = new List<StoringUnit>();
+        //Relaterat till familjemedlemmar
+        public List<FamilyMember> GetFamilyMembersFilteredByUserId (string userId)
+        {
+            var familyMembers = new List<FamilyMember>();
 
             using (var command = Database.GetDbConnection().CreateCommand())
             {
-                command.CommandText = "GetStoringUnitById";
+                command.CommandText = "GetFamilyMembersFilteredByUserId";
                 command.CommandType = CommandType.StoredProcedure;
 
-                var storingUnitParameter = command.CreateParameter();
-                storingUnitParameter.ParameterName = "@StorageId";
-                storingUnitParameter.DbType = DbType.Int32;
-                storingUnitParameter.Value = StorageId;
-                command.Parameters.Add(storingUnitParameter);
+                //Lägg till parametrar för userid
+                var userIdParameter = command.CreateParameter();
+                userIdParameter.ParameterName = "@UserId";
+                userIdParameter.DbType = DbType.String;
+                userIdParameter.Value = userId;
+                command.Parameters.Add(userIdParameter);
 
-                storingUnitParameter = command.CreateParameter();
-                storingUnitParameter.ParameterName = "@UserId";
-                storingUnitParameter.DbType = DbType.String;
-                storingUnitParameter.Value = UserId;
-                command.Parameters.Add(storingUnitParameter);
+                Database.OpenConnection();
 
-                await Database.OpenConnectionAsync();
-
-                using (var result = await command.ExecuteReaderAsync())
+                using (var result = command.ExecuteReader())
                 {
-                    if (result.HasRows)
+                    if(result.HasRows)
                     {
-                        while (await result.ReadAsync())
+                        while (result.Read())
                         {
-                            var storingUnitValues = new StoringUnit()
+                            var familyMember = new FamilyMember
                             {
-                                StorageId = result.GetInt32(0),
-                                //StorageImage = result.GetString(2),
-                                StorageName = result.GetString(3),
-                                StorageDescription = result.GetString(4)
-                                //QRCode = result.GetString (5)
+                                Id = result.GetInt32(0),
+                                UserId = result.GetString(1),
+                                Name = result.GetString(2)
                             };
-
-
-                            storingUnit.Add(storingUnitValues);
+                            familyMembers.Add(familyMember);
                         }
                     }
                 }
-                await Database.CloseConnectionAsync();
+                Database.CloseConnection();
             }
-
-
-            return storingUnit;
+            return familyMembers;
         }
 
         public async Task<List<FamilyMember>> GetFamilyMemberAsync(int Id, string UserId)
@@ -564,17 +452,17 @@ namespace StoreQR.Data
                 command.CommandText = "DeleteFamilyMemberById";
                 command.CommandType = CommandType.StoredProcedure;
 
-                var storingUnitParameter = command.CreateParameter();
-                storingUnitParameter.ParameterName = "@Id";
-                storingUnitParameter.DbType = DbType.Int32;
-                storingUnitParameter.Value = id;
-                command.Parameters.Add(storingUnitParameter);
+                var familyMemberParameter = command.CreateParameter();
+                familyMemberParameter.ParameterName = "@Id";
+                familyMemberParameter.DbType = DbType.Int32;
+                familyMemberParameter.Value = id;
+                command.Parameters.Add(familyMemberParameter);
 
-                storingUnitParameter = command.CreateParameter();
-                storingUnitParameter.ParameterName = "@UserId";
-                storingUnitParameter.DbType = DbType.String;
-                storingUnitParameter.Value = userId;
-                command.Parameters.Add(storingUnitParameter);
+                familyMemberParameter = command.CreateParameter();
+                familyMemberParameter.ParameterName = "@UserId";
+                familyMemberParameter.DbType = DbType.String;
+                familyMemberParameter.Value = userId;
+                command.Parameters.Add(familyMemberParameter);
 
                 await Database.OpenConnectionAsync();
 
@@ -588,19 +476,150 @@ namespace StoreQR.Data
                             {
                                 Id = result.GetInt32(0),
                                 Name = result.GetString(2)
-                                // Add other properties as needed
                             };
 
                             familyMembers.Add(familyMember);
                         }
                     }
                 }
-         
+
                 await Database.CloseConnectionAsync();
             }
 
 
             return familyMembers;
+        }
+
+        //Relaterat till förvaringsutrymmen
+        public List<StoringUnit> GetStorageUnitsFilteredByUserId(string userId)
+        {
+            var storingUnits = new List<StoringUnit>();
+
+            using (var command = Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "GetStorageUnitsFilteredByUserId";
+                command.CommandType = CommandType.StoredProcedure;
+
+                //Lägg till parametrar för userid
+                var userIdParameter = command.CreateParameter();
+                userIdParameter.ParameterName = "@UserId";
+                userIdParameter.DbType = DbType.String;
+                userIdParameter.Value = userId;
+                command.Parameters.Add(userIdParameter);
+
+                Database.OpenConnection();
+
+                using (var result = command.ExecuteReader())
+                {
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            var storingUnit = new StoringUnit
+                            {
+                                StorageId = result.GetInt32(0),
+                                StorageName = result.GetString(1),
+                                StorageDescription = result.GetString(2),
+                                UserId = result.GetString(3),
+                                StorageImage = result.IsDBNull(4) ? null! : result.GetString(4),
+                            };
+                            storingUnits.Add(storingUnit);
+                        }
+                    }
+                }
+                Database.CloseConnection();
+            }
+            return storingUnits;
+        }
+
+       
+        public async Task<List<StoringUnit>> GetStoringUnitAsync(int StorageId, string UserId)
+        {
+
+            var storingUnit = new List<StoringUnit>();
+
+            using (var command = Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "GetStoringUnitById";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var storingUnitParameter = command.CreateParameter();
+                storingUnitParameter.ParameterName = "@StorageId";
+                storingUnitParameter.DbType = DbType.Int32;
+                storingUnitParameter.Value = StorageId;
+                command.Parameters.Add(storingUnitParameter);
+
+                storingUnitParameter = command.CreateParameter();
+                storingUnitParameter.ParameterName = "@UserId";
+                storingUnitParameter.DbType = DbType.String;
+                storingUnitParameter.Value = UserId;
+                command.Parameters.Add(storingUnitParameter);
+
+                await Database.OpenConnectionAsync();
+
+                using (var result = await command.ExecuteReaderAsync())
+                {
+                    if (result.HasRows)
+                    {
+                        while (await result.ReadAsync())
+                        {
+                            var storingUnitValues = new StoringUnit()
+                            {
+                                StorageId = result.GetInt32(0),
+                                //StorageImage = result.GetString(2),
+                                StorageName = result.GetString(3),
+                                StorageDescription = result.GetString(4)
+                                //QRCode = result.GetString (5)
+                            };
+
+
+                            storingUnit.Add(storingUnitValues);
+                        }
+                    }
+                }
+                await Database.CloseConnectionAsync();
+            }
+
+
+            return storingUnit;
+        }
+
+        public async Task<bool> DeleteStorageUnitByIdAsync(int storageId, string userId)
+        {
+            var storageUnits = new List<StoringUnit>();
+            using (var command = Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "DeleteStorageUnitById";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var storingUnitParameter = command.CreateParameter();
+                storingUnitParameter.ParameterName = "@StorageId";
+                storingUnitParameter.DbType = DbType.Int32;
+                storingUnitParameter.Value = storageId;
+                command.Parameters.Add(storingUnitParameter);
+
+                storingUnitParameter = command.CreateParameter();
+                storingUnitParameter.ParameterName = "@UserId";
+                storingUnitParameter.DbType = DbType.String;
+                storingUnitParameter.Value = userId;
+                command.Parameters.Add(storingUnitParameter);
+
+                await Database.OpenConnectionAsync();
+
+                try
+                {
+                    await command.ExecuteNonQueryAsync();
+                    return true; // Deletion successful
+                }
+                catch (Exception)
+                {
+                    return false; // Deletion failed
+                }
+                finally
+                {
+                    await Database.CloseConnectionAsync();
+                }
+            }
         }
     }
       
