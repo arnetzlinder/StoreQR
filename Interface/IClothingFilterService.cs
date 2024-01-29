@@ -99,79 +99,48 @@ namespace StoreQR.Interface
             if (currentUserId != null )
             {
                 var clothingInfo = _context.CombineFamilyNameAndStorageNameByUserId(currentUserId).ToList();
-                var distinctBrands = clothingInfo.Select(c => c.ClothingBrand).Distinct().ToList();
-                var distinctSizes = clothingInfo.Select(c => c.ClothingSize).Distinct().ToList();
-                var distinctColors = clothingInfo.Select(c => c.ClothingColor).Distinct().ToList();
-                var distinctSeasons = clothingInfo.Select(c => c.Season).Distinct().ToList();
-                var distinctMaterials = clothingInfo.Select(c => c.ClothingMaterial).Distinct().ToList();
-                var distinctTypeOfClothing = clothingInfo.Select(c => c.TypeOfClothing).Distinct().ToList();
-                var distinctFamilyMemberName = clothingInfo.Select(c => c.FamilyMemberName).Distinct().ToList();
-                var distinctStorageNames = clothingInfo.Select(c => c.StorageName).Distinct().ToList();
-                var brandItems = distinctBrands.Select(brand => new SelectListItem { Text = brand, Value = brand }).ToList();
-                var sizeItems = distinctSizes.Select(size => new SelectListItem { Text = size, Value = size }).ToList();
-                var colorItems = distinctColors.Select(color => new SelectListItem { Text = color, Value = color }).ToList();
-                var seasonItems = distinctSeasons.Select(season => new SelectListItem { Text = season, Value = season }).ToList();
-                var materialItems = distinctMaterials.Select(material => new SelectListItem { Text = material, Value = material }).ToList();
-                var typeItems = distinctTypeOfClothing.Select(type => new SelectListItem { Text = type, Value = type }).ToList();
-                var nameItems = distinctFamilyMemberName.Select(name => new SelectListItem { Text = name, Value = name }).ToList();
-                var storingItems = distinctStorageNames.Select(storage => new SelectListItem { Text = storage, Value = storage }).ToList();
-                // Kollar om det finns något innehåll och isf filtrerar på vald egenskap
-                //var query = _context.CombineFamilyNameAndStorageNameByUserId(currentUserId).AsQueryable();
+                var filterOptions = new List<Func<ClothingViewModel, bool>>();
 
-                //if (!string.IsNullOrEmpty(ClothingBrand))
-                //{
-                //    query = query.Where(c => c.ClothingBrand == ClothingBrand);
-                //}
+                if (!string.IsNullOrEmpty(ClothingBrand))
+                    filterOptions.Add(c => c.ClothingBrand == ClothingBrand);
 
-                //if (!string.IsNullOrEmpty(ClothingSize))
-                //{
-                //    query = query.Where(c => c.ClothingSize == ClothingSize);
-                //}
+                if (!string.IsNullOrEmpty(ClothingSize))
+                    filterOptions.Add(c => c.ClothingSize == ClothingSize);
 
-                //if (!string.IsNullOrEmpty(ClothingColor))
-                //{
-                //    query = query.Where(c => c.ClothingColor == ClothingColor);
-                //}
+                if (!string.IsNullOrEmpty(ClothingColor))
+                    filterOptions.Add(c => c.ClothingColor == ClothingColor);
 
-                //if (!string.IsNullOrEmpty(Season))
-                //{
-                //    query = query.Where(c => c.Season == Season);
-                //}
+                if (!string.IsNullOrEmpty(Season))
+                    filterOptions.Add(c => c.Season == Season);
 
-                //if (!string.IsNullOrEmpty(ClothingMaterial))
-                //{
-                //    query = query.Where(c => c.ClothingMaterial == ClothingMaterial);
-                //}
+                if (!string.IsNullOrEmpty(ClothingMaterial))
+                    filterOptions.Add(c => c.ClothingMaterial == ClothingMaterial);
 
-                //if (!string.IsNullOrEmpty(TypeOfClothing))
-                //{
-                //    query = query.Where(c => c.TypeOfClothing == TypeOfClothing);
-                //}
-                //if (!string.IsNullOrEmpty(FamilyMemberName))
-                //{
-                //    query = query.Where(c => c.FamilyMemberName == FamilyMemberName);
-                //}
-                //if (!string.IsNullOrEmpty(StorageName))
-                //{
-                //    query = query.Where(c => c.StorageName == StorageName);
-                //}
+                if (!string.IsNullOrEmpty(TypeOfClothing))
+                    filterOptions.Add(c => c.TypeOfClothing == TypeOfClothing);
+
+                if (!string.IsNullOrEmpty(FamilyMemberName))
+                    filterOptions.Add(c => c.FamilyMemberName == FamilyMemberName);
+
+                if (!string.IsNullOrEmpty(StorageName))
+                    filterOptions.Add(c => c.StorageName == StorageName);
+
 
 
                 // Genomför förfrågan och returnera resultaten
-                var filteredClothingViewModels = _context.CombineFamilyNameAndStorageNameByUserId(currentUserId)
-                .Where(c =>
-               (string.IsNullOrEmpty(ClothingBrand) || c.ClothingBrand == ClothingBrand) &&
-               (string.IsNullOrEmpty(ClothingSize) || c.ClothingSize == ClothingSize) &&
-               (string.IsNullOrEmpty(ClothingColor) || c.ClothingColor == ClothingColor) &&
-               (string.IsNullOrEmpty(Season) || c.Season == Season) &&
-               (string.IsNullOrEmpty(ClothingMaterial) || c.ClothingMaterial == ClothingMaterial) &&
-               (string.IsNullOrEmpty(TypeOfClothing) || c.TypeOfClothing == TypeOfClothing) &&
-               (string.IsNullOrEmpty(FamilyMemberName) || c.FamilyMemberName == FamilyMemberName) &&
-               (string.IsNullOrEmpty(StorageName) || c.StorageName == StorageName)
-                )
-                .Select(c => new ClothingViewModel
+                var filteredClothingViewModels = clothingInfo
+                    .Where(c => filterOptions.All(option => option(c)))
+                    .OrderBy(c => c.ClothingSize ?? "")
+                    .ThenBy(c => c.ClothingBrand ?? "")
+                    .ThenBy(c => c.ClothingColor ?? "")
+                    .ThenBy(c => c.Season ?? "")
+                    .ThenBy(c => c.ClothingMaterial ?? "")
+                    .ThenBy(c => c.TypeOfClothing ?? "")
+                    .ThenBy(c=> c.FamilyMemberName ?? "")
+                    .ThenBy (c => c.StorageName ?? "")
+                    .Select(c => new ClothingViewModel
                 {
-                    //Eftersom vi har en join så mappar vi ClothingItem mot ClothingViewModel
+                    
                     ClothingId = c.ClothingId,
                     ClothingName = c.ClothingName,
                     ClothingBrand = c.ClothingBrand,
