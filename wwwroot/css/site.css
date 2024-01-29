@@ -84,6 +84,15 @@ html {
         background-color: var(--SecondAccentColor);
         opacity: 0.7;
     }
+
+    .btn-warning:active {
+        background-color: var(--SecondAccentColor);
+    }
+
+    .btn-warning:focus {
+        background-color: var(--SecondAccentColor);
+        color: white;
+    }
 /*Default styling bootstrap*/
 
 @media (min-width: 768px) {
@@ -142,6 +151,12 @@ body {
     width: 20rem;
     text-align: end;
 }
+
+.alert-success {
+    background-color: var(--FirstColor);
+    color: var(--SecondAccentColor);
+    border-color: transparent;
+}
 /*Login*/
 #account a {
     color: var(--TextColor);
@@ -180,6 +195,16 @@ body {
     font-size: 1rem;
     border: 2px solid var(--TextColor);
     min-width: 10rem;
+}
+
+
+
+.editFamilyMember {
+    border-color: var(--TextColor);
+    background-color: var(--SecondColor);
+    border-radius: 5px;
+    width: 100%;
+    max-width: 30rem;
 }
 /*Kläderstyles*/
 .filter-dropdown {

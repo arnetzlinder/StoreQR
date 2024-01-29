@@ -510,6 +510,100 @@ namespace StoreQR.Data
             return storingUnit;
         }
 
+        public async Task<List<FamilyMember>> GetFamilyMemberAsync(int Id, string UserId)
+        {
+
+            var familyMember = new List<FamilyMember>();
+
+            using (var command = Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "GetFamilyMemberById";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var storingUnitParameter = command.CreateParameter();
+                storingUnitParameter.ParameterName = "@Id";
+                storingUnitParameter.DbType = DbType.Int32;
+                storingUnitParameter.Value = Id;
+                command.Parameters.Add(storingUnitParameter);
+
+                storingUnitParameter = command.CreateParameter();
+                storingUnitParameter.ParameterName = "@UserId";
+                storingUnitParameter.DbType = DbType.String;
+                storingUnitParameter.Value = UserId;
+                command.Parameters.Add(storingUnitParameter);
+
+                await Database.OpenConnectionAsync();
+
+                using (var result = await command.ExecuteReaderAsync())
+                {
+                    if (result.HasRows)
+                    {
+                        while (await result.ReadAsync())
+                        {
+                            var familyMemberValues = new FamilyMember()
+                            {
+                                Id = result.GetInt32(0),
+                                Name = result.GetString(2)
+                            };
+
+
+                            familyMember.Add(familyMemberValues);
+                        }
+                    }
+                }
+                await Database.CloseConnectionAsync();
+            }
+
+
+            return familyMember;
+        }
+
+        public async Task<IEnumerable<FamilyMember>> DeleteFamilyMemberByIdAsync(int id, string userId)
+        {
+            var familyMembers = new List<FamilyMember>();
+            using (var command = Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "DeleteFamilyMemberById";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var storingUnitParameter = command.CreateParameter();
+                storingUnitParameter.ParameterName = "@Id";
+                storingUnitParameter.DbType = DbType.Int32;
+                storingUnitParameter.Value = id;
+                command.Parameters.Add(storingUnitParameter);
+
+                storingUnitParameter = command.CreateParameter();
+                storingUnitParameter.ParameterName = "@UserId";
+                storingUnitParameter.DbType = DbType.String;
+                storingUnitParameter.Value = userId;
+                command.Parameters.Add(storingUnitParameter);
+
+                await Database.OpenConnectionAsync();
+
+                using (var result = await command.ExecuteReaderAsync())
+                {
+                    if (result.HasRows)
+                    {
+                        while (await result.ReadAsync())
+                        {
+                            var familyMember = new FamilyMember()
+                            {
+                                Id = result.GetInt32(0),
+                                Name = result.GetString(2)
+                                // Add other properties as needed
+                            };
+
+                            familyMembers.Add(familyMember);
+                        }
+                    }
+                }
+         
+                await Database.CloseConnectionAsync();
+            }
+
+
+            return familyMembers;
+        }
     }
       
     }

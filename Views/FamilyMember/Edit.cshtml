@@ -1,0 +1,33 @@
+﻿@model List<StoreQR.Models.FamilyMember>
+@{
+    ViewData["Title"] = "Redigera hushållsmedlem";
+}
+
+@if (User?.Identity?.IsAuthenticated == true)
+{
+    <div class="d-flex flex-row align-items-center justify-content-center editFamilyMember">
+        @foreach (var item in Model)
+        {
+            <div class="m-1 p-0 flex-column d-flex w-50 ">
+                <div class=" d-flex flex-column mx-3 p-3">
+                    <form method="post" asp-area="" asp-controller="FamilyMember" asp-action="Edit">
+                        <input type="hidden" asp-for="@item.Id" name="Id" />
+                        <div class="form-group mt-3">
+                            <label for="Name">Namn:</label>
+                            <input type="text" class="form-control" id="Name" name="Name" value="@item.Name">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-3 justify-content-end">Spara</button>
+                    </form>
+                </div>
+
+            </div>
+        }
+
+    </div>
+}
+else
+{
+
+    <span>Välkommen! Logga in för att få tillgång till StoreQR</span>
+}
