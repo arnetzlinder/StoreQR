@@ -1,0 +1,31 @@
+﻿@model StoreQR.Models.StoringUnit
+@{
+    ViewData["Title"] = "Radera förvaringsutrymme";
+}
+
+@if (User?.Identity?.IsAuthenticated == true)
+{
+    <div class="d-flex flex-row justify-content-center align-items-center">
+       
+            <div class="m-1 p-3 flex-column d-flex w-50 deleteStorage">
+                <a asp-action="Index" class="mb-1 GoingBack"><i class="fa-solid fa-chevron-left"></i> Tillbaka</a>
+                <div class=" d-flex flex-column mx-3 p-3">
+                    <h5 class="text-center mx-3 p-3">@Model.StorageName</h5>
+                    <p class="text-center">Beskrivning: @Model.StorageDescription</p>
+                    <p class="mt-3">Om du raderar @Model.StorageName så kommer kläderna som är inlagda däri att förlora sin lagringsplats.</p>
+                    <form method="post" asp-area="" asp-controller="Storing" asp-action="DeleteConfirmed" >
+                        <input type="hidden" asp-for="StorageId" name="StorageId" />
+                        
+                        <button type="submit" class="btn btn-danger mt-1">Radera förvaringsutrymme</button>
+                    </form>
+                </div>
+
+            </div>
+
+    </div>
+}
+else
+{
+
+    <span>Välkommen! Logga in för att få tillgång till StoreQR</span>
+}

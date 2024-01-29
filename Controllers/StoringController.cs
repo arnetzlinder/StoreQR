@@ -65,6 +65,10 @@ namespace StoreQR.Controllers
 
                                 model.StorageImage = base64String;
                             }
+                        } else
+                        {
+                            //Sätt StorageImage till null om ingen bild läggs in
+                            model.StorageImage = null;
                         }
 
                         model.StorageName = model.StorageName.Trim();
@@ -171,6 +175,66 @@ namespace StoreQR.Controllers
             {
                 return View(model);
             }
+        }
+        
+        [Authorize]
+        public async Task<IActionResult> Delete(int StorageId)
+        {
+            string? currentUserId = _userManager.GetUserId(HttpContext.User);
+
+            if (currentUserId == null)
+            {
+                _logger.LogWarning("User is not authorized.");
+                return Forbid(); // Return 403 Forbidden status if the user is not authorized.
+            }
+
+            var storingUnits = await _context.GetStoringUnitAsync(StorageId, currentUserId);
+
+            if (storingUnits == null)
+            {
+                Console.WriteLine("Förvaringsutrymme saknas");
+            }
+            var storingUnit = storingUnits?.First();
+
+
+            return View("Delete", storingUnit);
+        }
+        //Delete StoringUnit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed (int StorageId)
+        {
+            if (StorageId == 0)
+            {
+                return NotFound();
+            }
+            string? currentUserId = _userManager.GetUserId(HttpContext.User);
+
+            if (currentUserId == null)
+            {
+                _logger.LogWarning("User is not authorized.");
+                return Forbid(); // Return 403 Forbidden status if the user is not authorized.
+            }
+
+            var storingUnit = await _context.StoringUnit.FindAsync(StorageId);
+
+            if (storingUnit == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                await _context.DeleteStorageUnitByIdAsync(StorageId, currentUserId);
+                TempData["DeleteSuccessMessage"] = "Din förvaringsutrymme raderades.";
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, $"Error deleting StoingUnit with ID {StorageId}. Database update error.");
+                TempData["DeleteErrorMessage"] = "Det gick inte att radera ditt förvaringsutrymme.";
+                return View(storingUnit);
+            }
+            return RedirectToAction("Index");
+
         }
     }
 }

@@ -8,7 +8,18 @@
     <div class="container">
         <div class="d-flex flex-column align-items-center justify-content-center">
             <h2 class="mb-3 mt-3">Mina förvaringsutrymmen</h2>
-
+            @if (TempData.ContainsKey("DeleteSuccessMessage"))
+            {
+                <div class="alert alert-success" role="alert">
+                    @TempData["DeleteSuccessMessage"]
+                </div>
+            }
+            @if (TempData.ContainsKey("DeleteErrorMessage"))
+            {
+                <div class="alert alert-success" role="alert">
+                    @TempData["DeleteErrorMessage"]
+                </div>
+            }
             <div class="d-flex align-items-center justify-content-center mb-3">
                 <a class="btn btn-primary px-3" asp-area="" asp-controller="Storing" asp-action="Create">Lägg till förvaringsutrymme</a>
             </div>
@@ -31,6 +42,8 @@
                             <h4 class="card-title text-center mx-3 p-3">@item.StorageName</h4>
                             <p class="card-text mx-3 p-3 text-center">Beskrivning: @item.StorageDescription</p>
                             <a class="btn btn-primary m-3 justify-content-end" asp-area="" asp-controller="Storing" asp-action="Edit" asp-route-StorageId="@item.StorageId">Redigera</a>
+                            <a class="btn btn-danger mx-3 justify-content-end" asp-area="" asp-controller="Storing" asp-action="Delete" asp-route-StorageId="@item.StorageId">Radera</a>
+
                         </div>
                     </div>
                 }

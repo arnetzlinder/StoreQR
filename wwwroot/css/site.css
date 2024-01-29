@@ -73,7 +73,11 @@ html {
         border-radius: 5px;
         box-shadow: transparent;
     }
-
+.btn-danger {
+    background-color: var(--SecondAccentColor);
+    border: transparent;
+    color: white;
+}
 .btn-warning {
     background-color: var(--SecondAccentColor);
     color: white;
@@ -93,7 +97,7 @@ html {
         background-color: var(--SecondAccentColor);
         color: white;
     }
-/*Default styling bootstrap*/
+/*Ändra default styling bootstrap*/
 
 @media (min-width: 768px) {
   html {
@@ -114,12 +118,9 @@ body {
   margin-bottom: 60px;
 }
 
-.btn-danger {
-    background-color: var(--SecondAccentColor);
-    border: transparent;
-    color: white;
-}
 
+
+/*Navigering styles*/
 .nav-link {
     color: var(--TextColor);
 }
@@ -150,6 +151,25 @@ body {
     top: 148px;
     width: 20rem;
     text-align: end;
+}
+
+/*Allmän styling*/
+.GoingBack:link {
+    text-decoration: none;
+    color: var(--TextColor);
+}
+.GoingBack:visited {
+    text-decoration: none;
+    color: var(--TextColor);
+}
+.GoingBack:active {
+    text-decoration: none;
+    color: var(--TextColor);
+}
+.GoingBack:hover {
+    text-decoration: underline;
+    color: var(--TextColor);
+    opacity: 0.8;
 }
 
 .alert-success {
@@ -187,6 +207,8 @@ body {
         background-color: var(--SecondAccentColor);
         color: white;
     }
+
+
 /*FamiljemedlemmarStyles*/
 .FamilyMemberCard {
     border-radius: 5px;
@@ -206,6 +228,7 @@ body {
     width: 100%;
     max-width: 30rem;
 }
+
 /*Kläderstyles*/
 .filter-dropdown {
     width: 15.5rem;
@@ -322,12 +345,7 @@ body {
         border-radius: 5px;
     }
 
-    .StorageCard a {
-        background-color: var(--AccentColor);
-        color: var(--TextColor);
-        border-radius: 5px;
-        border: transparent;
-    }
+    
 
         .StorageCard a:hover {
             background-color: var(--TextColor);
@@ -352,6 +370,23 @@ body {
     flex-direction: row;
 }
 
+.deleteStorage {
+    max-width: 350px;
+    max-height: 700px;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid var(--TextColor);
+    background-color: var(--SecondColor);
+    color: var(--TextColor);
+    font-size: 1rem;
+    margin: 0.75rem;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.deleteStorage form {
+  display: flex;
+  justify-content:center;
+  align-items:center;
+}
 /* Footer*/
 .StoreQRFooter {
     color: var(--TextColor);
