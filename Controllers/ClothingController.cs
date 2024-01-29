@@ -398,14 +398,14 @@ namespace StoreQR.Controllers
                 }
             }
 
-            var clothingItems = await _context.GetClothingItemAsync(ClothingId, currentUserId);
+            var clothingItem = await _context.GetClothingItemAsync(ClothingId, currentUserId);
 
-            if (clothingItems == null || !clothingItems.Any())
+            if (clothingItem == null || !clothingItem.Any())
             {
                 Console.WriteLine("Klädesplagg saknas");
             }
 
-            return View(clothingItems);
+            return View(clothingItem);
         }
 
         //POST Clothing/Edit
