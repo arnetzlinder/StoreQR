@@ -30,7 +30,7 @@
                         <div class="card-body d-flex flex-column mx-3 p-3 StorageCardBody">
                             <h4 class="card-title text-center mx-3 p-3">@item.StorageName</h4>
                             <p class="card-text mx-3 p-3 text-center">Beskrivning: @item.StorageDescription</p>
-                            <a class="btn btn-primary m-3 justify-content-end" asp-area="" asp-controller="Storing" asp-action="Edit">Redigera</a>
+                            <a class="btn btn-primary m-3 justify-content-end" asp-area="" asp-controller="Storing" asp-action="Edit" asp-route-StorageId="@item.StorageId">Redigera</a>
                         </div>
                     </div>
                 }

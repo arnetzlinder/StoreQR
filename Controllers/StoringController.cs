@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using StoreQR.Data;
 using StoreQR.Models;
 using System.Security.Claims;
@@ -95,6 +96,81 @@ namespace StoreQR.Controllers
                 return BadRequest("UserId saknas");
             }
             return View(model);
+        }
+
+        //Get StoringUnit Edit
+        public async Task<IActionResult> Edit (int StorageId)
+        {
+            string? currentUserId = _userManager.GetUserId(HttpContext.User);
+
+            if (currentUserId == null)
+            {
+                _logger.LogWarning("User is not authorized.");
+                return Forbid(); // Return 403 Forbidden status if the user is not authorized.
+            }
+
+            var storingUnits = await _context.GetStoringUnitAsync(StorageId, currentUserId);
+
+            if (storingUnits == null || !storingUnits.Any())
+            {
+                Console.WriteLine("Förvaringsutrymme saknas");
+            }
+            return View(storingUnits);
+        }
+
+        //POST StoringUnit Edit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit (int StorageId, StoringUnit model)
+        {
+            if (StorageId != model.StorageId)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+            {
+                return BadRequest("UserId saknas");
+            }
+
+            try
+            {
+                if(ModelState.IsValid)
+                {
+                    try
+                    {
+                        //Hämta nuvarande förvaringsutrymmeobjekt från databasen
+                        var existingStoringUnit = await _context.StoringUnit.FindAsync(StorageId);
+
+                        if (existingStoringUnit == null)
+                        {
+                            return NotFound();
+                        }
+
+                        //Uppdaterar det som användaren skrivit in
+                        existingStoringUnit.StorageName = model.StorageName;
+                        existingStoringUnit.StorageDescription = model.StorageDescription;
+
+                        //Spara ändringar till databas
+                        _context.StoringUnit.Update(existingStoringUnit);
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index");
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        _logger.LogError(ex, $"Error updating StoringUnit with ID {StorageId}. Database update error.");
+                        return View(model);
+                    }
+                }
+                return View(model);
+            }
+            catch
+            {
+                return View(model);
+            }
         }
     }
 }

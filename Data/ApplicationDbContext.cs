@@ -459,6 +459,57 @@ namespace StoreQR.Data
             return clothingItemWithStorageName;
         }
 
+        public async Task<List<StoringUnit>> GetStoringUnitAsync(int StorageId, string UserId)
+        {
+
+            var storingUnit = new List<StoringUnit>();
+
+            using (var command = Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "GetStoringUnitById";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var storingUnitParameter = command.CreateParameter();
+                storingUnitParameter.ParameterName = "@StorageId";
+                storingUnitParameter.DbType = DbType.Int32;
+                storingUnitParameter.Value = StorageId;
+                command.Parameters.Add(storingUnitParameter);
+
+                storingUnitParameter = command.CreateParameter();
+                storingUnitParameter.ParameterName = "@UserId";
+                storingUnitParameter.DbType = DbType.String;
+                storingUnitParameter.Value = UserId;
+                command.Parameters.Add(storingUnitParameter);
+
+                await Database.OpenConnectionAsync();
+
+                using (var result = await command.ExecuteReaderAsync())
+                {
+                    if (result.HasRows)
+                    {
+                        while (await result.ReadAsync())
+                        {
+                            var storingUnitValues = new StoringUnit()
+                            {
+                                StorageId = result.GetInt32(0),
+                                //StorageImage = result.GetString(2),
+                                StorageName = result.GetString(3),
+                                StorageDescription = result.GetString(4)
+                                //QRCode = result.GetString (5)
+                            };
+
+
+                            storingUnit.Add(storingUnitValues);
+                        }
+                    }
+                }
+                await Database.CloseConnectionAsync();
+            }
+
+
+            return storingUnit;
+        }
+
     }
       
     }

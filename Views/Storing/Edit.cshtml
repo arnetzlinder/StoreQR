@@ -1,0 +1,45 @@
+﻿@model List<StoreQR.Models.StoringUnit>
+@{
+    ViewData["Title"] = "Redigera förvaringsutrymme";
+}
+
+@if (User?.Identity?.IsAuthenticated == true)
+{
+    <div class="d-flex flex-row align-items-center justify-content-center">
+        @foreach (var item in Model)
+        {
+            <div class="m-1 p-0 flex-column d-flex w-50 editStorage">
+                @*  <div class="d-flex justify-content-center align-items-center">
+        @if (item.StorageImage != null)
+        {
+        <img class="m-3 w-50" src="data:image/png;base64,@Convert.ToBase64String(item.StorageImage)" alt="Bild av plagg" />
+        }
+        else
+        {
+        <img class="m-3 w-50" src="~/lib/example-pic.jpg" alt="Exempelbild" />
+        }
+        </div> *@
+                <div class=" d-flex flex-column mx-3 p-3">
+                    <h5 class="text-center mx-3 p-3">@item.StorageName</h5>
+                    <form method="post" asp-area="" asp-controller="Storing" asp-action="Edit">
+                        <input type="hidden" asp-for="@item.StorageId" name="StorageId" />
+                        <input type="hidden" asp-for="@item.StorageName" name="StorageName" />
+                        <div class="form-group mt-3">
+                            <label for="StorageDescription">Beskrivning:</label>
+                            <input type="text" class="form-control" id="StorageDescription" name="StorageDescription" value="@item.StorageDescription">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary m-3 justify-content-end">Spara</button>
+                    </form>
+                </div>
+
+            </div>
+        }
+
+    </div>
+}
+else
+{
+
+    <span>Välkommen! Logga in för att få tillgång till StoreQR</span>
+}
