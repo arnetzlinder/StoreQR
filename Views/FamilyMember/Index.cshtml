@@ -19,10 +19,22 @@
                 <div class="card FamilyMemberCard m-1 p-3 ">
                     <div class="d-flex flex-column">
                         <h4>@item.Name</h4>
-                        <a class="btn btn-primary m-1 justify-content-end " asp-area="" asp-controller="FamilyMember" asp-action="Edit">Redigera</a>
-                        <a class="btn btn-warning m-1 justify-content-end " asp-area="" asp-controller="FamilyMember" asp-action="Delete">Radera</a>
+                        <a class="btn btn-primary m-1 justify-content-end" asp-area="" asp-controller="FamilyMember" asp-action="Edit" asp-route-Id="@item.Id">Redigera</a>
+                        <a class="btn btn-warning m-1 justify-content-end" asp-controller="FamilyMember" asp-action="Delete" asp-route-Id="@item.Id" onclick="return confirm('Är du säker på att du vill ta bort hushållsmedlemmen?')" asp-area="">Radera</a>
                     </div>
 
+                </div>
+            }
+            @if (TempData.ContainsKey("DeleteSuccessMessage"))
+            {
+                <div class="alert alert-success" role="alert">
+                    @TempData["DeleteSuccessMessage"]
+                </div>
+            }
+            @if (TempData.ContainsKey("DeleteErrorMessage"))
+            {
+                <div class="alert alert-success" role="alert">
+                    @TempData["DeleteErrorMessage"]
                 </div>
             }
         </div>
@@ -39,3 +51,4 @@ else
 
     <span>Välkommen! Logga in för att få tillgång till StoreQR</span>
 }
+
