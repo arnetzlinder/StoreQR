@@ -358,6 +358,10 @@ namespace StoreQR.Controllers
                     .Distinct()
                     .ToList();
 
+                //Kolla om ClothingUserId är satt till -1 och lägg isf till "Ingen vald"
+                bool includeNobodyChosen = _context.ClothingItem.Any(c => c.UserId == currentUserId && c.ClothingUserId == -1);
+
+              
                 if (familyMemberNames.Any())
                 {
                     ViewBag.FamilyMemberNames = new SelectList(familyMemberNames, "Value", "Text");
@@ -369,6 +373,8 @@ namespace StoreQR.Controllers
                 new SelectListItem { Value = "", Text = "Inga medlemmar i hushållet tillagda" }
             };
                 }
+
+
             }
 
             if (!string.IsNullOrEmpty(currentUserId))

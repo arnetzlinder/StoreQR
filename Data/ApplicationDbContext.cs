@@ -352,19 +352,17 @@ namespace StoreQR.Data
                             var clothingItemValues = new ClothingItem()
                             {
                                 ClothingId = result.GetInt32(0),
-                                ClothingImage = result.GetString(2),
+                                ClothingImage = result.IsDBNull(2) ? null : result.GetString(2),
                                 ClothingName = result.GetString(3),
-                                ClothingUserId = result.GetInt32(4),
-                                //QRCode = result.GetString (5),
-                                ClothingBrand = result.GetString(6),
-                                ClothingSize = result.GetString(7),
-                                ClothingColor = result.GetString(8),
-                                Season = result.GetString(9),
-                                ClothingMaterial = result.GetString(10),
-                                TypeOfClothing = result.GetString(11),
-                                StorageId = result.GetInt32(12)
-                                //FamilyMemberName = familyMemberName?.FamilyMemberName!,
-                                //StorageName = storageName?.StorageName!
+                                ClothingUserId = result.IsDBNull(4) ? (int?)null : (result.GetInt32(4) == -1 ? (int?)null : result.GetInt32(4)),
+                                // QRCode = result.IsDBNull(5) ? null : result.GetString(5),
+                                ClothingBrand = result.IsDBNull(6) ? null : result.GetString(6),
+                                ClothingSize = result.IsDBNull(7) ? null : result.GetString(7),
+                                ClothingColor = result.IsDBNull(8) ? null : result.GetString(8),
+                                Season = result.IsDBNull(9) ? null : result.GetString(9),
+                                ClothingMaterial = result.IsDBNull(10) ? null : result.GetString(10),
+                                TypeOfClothing = result.IsDBNull(11) ? null : result.GetString(11),
+                                StorageId = result.IsDBNull(12) ? (int?)null : result.GetInt32(12)
                             };
                             
 
@@ -405,8 +403,8 @@ namespace StoreQR.Data
                             var clothingFamilyName = new ClothingViewModel()
                             {
                                 ClothingId = result.GetInt32(0),
-                                FamilyMemberName = result.GetString(1),
-                                FamilyMemberId = result.GetInt32(2)
+                                FamilyMemberName = result.IsDBNull(1) ? "Ingen vald" : result.GetString(1),
+                                FamilyMemberId = result.IsDBNull(2) ? -1 : result.GetInt32(2)
                             };
 
                             clothingItemWithFamilyMemberName.Add(clothingFamilyName);
