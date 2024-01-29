@@ -43,12 +43,12 @@ namespace StoreQR.Controllers
             string? currentUserId = _userManager.GetUserId(HttpContext.User);
             if (currentUserId != null)
             {
-                Stopwatch klocka = new Stopwatch();
-                klocka.Start();
+                //Stopwatch klocka = new Stopwatch();
+                //klocka.Start();
                 //Hämtar alla värden först
                 var familyMembersAndStorage = _context.CombineFamilyNameAndStorageNameByUserId(currentUserId);
                 //Denna tar tio sekunder drygt.
-                var tid1 = klocka.Elapsed;
+                //var tid1 = klocka.Elapsed;
 
                 //Sidor i pagineringen
                 int pageSize = 10;
@@ -69,7 +69,6 @@ namespace StoreQR.Controllers
                     .Distinct()
                     .ToList();
                 
-                TimeSpan tid = klocka.Elapsed;
                 //Plockar ut distinkta värden för förvaringsutrymmen
                 var storageUnits = familyMembersAndStorage.Select(c => new
                 {
@@ -79,19 +78,20 @@ namespace StoreQR.Controllers
                 })
                     .Distinct()
                     .ToList();
-                var tid3 = klocka.Elapsed;
+                
+
                 //var clothingInfo = _context.GetFamilyMembersByUserId(currentUserId).ToList();
                 //var storageUnitNames = _context.GetStorageNameByUserId(currentUserId).ToList();
-                ViewBag.DistinctBrands = distinctFamilyMembers.Select(c => c.ClothingBrand).Distinct().ToList();
-                ViewBag.DistinctSizes = distinctFamilyMembers.Select(c => c.ClothingSize).Distinct().ToList();
-                ViewBag.DistinctColors = distinctFamilyMembers.Select(c => c.ClothingColor).Distinct().ToList();
-                ViewBag.DistinctSeasons = distinctFamilyMembers.Select(c => c.Season).Distinct().ToList();
-                ViewBag.DistinctMaterials = distinctFamilyMembers.Select(c => c.ClothingMaterial).Distinct().ToList();
-                ViewBag.DistinctTypesOfClothing = distinctFamilyMembers.Select(c => c.TypeOfClothing).Distinct().ToList();
-                ViewBag.DistinctFamilyMemberName = distinctFamilyMembers.Select(c => c.FamilyMemberName).Distinct().ToList();
-                ViewBag.StorageUnitName = storageUnits.Select(c => c.StorageName).Distinct().ToList();
+                ViewBag.DistinctBrands = distinctFamilyMembers.Select(c => c.ClothingBrand).Distinct().OrderBy(x => x).ToList();
+                ViewBag.DistinctSizes = distinctFamilyMembers.Select(c => c.ClothingSize).Distinct().OrderBy(x => x).ToList();
+                ViewBag.DistinctColors = distinctFamilyMembers.Select(c => c.ClothingColor).Distinct().OrderBy(x => x).ToList();
+                ViewBag.DistinctSeasons = distinctFamilyMembers.Select(c => c.Season).Distinct().OrderBy(x => x).ToList();
+                ViewBag.DistinctMaterials = distinctFamilyMembers.Select(c => c.ClothingMaterial).Distinct().OrderBy(x => x).ToList();
+                ViewBag.DistinctTypesOfClothing = distinctFamilyMembers.Select(c => c.TypeOfClothing).Distinct().OrderBy(x => x).ToList();
+                ViewBag.DistinctFamilyMemberName = distinctFamilyMembers.Select(c => c.FamilyMemberName).Distinct().OrderBy(x => x).ToList();
+                ViewBag.StorageUnitName = storageUnits.Select(c => c.StorageName).Distinct().OrderBy(x => x).ToList();
 
-                var tid2 = klocka.Elapsed;
+               
 
                 if (ResetFilters.HasValue && ResetFilters.Value)
                 {
