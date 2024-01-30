@@ -288,6 +288,10 @@ namespace StoreQR.Controllers
 
                                 model.ClothingImage = base64String;
                             }
+                        } else
+                        {
+                            //Sätt ClothingImage till null om ingen bild läggs in
+                            model.ClothingImage = null;
                         }
                         model.ClothingBrand = model.ClothingBrand;
                         model.ClothingName = model.ClothingName.Trim();
