@@ -225,7 +225,7 @@ namespace StoreQR.Controllers
             try
             {
                 await _context.DeleteStorageUnitByIdAsync(StorageId, currentUserId);
-                TempData["DeleteSuccessMessage"] = "Din förvaringsutrymme raderades.";
+                TempData["DeleteSuccessMessage"] = "Dtt förvaringsutrymme raderades.";
             }
             catch (DbUpdateException ex)
             {
