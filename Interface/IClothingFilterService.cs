@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Exchange.WebServices.Data;
 
 
 namespace StoreQR.Interface

@@ -371,9 +371,9 @@ body {
 }
 
 .deleteStorage {
-    max-width: 350px;
+    max-width: 450px;
     max-height: 700px;
-    width: 300px !important;
+    width: 350px !important;
     border-radius: 5px;
     border: 1px solid var(--TextColor);
     background-color: var(--SecondColor);
@@ -391,6 +391,13 @@ body {
 .DeleteStorageInfo{
     background-color: var(--AccentInputColor);
     border-radius: 5px;
+}
+
+.DeleteStorageInfo h5 {
+    word-wrap:inherit;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration:underline;
 }
 /* Footer*/
 .StoreQRFooter {

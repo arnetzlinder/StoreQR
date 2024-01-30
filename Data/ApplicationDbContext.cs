@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Exchange.WebServices.Data;
-
-//using Microsoft.Exchange.WebServices.Data;
 using Microsoft.Identity.Client.Extensions.Msal;
 using StoreQR.Interface;
 using StoreQR.Models;

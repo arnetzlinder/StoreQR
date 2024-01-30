@@ -71,7 +71,7 @@ namespace StoreQR.Controllers
                             model.StorageImage = null;
                         }
 
-                        model.StorageName = model.StorageName.Trim();
+                        model.StorageName = ToPascalCase(model.StorageName.Trim());
                         model.StorageDescription = model.StorageDescription.Trim();
 
                         _context.StoringUnit.Add(model);
@@ -100,6 +100,24 @@ namespace StoreQR.Controllers
                 return BadRequest("UserId saknas");
             }
             return View(model);
+        }
+
+        public static string ToPascalCase(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            // Split the string into words
+            string[] words = input.Split(new char[] { ' ', '_', '-' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Capitalize the first letter of each word
+            for (int i = 0; i < words.Length; i++)
+            {
+                words[i] = char.ToUpper(words[i][0]) + words[i].Substring(1);
+            }
+
+            // Join the words back into a single string with spaces
+            return string.Join(" ", words);
         }
 
         //Get StoringUnit Edit

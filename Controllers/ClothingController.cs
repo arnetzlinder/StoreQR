@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using StoreQR.Interface;
 using Microsoft.CodeAnalysis.Elfie.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Exchange.WebServices.Data;
 using X.PagedList;
 
 namespace StoreQR.Controllers
@@ -184,18 +183,6 @@ namespace StoreQR.Controllers
            
           
         }
-        static List<string> ConvertToPascalCase(List<string> inputList) 
-        { 
-            List<string> pascalCaseList = new List<string>(); 
-            foreach (string input in inputList) 
-            { 
-                string[] words = input.Split(' '); for (int i = 0; i < words.Length; i++) 
-                {
-                    pascalCaseList.Add(char.ToUpper(words[i][0]) + words[i].Substring(1).ToLower()); 
-                } 
-            } 
-            return pascalCaseList; 
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -293,14 +280,14 @@ namespace StoreQR.Controllers
                             //Sätt ClothingImage till null om ingen bild läggs in
                             model.ClothingImage = null;
                         }
-                        model.ClothingBrand = model.ClothingBrand;
+                        model.ClothingBrand = ToPascalCase(model.ClothingBrand);
                         model.ClothingName = model.ClothingName.Trim();
                         model.ClothingUserId = model.ClothingUserId;
                         model.ClothingSize = model.ClothingSize;
-                        model.ClothingColor = model.ClothingColor;
-                        model.ClothingMaterial = model.ClothingMaterial;
-                        model.Season = model.Season;
-                        model.TypeOfClothing = model.TypeOfClothing;
+                        model.ClothingColor = ToPascalCase(model.ClothingColor);
+                        model.ClothingMaterial = ToPascalCase(model.ClothingMaterial);
+                        model.Season = ToPascalCase(model.Season);
+                        model.TypeOfClothing = ToPascalCase(model.TypeOfClothing);
                         model.StorageId = model.StorageId;
                         model.UserId = userId;
 
@@ -334,6 +321,25 @@ namespace StoreQR.Controllers
    
             
                 return View(model);
+        }
+
+        //Metod för att göra om det användaren lägger in till Pascal Case
+        public static string ToPascalCase(string? input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input ?? string.Empty;
+
+            // Dela upp strängen i ord
+            string[] words = input.Split(new char[] { ' ', '_', '-' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Gör första bokstaven i varje ord stor
+            for (int i = 0; i < words.Length; i++)
+            {
+                words[i] = char.ToUpper(words[i][0]) + words[i].Substring(1);
+            }
+
+            // Sätt ihop orden igen med bevarade mellanrum
+            return string.Join(" ", words);
         }
 
         //Get ClothingItem Edit
