@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using StoreQR.Data;
 using StoreQR.Models;
 using System.Security.Claims;
+using X.PagedList;
 
 namespace StoreQR.Controllers
 {
@@ -23,15 +24,18 @@ namespace StoreQR.Controllers
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
-        public IActionResult Index(StoringUnit viewModel)
+        public IActionResult Index(StoringUnit viewModel, int? page)
         {
             //Hämta användarens id med hjälp av user manager
             string? currentUserId = _userManager.GetUserId(HttpContext.User);
+            //Sidor i pagineringen
+            int pageSize = 10;
             if (currentUserId != null)
             {
                 var storageUnits = _context.GetStorageUnitsFilteredByUserId(currentUserId);
+                var pagedStorageUnits = storageUnits.ToPagedList(page ?? 1, pageSize);
 
-                return View(storageUnits);
+                return View(pagedStorageUnits);
             }
            return View(viewModel);
         }

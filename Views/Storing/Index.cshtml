@@ -1,11 +1,14 @@
-﻿@model List<StoreQR.Models.StoringUnit>
+﻿@model IPagedList<StoreQR.Models.StoringUnit>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
 @{
     ViewData["Title"] = "Förvaringsutrymmen";
 }
 
 @if (User?.Identity?.IsAuthenticated == true)
 {
-    <div class="container">
+    <div class="container mb-5">
         <div class="d-flex flex-column align-items-center justify-content-center">
             <h2 class="mb-3 mt-3">Mina förvaringsutrymmen</h2>
             @if (TempData.ContainsKey("DeleteSuccessMessage"))
@@ -22,6 +25,15 @@
             }
             <div class="d-flex align-items-center justify-content-center mb-3">
                 <a class="btn btn-primary px-3" asp-area="" asp-controller="Storing" asp-action="Create">Lägg till förvaringsutrymme</a>
+            </div>
+
+            <div class="d-none d-md-block">
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
+                         new PagedListRenderOptions
+            {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            })
             </div>
 
             <div class="d-flex flex-wrap justify-content-around StorageBody">
