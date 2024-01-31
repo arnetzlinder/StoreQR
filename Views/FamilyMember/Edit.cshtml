@@ -6,7 +6,7 @@
 @if (User?.Identity?.IsAuthenticated == true)
 {
     <a asp-action="Index" class="mb-1 GoingBack"><i class="fa-solid fa-chevron-left"></i> Tillbaka</a>
-    <div class="d-flex flex-row align-items-center justify-content-center editFamilyMember">
+    <div class="d-flex flex-row align-items-center justify-content-center mt-3 editFamilyMember">
         @foreach (var item in Model)
         {
             <div class="m-1 p-0 flex-column d-flex w-50 ">

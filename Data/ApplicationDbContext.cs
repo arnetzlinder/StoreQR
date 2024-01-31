@@ -104,7 +104,7 @@ namespace StoreQR.Data
 
             using (var command = Database.GetDbConnection().CreateCommand())
             {
-                command.CommandText = "GetStorageNameByUserId";
+                command.CommandText = "GetStoringUnitsByUserId";
                 command.CommandType = CommandType.StoredProcedure;
 
                 //Lägg till parametrar för userid
@@ -125,8 +125,9 @@ namespace StoreQR.Data
                             var storageUnitName = new ClothingViewModel
                             {
                                 StorageId = result.GetInt32(0),
-                                StorageName = result.GetString(1),
-                                UserId = result.GetString(2),
+                                UserId = result.GetString(1),
+                                StorageName = result.GetString(3)
+                                
                             };
 
                             storageUnitNames.Add(storageUnitName);
