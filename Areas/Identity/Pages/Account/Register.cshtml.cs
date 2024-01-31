@@ -95,7 +95,7 @@ namespace StoreQR.Areas.Identity.Pages.Account
             /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare("Password", ErrorMessage = "Lösenorden matchar inte")]
             public string ConfirmPassword { get; set; }
         }
 
