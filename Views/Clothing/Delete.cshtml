@@ -1,0 +1,44 @@
+﻿@model StoreQR.Models.ClothingItem
+@{
+    ViewData["Title"] = "Radera klädesplagg";
+}
+
+@if (User?.Identity?.IsAuthenticated == true)
+{
+    <div class="d-flex flex-row justify-content-center align-items-center">
+
+        <div class="m-1 p-3 flex-column d-flex w-50 deleteClothing">
+            <a asp-action="Index" class="mb-1 GoingBack"><i class="fa-solid fa-chevron-left"></i> Tillbaka</a>
+            <div class=" d-flex flex-column mx-3 p-3">
+                <div class="DeleteClothingInfo">
+                    <div class="d-flex justify-content-center align-items-center">
+                        @if (!string.IsNullOrEmpty(Model.ClothingImage))
+                        {
+                            <img class="m-3" src="data:image/;base64,@Model.ClothingImage" alt="Bild av plagg" />
+                        }
+                        else
+                        {
+                            <img class="m-3" src="~/lib/example-pic.jpg" alt="Exempelbild" />
+                        }
+                    </div>
+                    <h5 class="text-center mx-3 p-3">Beskrivning</h5>
+                    <p class="text-center">@Model.ClothingName</p>
+                    <p class="text-center">Storlek: @Model.ClothingSize</p>
+                </div>
+                <p class="mt-3">Om du raderar @Model.ClothingName så försvinner all information om klädesplagget såsom användare och förvaringsplats.</p>
+                <form method="post" asp-area="" asp-controller="Clothing" asp-action="DeleteConfirmed">
+                    <input type="hidden" asp-for="ClothingId" name="ClothingId" />
+
+                    <button type="submit" class="btn btn-danger mt-1">Radera förvaringsutrymme</button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+}
+else
+{
+
+    <span>Välkommen! Logga in för att få tillgång till StoreQR</span>
+}

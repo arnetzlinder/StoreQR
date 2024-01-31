@@ -491,5 +491,66 @@ namespace StoreQR.Controllers
 
         }
 
+        //Get delete view of ClothingItem
+        [Authorize]
+        public async Task<IActionResult> Delete(int ClothingId)
+        {
+            string? currentUserId = _userManager.GetUserId(HttpContext.User);
+
+            if (currentUserId == null)
+            {
+                _logger.LogWarning("User is not authorized.");
+                return Forbid(); // Return 403 Forbidden status if the user is not authorized.
+            }
+
+            var clothingItems = await _context.GetClothingItemAsync(ClothingId, currentUserId);
+
+            if (clothingItems == null)
+            {
+                Console.WriteLine("Förvaringsutrymme saknas");
+            }
+            var clothingItem = clothingItems?.First();
+
+
+            return View("Delete", clothingItem);
+        }
+        //Delete ClothingItem
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int ClothingId)
+        {
+            if (ClothingId == 0)
+            {
+                return NotFound();
+            }
+            string? currentUserId = _userManager.GetUserId(HttpContext.User);
+
+            if (currentUserId == null)
+            {
+                _logger.LogWarning("User is not authorized.");
+                return Forbid(); // Return 403 Forbidden status if the user is not authorized.
+            }
+
+            var clothingItem = await _context.ClothingItem.FindAsync(ClothingId);
+
+            if (clothingItem == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                await _context.DeleteClothingItemByIdAsync(ClothingId, currentUserId);
+                TempData["DeleteSuccessMessage"] = "Dtt förvaringsutrymme raderades.";
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, $"Error deleting StoingUnit with ID {ClothingId}. Database update error.");
+                TempData["DeleteErrorMessage"] = "Det gick inte att radera ditt förvaringsutrymme.";
+                return View(clothingItem);
+            }
+            return RedirectToAction("Index");
+
+        }
+
     }
 }

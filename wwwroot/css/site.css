@@ -264,15 +264,15 @@ body {
     .ClothingCard p {
         background-color: var(--AccentInputColor);
         border-radius: 5px;
-        padding: 1rem;
+        font-size: 0.9rem;
+        padding: 2px;
     }
 
     .ClothingCard a {
-        background-color: var(--AccentColor);
-        color: var(--TextColor);
         border-radius: 5px;
         border: transparent;
         cursor: pointer;
+        font-size: 0.9rem;
     }
     .ClothingCard a:hover {
         background-color: var(--TextColor);
@@ -286,7 +286,7 @@ body {
         }
     .ClothingCard img {
         height: auto;
-        max-height: 180px;
+        max-height: 150px;
         border-radius: 5px;
         filter: drop-shadow(5px 5px 5px #CF9291);
         object-fit: cover;
@@ -306,6 +306,41 @@ body {
     background-color: var(--SecondColor);
     border-radius: 5px;
 }
+
+.deleteClothing {
+    max-width: 450px;
+    max-height: 750px;
+    width: 400px !important;
+    border-radius: 5px;
+    border: 1px solid var(--TextColor);
+    background-color: var(--SecondColor);
+    color: var(--TextColor);
+    font-size: 1rem;
+    margin: 0.75rem;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+    .deleteClothing img {
+        max-height: 250px;
+    }
+
+    .deleteClothing form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+.DeleteClothingInfo {
+    background-color: var(--AccentInputColor);
+    border-radius: 5px;
+}
+
+    .DeleteClothingInfo h5 {
+        word-wrap: inherit;
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-decoration: underline;
+    }
 
 
 /*Förvaringstyles*/

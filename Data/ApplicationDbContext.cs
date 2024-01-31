@@ -352,6 +352,44 @@ namespace StoreQR.Data
             return clothingItemWithStorageName;
         }
 
+        public async Task<bool> DeleteClothingItemByIdAsync(int clothingId, string userId)
+        {
+            var clothingItems = new List<ClothingItem>();
+            using (var command = Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "DeleteClothingItemById";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var clothingItemParameter = command.CreateParameter();
+                clothingItemParameter.ParameterName = "@ClothingId";
+                clothingItemParameter.DbType = DbType.Int32;
+                clothingItemParameter.Value = clothingId;
+                command.Parameters.Add(clothingItemParameter);
+
+                clothingItemParameter = command.CreateParameter();
+                clothingItemParameter.ParameterName = "@UserId";
+                clothingItemParameter.DbType = DbType.String;
+                clothingItemParameter.Value = userId;
+                command.Parameters.Add(clothingItemParameter);
+
+                await Database.OpenConnectionAsync();
+
+                try
+                {
+                    await command.ExecuteNonQueryAsync();
+                    return true; // Deletion successful
+                }
+                catch (Exception)
+                {
+                    return false; // Deletion failed
+                }
+                finally
+                {
+                    await Database.CloseConnectionAsync();
+                }
+            }
+        }
+
 
         //Relaterat till familjemedlemmar
         public List<FamilyMember> GetFamilyMembersFilteredByUserId (string userId)
