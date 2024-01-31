@@ -77,6 +77,7 @@ namespace StoreQR.Controllers
 
                         model.StorageName = ToPascalCase(model.StorageName.Trim());
                         model.StorageDescription = model.StorageDescription.Trim();
+                        model.QRCode = model.QRCode;
 
                         _context.StoringUnit.Add(model);
                         await _context.SaveChangesAsync();

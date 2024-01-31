@@ -23,5 +23,7 @@ namespace StoreQR.Models
         [DisplayName("Bild")]
         [NotMapped]
         public string? StorageImage { get; set; } = string.Empty;
+
+        public string? QRCode { get; set; } = string.Empty; 
     }
 }

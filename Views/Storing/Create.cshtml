@@ -24,9 +24,56 @@
             <label asp-for="StorageImageFile" class="mt-2"></label>
             <input asp-for="StorageImageFile" type="file" accept="image/*" capture="camera" class="form-control-file" />
         </div>
-        @*     <div id="reader" style="width: 300px; height: 300px;"></div>
-        <button type="button" class="btn btn-primary" id="scanButton">Skanna QR-kod</button>
-        <input type="hidden" id="qrCodeResult" name="StorageQRCode" /> *@
+        <div class="form-group">
+            <label asp-for="QRCode" class="mt-2">QR-kod</label>
+            <div class="d-flex flex-column">
+                <input asp-for="QRCode" name="QRCode" class="form-control" readonly/>       
+                <button type="button" class="btn btn-primary ml-2" onclick="scanQRCode()">Skanna QR-kod</button>
+                <br />
+                <div id="reader" style="display: none;"></div>
+                </div>
+        </div>
         <button type="submit" class="btn btn-primary mt-3">Spara</button>
     </form>
 </div>
+
+    <script>
+        //funktion för att öppna qr-kodläsaren
+    function scanQRCode() {
+        const html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+
+       //Visa Qr-kodläsaren
+        document.getElementById("reader").style.display = "block";
+
+        html5QrcodeScanner.render(onScanSuccess);
+    }
+
+    // Callback function for successful scan
+    function onScanSuccess(qrCodeData) {
+        // Populate the input field with the scanned QR code data
+        document.getElementById("QRCode").value = qrCodeData;
+
+        // Hide the reader div
+        document.getElementById("reader").style.display = "none";
+
+        // Close the QR code scanner
+        html5QrcodeScanner.stop();
+    }
+        // function onScanSuccess(decodedText, decodedResult) {
+        //     // handle the scanned code as you like, for example:
+        //     console.log(`Code matched = ${decodedText}`, decodedResult);
+        // }
+
+        // function onScanFailure(error) {
+        //     // handle scan failure, usually better to ignore and keep scanning.
+        //     // for example:
+        //     console.warn(`Code scan error = ${error}`);
+        // }
+
+        // console.log("start scanner");
+        // let html5QrcodeScanner = new Html5QrcodeScanner(
+        //     "reader",
+        //     { fps: 10, qrbox: { width: 250, height: 250 } },
+        //           /* verbose= */ false);
+        // html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    </script>
