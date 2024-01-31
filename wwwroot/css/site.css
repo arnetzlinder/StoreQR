@@ -401,12 +401,22 @@ body {
 }
 /* Footer*/
 .StoreQRFooter {
-    color: var(--TextColor);
+    background-color: VAR(--AccentColor);
+    color: white;
+}
+.StoreQRFooter  li{
+    background-color: VAR(--AccentColor);
+    color: white;
 }
 
-.StoreQRFooter a {
-    color: var(--TextColor);
-}
+    .StoreQRFooter p {
+        background-color: VAR(--AccentColor);
+        color: white;
+    }
+
+    .StoreQRFooter a {
+        color: var(--TextColor);
+    }
 
 .LogoutBtn {
     background-color: var(--AccentColor);

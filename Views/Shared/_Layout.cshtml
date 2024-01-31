@@ -58,42 +58,39 @@
         </nav>
     </header>
     <div class="container">
-            <main role="main" class="pb-3">
+            <main role="main" class="pb-3 mb-3">
                 @RenderBody()
             </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="footer">
-        <div class="container StoreQRFooter">
-            &copy; 2024 - StoreQR
-        </div>
-        <div class="d-flex">
-            <ul>
-                <li>
+    <footer class="border-top footer text-muted fixed-bottom StoreQRFooter">
+        <div class="desktop-only container">
+        <div class="d-flex flex-row">
+            <ul class="list-unstyled d-flex mb-0 justify-content-between">
+                <li class="m-3">
                     <span>
                         <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
                     </span>
                     Stockholm
                 </li>
-                <li>
-                        <a href="https://github.com/arnetzlinder">
+                <li class="m-3">
+                    <a href="https://github.com/arnetzlinder" class="text-decoration-none text-reset">
                             <span>
                                 <i class="fa-brands fa-github" aria-hidden="true"></i>
                             </span>
                             Github
                         </a>
                  </li>
-                 <li>
-                        <a href="https://www.linkedin.com/in/susanne-arnetz-linder-999a2481/">
+                <li class="m-3">
+                    <a href="https://www.linkedin.com/in/susanne-arnetz-linder-999a2481/" class="text-decoration-none text-reset">
                             <span>
                                 <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
                             </span>
                             LinkedIn
                         </a>
                  </li>
-                <li>
-                    <a href="https://portfolio.arnetzlinder.com">
+                <li class="m-3">
+                    <a href="https://portfolio.arnetzlinder.com" class="text-decoration-none text-reset">
                     <span>
                             <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
                     </span>
@@ -102,9 +99,41 @@
                     </li>
 
             </ul>
+            <div class="m-3 ms-auto">
+                <p>&copy; 2024 - StoreQR</p>
+            </div>
+            </div>
+        </div>
+        <div class="mobile-only container">
+            <div class="d-flex flex-row">
+                <ul class="list-unstyled d-flex mb-0 justify-content-between">
+                    <li class="m-3">
+                        <a href="https://github.com/arnetzlinder" class="text-decoration-none text-reset">
+                            <span>
+                                <i class="fa-brands fa-github" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="m-3">
+                        <a href="https://www.linkedin.com/in/susanne-arnetz-linder-999a2481/" class="text-decoration-none text-reset">
+                            <span>
+                                <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="m-3">
+                        <a href="https://portfolio.arnetzlinder.com" class="text-decoration-none text-reset">
+                            <span>
+                                <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </li>
 
-        </div>
-        </div>
+                </ul>
+                <div class="m-3 ms-auto">
+                    <p>&copy; 2024 - StoreQR</p>
+                </div>
+            </div>
     </footer>
     <style>
         .navbar-toggler {
@@ -202,6 +231,26 @@
             .navbar-toggler.active #navbarSpan3 {
                 transform: translateY(-8px) rotate(-45deg);
             }
+
+        @@media screen and (max-width: 576px) {
+            .desktop-only {
+                display: none !important;
+            }
+
+            .mobile-only {
+                display: block;
+            }
+        }
+
+        @@media screen and (min-width: 577px) {
+            .desktop-only {
+                display: block !important;
+            }
+
+            .mobile-only {
+                display: none;
+            }
+        }
 
         
     </style>
