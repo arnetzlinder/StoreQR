@@ -540,12 +540,12 @@ namespace StoreQR.Controllers
             try
             {
                 await _context.DeleteClothingItemByIdAsync(ClothingId, currentUserId);
-                TempData["DeleteSuccessMessage"] = "Dtt förvaringsutrymme raderades.";
+                TempData["DeleteSuccessMessage"] = "Ditt klädesplagg raderades.";
             }
             catch (DbUpdateException ex)
             {
-                _logger.LogError(ex, $"Error deleting StoingUnit with ID {ClothingId}. Database update error.");
-                TempData["DeleteErrorMessage"] = "Det gick inte att radera ditt förvaringsutrymme.";
+                _logger.LogError(ex, $"Error deleting ClothingItem with ID {ClothingId}. Database update error.");
+                TempData["DeleteErrorMessage"] = "Det gick inte att radera ditt klädesplagg.";
                 return View(clothingItem);
             }
             return RedirectToAction("Index");

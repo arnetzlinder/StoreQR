@@ -12,6 +12,18 @@
 
     <div class="container d-flex flex-column align-items-center justify-content-center mb-5">
         <h2 class="mb-3 mt-3">Mina kläder</h2>
+        @if (TempData.ContainsKey("DeleteSuccessMessage"))
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["DeleteSuccessMessage"]
+            </div>
+        }
+        @if (TempData.ContainsKey("DeleteErrorMessage"))
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["DeleteErrorMessage"]
+            </div>
+        }
         <div class="d-flex align-items-center justify-content-center">
             <a class="btn btn-primary addClothesButton px-3" asp-area="" asp-controller="Clothing" asp-action="Create">Lägg till nytt</a>
         </div>
