@@ -395,7 +395,7 @@ body {
         }
 
     .StorageCard img {
-        max-height: 300px;
+        max-height: 150px;
         border-radius: 5px;
         filter: drop-shadow(5px 5px  5px #CF9291);
     }
