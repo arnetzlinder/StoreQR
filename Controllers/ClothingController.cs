@@ -222,7 +222,7 @@ namespace StoreQR.Controllers
 
             if (!string.IsNullOrEmpty(userId))
             {
-                var storageNames = _context.GetStorageNameByUserId(userId)
+                var storageData = _context.GetStorageNameByUserId(userId)
                     .Where(fm => fm.UserId == userId)
                     .GroupBy(fm => fm.StorageName)
                     .Select(group => group.First())
@@ -233,16 +233,18 @@ namespace StoreQR.Controllers
                     })
                     .ToList();
 
-                if (storageNames.Any())
+                if (storageData.Any())
                 {
-                    ViewBag.storageNames = new SelectList(storageNames, "Value", "Text");
+                    ViewBag.storageData = storageData;
+                    ViewBag.QRCodes = storageData.ToDictionary(item => item.Value, item => item.Text);
                 }
                 else
                 {
-                    ViewBag.storageNames = new List<SelectListItem>
+                    ViewBag.storageData = new List<SelectListItem>
             {
                 new SelectListItem { Value = "", Text = "Inga förvaringsutrymmen tillagda" }
             };
+                    ViewBag.QRCodes = new Dictionary<string, string>();
                 }
             }
 

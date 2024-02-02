@@ -46,10 +46,17 @@
            <label asp-for="TypeOfClothing" class="mt-2"></label>
         <input asp-for="TypeOfClothing" class="form-control" id="TypeOfClothing"/>
     </div>
-    @* //Boxen kommer behöva laddas på något annat sätt *@
+    <div class="form-group">
+        <label class="mt-2">QR-kod</label>
+        <div class="d-flex flex-column">
+            <button type="button" class="btn btn-primary ml-2" onclick="scanQRCode()">Skanna QR-kod</button>
+             <br />
+                <div id="reader" style="display: none;"></div>
+            </div>
+        </div>
     <div class="form-group ClothingUser">
         <label asp-for="StorageId" class="control-label mt-2 mb-2">Välj var plagget förvaras</label>
-        <select asp-for="StorageId" class="form-control" asp-items="@ViewBag.StorageNames">
+        <select asp-for="StorageId" class="form-control" asp-items="@ViewBag.storageData">
             <option value="">Ingen vald</option>
         </select>
     </div>
@@ -96,25 +103,40 @@
             });
     };
 
-    // document.getElementById('scanButton').addEventListener('click', function () {
-    //     // Initialize the QR code scanner
-    //     let html5QrcodeScanner = new Html5QrcodeScanner(
-    //         'reader', // Element ID for the QR code scanner container
-    //         { fps: 10, qrbox: 250 } // Configuration options (e.g., frames per second, QR box size)
-    //     );
+    const html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+        // Funktion för att öppna QR-kodläsaren
+        function scanQRCode() {
+            
 
-    //     // Start scanning
-    //     html5QrcodeScanner.render(result => {
-    //         // Handle the scanned QR code result
-    //         console.log('Scanned result:', result);
-    //         // Set the scanned result to a hidden input field in the form
-    //         document.getElementById('qrCodeResult').value = result;
+            // Visa QR-kodläsaren
+            document.getElementById("reader").style.display = "block";
 
-    //         // You can perform other actions with the scanned result here
-    //         // For example, update other fields in the form
-    //     }).catch(err => {
-    //         // Handle any errors that occur during scanning
-    //         console.error(err);
-    //     });
-    // });
+            html5QrcodeScanner.render(onScanSuccess);
+        }
+
+    // Hantera lyckad scanning
+    function onScanSuccess(qrCodeData) {
+        //Göm läsaren
+        document.getElementById("reader").style.display = "none";
+
+        // Stäng läsare
+        html5QrcodeScanner.stop();
+
+        //Hämta rätt dropdownelement
+        var dropdown = document.getElementById('StorageId');
+
+        //Kolla om den scannade qr-koden existerar i viewbag.storagedata
+        if (ViewBag.QRCodes.hasOwnProperty(qrCodeData)) {
+            for (var i = 0; i < dropdown.options.length; i++) {
+                var option = dropdown.options[i];
+                if (option.value === ViewBag.QRCodes[qrCodeData]) {
+                    // Update the dropdown selection
+                    dropdown.value = option.value;
+                    console.log(option.value, "optionvalue");
+                    break;
+                }
+            }
+        }
+        //Finns inte qr-koden händer ingenting
+    }
 </script>

@@ -48,5 +48,7 @@ namespace StoreQR.Models
         public int? StorageId { get; set; }
         public string StorageName { get; set; } = string.Empty;
 
+        public string QRCode {  get; set; } = string.Empty;
+
     }
 }

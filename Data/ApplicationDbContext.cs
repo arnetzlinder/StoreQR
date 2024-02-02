@@ -126,8 +126,9 @@ namespace StoreQR.Data
                             {
                                 StorageId = result.GetInt32(0),
                                 UserId = result.GetString(1),
-                                StorageName = result.GetString(3)
-                                
+                                StorageName = result.GetString(3),
+                                QRCode = result.IsDBNull(4) ? null! : result.GetString(4),
+
                             };
 
                             storageUnitNames.Add(storageUnitName);
