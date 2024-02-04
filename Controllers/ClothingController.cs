@@ -228,15 +228,27 @@ namespace StoreQR.Controllers
                     .Select(group => group.First())
                     .Select(fm => new SelectListItem
                     {
-                        Value = fm.StorageId.ToString(),
+                        Value = fm.StorageId.ToString() ?? "",
                         Text = fm.StorageName
                     })
                     .ToList();
 
+                var qrCodes = _context.GetStorageNameByUserId(userId)
+                    .Where(fm => fm.UserId == userId)
+                    .GroupBy(fm => fm.StorageName)
+                    .Select(group => group.First())
+                    .Select(fm => new SelectListItem
+                    {
+                        Value = fm.QRCode ?? "",
+                        Text = fm.StorageId.ToString()
+                    })
+                    .ToList();
+
+
                 if (storageData.Any())
                 {
                     ViewBag.storageData = storageData;
-                    ViewBag.QRCodes = storageData.ToDictionary(item => item.Value, item => item.Text);
+                    ViewBag.qrCodes = qrCodes;
                 }
                 else
                 {

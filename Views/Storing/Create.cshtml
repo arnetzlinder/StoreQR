@@ -36,7 +36,7 @@
         <button type="submit" class="btn btn-primary mt-3">Spara</button>
     </form>
 </div>
-
+@* <script src="https://unpkg.com/html5-qrcode.min.js" type="text/javascript"></script> *@
     <script>
         //funktion för att öppna qr-kodläsaren
     function scanQRCode() {
@@ -50,6 +50,7 @@
 
     // Callback function for successful scan
     function onScanSuccess(qrCodeData) {
+        console.log("Found a qr code");
         // Populate the input field with the scanned QR code data
         document.getElementById("QRCode").value = qrCodeData;
 
@@ -58,5 +59,6 @@
 
         // Close the QR code scanner
         html5QrcodeScanner.stop();
+        console.log("Tried to stop the scanner");
     }
     </script>

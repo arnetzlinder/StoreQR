@@ -47,11 +47,11 @@
         <input asp-for="TypeOfClothing" class="form-control" id="TypeOfClothing"/>
     </div>
     <div class="form-group">
-        <label class="mt-2">QR-kod</label>
+        <label class="mt-2">Skanna QR-kod på ditt förvaringsutrymme</label>
         <div class="d-flex flex-column">
-            <button type="button" class="btn btn-primary ml-2" onclick="scanQRCode()">Skanna QR-kod</button>
+                <button type="button" class="btn btn-primary ml-2" onclick="openScanner()">Skanna QR-kod</button>
              <br />
-                <div id="reader" style="display: none;"></div>
+                <div id="reader" style="display:none;"></div>
             </div>
         </div>
     <div class="form-group ClothingUser">
@@ -59,84 +59,58 @@
         <select asp-for="StorageId" class="form-control" asp-items="@ViewBag.storageData">
             <option value="">Ingen vald</option>
         </select>
+     @*        <p>
+                @foreach (var kvp in ViewBag.qrCodes)
+                {
+                    <strong id="strong">@kvp.Text:</strong> @kvp.Value
+
+                    <br />
+                }
+            </p> *@
     </div>
     <div class="form-group d-flex flex-column">
             <label asp-for="ClothingImageFile" class="mt-2"></label>
         <input asp-for="ClothingImageFile" type="file" accept="image/*" capture="camera" class="form-control-file" />
     </div>
-    @*     <div id="reader" style="width: 300px; height: 300px;"></div>
-        <button type="button" class="btn btn-primary" id="scanButton">Skanna QR-kod</button>
-        <input type="hidden" id="qrCodeResult" name="ClothingQRCode" /> *@
     <button type="submit" class="btn btn-primary mt-3">Spara</button>
 </form>
 </div>
-
-<script>
-        function validateForm() {
-            // Ta bort mellanslag före och efter samt gör om alla strängar till pascal case
-            updateValue("ClothingName");
-            updateValue("ClothingBrand");
-            updateValue("ClothingSize");
-            updateValue("ClothingColor");
-            updateValue("Season");
-            updateValue("ClothingMaterial");
-            updateValue("TypeOfClothing");
-
-            return true; // Allow the form to be submitted
-        }
-
-        // Function to update the value of an element identified by ID
-        function updateValue(elementId) {
-            var element = document.getElementById(elementId);
-
-            // Check if the element exists
-            if (element) {
-                // Update the value if the element exists
-                element.value = toPascalCase(element.value);
-            }
-        }
-
-        // Function to convert a string to Pascal case
-        function toPascalCase(str) {
-            return str.trim().replace(/\b\w/g, function (word) {
-                return word.toUpperCase();
-            });
-    };
-
-    const html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
-        // Funktion för att öppna QR-kodläsaren
-        function scanQRCode() {
-            
-
-            // Visa QR-kodläsaren
-            document.getElementById("reader").style.display = "block";
-
-            html5QrcodeScanner.render(onScanSuccess);
-        }
-
-    // Hantera lyckad scanning
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script type="text/javascript">
+    var scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+    var scanned = false;
+    var qrCodes = @Html.Raw(Json.Serialize(ViewBag.qrCodes));
     function onScanSuccess(qrCodeData) {
-        //Göm läsaren
+        if (scanned == true) { return; }
+        scanned = true;
+        console.log("Scanned QR Code:", qrCodeData);
+        console.log("QrCodes stored are", qrCodes);
+        var dropdown = document.getElementById('StorageId');
+         for (var kvp in qrCodes) {
+             console.log("Value is: ", qrCodes[kvp].value);
+            if (qrCodes[kvp].value === qrCodeData) {
+                console.log("The matching id is:" + qrCodes[kvp].text);
+                dropdown.value = qrCodes[kvp].text;
+             }
+         }
+
+        console.log("Tried to stop the scanner");
         document.getElementById("reader").style.display = "none";
 
-        // Stäng läsare
-        html5QrcodeScanner.stop();
-
-        //Hämta rätt dropdownelement
-        var dropdown = document.getElementById('StorageId');
-
-        //Kolla om den scannade qr-koden existerar i viewbag.storagedata
-        if (ViewBag.QRCodes.hasOwnProperty(qrCodeData)) {
-            for (var i = 0; i < dropdown.options.length; i++) {
-                var option = dropdown.options[i];
-                if (option.value === ViewBag.QRCodes[qrCodeData]) {
-                    // Update the dropdown selection
-                    dropdown.value = option.value;
-                    console.log(option.value, "optionvalue");
-                    break;
-                }
-            }
-        }
-        //Finns inte qr-koden händer ingenting
+        console.log("Tried to stop the scanner2");
+  
+        console.log("Tried to stop the scanner3");
+        return;
     }
+
+    // Funktion som öppnar QR-kodläsare
+    function openScanner() {
+        console.log("Opening a scanner");
+
+        //Visa Qr-kodläsaren
+        document.getElementById("reader").style.display = "block";
+
+        scanner.render(onScanSuccess);
+    }
+
 </script>
