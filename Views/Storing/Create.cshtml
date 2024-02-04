@@ -36,11 +36,17 @@
         <button type="submit" class="btn btn-primary mt-3">Spara</button>
     </form>
 </div>
-@* <script src="https://unpkg.com/html5-qrcode.min.js" type="text/javascript"></script> *@
+<script src="https://unpkg.com/html5-qrcode.min.js" type="text/javascript"></script>
     <script>
         //funktion för att öppna qr-kodläsaren
     function scanQRCode() {
-        const html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+        const html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+            fps: 10, qrbox: 250, 
+            //För att den bakre kameran på mobilen ska användas
+            videoConstraints: {
+                facingMode: "environment",
+            },
+        }, false);
 
        //Visa Qr-kodläsaren
         document.getElementById("reader").style.display = "block";

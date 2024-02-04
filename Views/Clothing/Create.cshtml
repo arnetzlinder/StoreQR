@@ -75,9 +75,15 @@
     <button type="submit" class="btn btn-primary mt-3">Spara</button>
 </form>
 </div>
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+@* <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script> *@
 <script type="text/javascript">
-    var scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+    var scanner = new Html5QrcodeScanner("reader", {
+        fps: 10, qrbox: 250,
+        //För att den bakre kameran på mobilen ska användas
+        videoConstraints: {
+            facingMode: "environment",
+        },
+    }, false);
     var scanned = false;
     var qrCodes = @Html.Raw(Json.Serialize(ViewBag.qrCodes));
     function onScanSuccess(qrCodeData) {
