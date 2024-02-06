@@ -57,7 +57,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container mb-3">
             <main role="main" class="pb-3 mb-3">
                 @RenderBody()
             </main>
@@ -264,24 +264,7 @@
             button.classList.toggle('active');
             menu.classList.toggle('show');
         }
-        // Get reference to the reader container
-        // let resultContainer = document.getElementById('reader');
-
-        // // Initialize the QR code scanner
-        // let html5QrcodeScanner = new Html5QrcodeScanner(
-        //     'reader', // Element ID for the QR code scanner container
-        //     { fps: 10, qrbox: 250 } // Configuration options (e.g., frames per second, QR box size)
-        // );
-
-        // // Start scanning
-        // html5QrcodeScanner.render(result => {
-        //     // Handle the scanned QR code result
-        //     console.log('Scanned result:', result);
-        //     // You can perform actions with the scanned result here, such as updating a field in your form
-        // }).catch(err => {
-        //     // Handle any errors that occur during initialization
-        //     console.error(err);
-        // });
+    
     </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
