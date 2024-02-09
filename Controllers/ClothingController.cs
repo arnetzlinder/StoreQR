@@ -42,15 +42,11 @@ namespace StoreQR.Controllers
             string? currentUserId = _userManager.GetUserId(HttpContext.User);
             if (currentUserId != null)
             {
-                //Stopwatch klocka = new Stopwatch();
-                //klocka.Start();
                 //Hämtar alla värden först
                 var familyMembersAndStorage = _context.CombineFamilyNameAndStorageNameByUserId(currentUserId);
-                //Denna tar tio sekunder drygt.
-                //var tid1 = klocka.Elapsed;
-
+                
                 //Sidor i pagineringen
-                int pageSize = 10;
+                int pageSize = 9;
 
                 //Plockar ut distinkta värden för familjemedlemmar
                 var distinctFamilyMembers = familyMembersAndStorage

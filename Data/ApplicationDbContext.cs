@@ -21,9 +21,7 @@ namespace StoreQR.Data
 
         public DbSet<FamilyMember> FamilyMember { get; set; }
         
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor
-            //IClothingFilterService clothingFilterService
-            )
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor)
             : base(options)
         {
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));

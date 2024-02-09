@@ -8,18 +8,15 @@
 
 @if (Model.ShowRequestId)
 {
-    <p>
+    <p class="text-center">
         <strong>Request ID:</strong> <code>@Model.RequestId</code>
     </p>
 }
 
-<h3>Development Mode</h3>
+<div class="text-center">
+<h3>Felläge</h3>
 <p>
-    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
+    Ett fel har uppstått. Kontakta StoreQR om problemet kvarstår.
 </p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+</div>
+
